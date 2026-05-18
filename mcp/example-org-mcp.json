@@ -1,0 +1,71 @@
+{
+  "_README": [
+    "Example MCP server config for <organization> stakeholders using prof-data-analyst plugin.",
+    "Drop into ~/.claude.json under the top-level 'mcpServers' key (user scope) — DO NOT commit secrets.",
+    "Alternatively use the CLI commands at the bottom (cleaner, no manual JSON edit).",
+    "",
+    "After install: restart Claude Code, then verify with: `claude mcp list`",
+    "Each entry should report: <name>: <command> - ✓ Connected",
+    "",
+    "All 3 MCPs are OPTIONAL — install only the ones your team uses.",
+    "Non-<organization> users: ignore this file entirely. The plugin works without these."
+  ],
+
+  "mcpServers": {
+    "<org-data-mcp>": {
+      "_purpose": "<organization> unified data MCP gateway. Bundles Semantic Cube + Data Portal + Journey Data + <event-system> (mini-app tracking). See references/org-extensions.md §2.",
+      "_replace_server_id": "Replace <SERVER_ID> below with your team's MCP server ID provided by <organization> Data Platform team. Ping in Google Chat 'Claude With <organization> Data' group.",
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "mcp-remote",
+        "https://mdp-mcp-gateway.<internal-host>/servers/<SERVER_ID>/mcp"
+      ]
+    },
+
+    "<org-sql-agent>": {
+      "_purpose": "<org-sql-agent> NL→SQL agent (<organization>-specific). Optional. See references/org-extensions.md §3a.",
+      "_install_note": "Requires local <org-sql-agent> client checkout + Python env. Replace <PATH_TO_ORG_SQL> with your local install path. Ping <org-catalog>-team for setup if not available.",
+      "type": "stdio",
+      "command": "python",
+      "args": [
+        "<PATH_TO_ORG_SQL>/mcp_server.py"
+      ],
+      "env": {
+        "ORG_SQL_BQ_PROJECT": "<bq-billing-project>",
+        "ORG_SQL_BQ_DATA_PROJECT": "<data-project>",
+        "ORG_SQL_USER": "<your-email>@<your-org>"
+      }
+    },
+
+    "powerbi-modeling": {
+      "_purpose": "PowerBI Desktop model editing via TMDL/PBIP. Optional. Used by mode-report for PBI deliverables.",
+      "_install_note": "Requires VSCode extension 'analysis-services.powerbi-modeling-mcp' installed. Adjust path to match your extension version.",
+      "type": "stdio",
+      "command": "C:\\Users\\<USER>\\.vscode\\extensions\\analysis-services.powerbi-modeling-mcp-<VERSION>\\server\\powerbi-modeling-mcp.exe",
+      "args": [
+        "--start",
+        "--readwrite"
+      ]
+    }
+  },
+
+  "_CLI_install_commands": {
+    "_note": "Alternative to manual JSON edit — run these in PowerShell/bash to register MCPs at user scope.",
+    "<org-data-mcp>": "claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://mdp-mcp-gateway.<internal-host>/servers/<SERVER_ID>/mcp",
+    "<org-sql-agent>": "claude mcp add -s user <org-sql-agent> -- python <PATH_TO_ORG_SQL>/mcp_server.py",
+    "powerbi-modeling": "claude mcp add -s user powerbi-modeling -- C:\\path\\to\\powerbi-modeling-mcp.exe --start --readwrite"
+  },
+
+  "_verify": "After install: `claude mcp list` should show all 3 as ✓ Connected. If '✗ Failed to connect', check VPN (<organization> internal services need <organization> VPN) and that the server endpoint is reachable from your machine.",
+
+  "_security_notes": [
+    "1. NEVER commit a real SERVER_ID, <org-catalog> PATH, or PAT into a public repo.",
+    "2. SERVER_ID for <org-data-mcp> is per-team — get yours from <organization> Data Platform team, do not share across teams.",
+    "3. <org-sql-agent> + <org-data-mcp> MCPs require <organization> VPN for endpoint reachability.",
+    "4. powerbi-modeling MCP touches local PBI Desktop files only; no remote auth."
+  ]
+}
