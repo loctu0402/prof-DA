@@ -2,7 +2,7 @@
 
 Most DA work starts the same way: "what columns does this table have, and what do they mean, and do I have access?". The naive answer (`SELECT * FROM table LIMIT 5`) is the LAST resort, not the first. This reference encodes the **preferred tier ladder** for answering that question.
 
-The ladder is engine-agnostic — concrete tool names (BigQuery `INFORMATION_SCHEMA`, OpenMetadata, <organization> <org-sql-agent> tags, <organization> Semantic Cube, <org-catalog> MCP) are illustrative. Substitute your org's equivalents.
+The ladder is engine-agnostic — concrete tool names (BigQuery `INFORMATION_SCHEMA`, OpenMetadata, `<org-catalog>.*` tag namespace, semantic-cube layer, NL→SQL MCP) are illustrative. Substitute your org's equivalents.
 
 ## The Five Tiers (read top-down, stop at the first that suffices)
 
@@ -34,9 +34,9 @@ Some catalogs let table owners apply a special tag indicating "this table has be
 - Joins to related tables
 - Known gotchas / sentinels / partition discipline
 
-**Example — <organization> <org-sql-agent> tag pattern**:
+**Example — `<org-catalog>.*` tag pattern (any catalog can adopt)**:
 
-The <organization> data catalog (`https://<data-catalog-host>`) supports a `<org-catalog>.*` tag namespace. A table tagged `<org-catalog>.<domain-tag>` (visible via URL `https://<data-catalog-host>/tag/<org-catalog>.<domain-tag>`) means the owner of that BU has invested in LLM-grade schema curation for downstream agent use.
+A catalog can reserve a `<org-catalog>.*` tag namespace specifically for LLM-grade curation. A table tagged `<org-catalog>.<business_unit>` means the owner of that BU has invested in LLM-grade schema curation for downstream agent use. The <organization>-specific implementation of this pattern is documented separately in `references/org-extensions.md`.
 
 Discovery pattern:
 ```
@@ -61,7 +61,7 @@ Most orgs ship one canonical catalog tool. Direct REST/GraphQL API access gives 
 | Atlan | REST | API token | `GET /api/atlas/v2/entity/uniqueAttribute/type/Table?attr:qualifiedName=<fqn>` |
 | Collibra | REST | OAuth2 | `GET /rest/2.0/assets?type=Table&name=<name>` |
 
-**<organization> specifics**: see `references/org-extensions.md` → "OpenMetadata workflow" section. Detailed playbook (fetch / dry-run / push) lives at `<workspace>/lt-memory/setup/openmetadata-workflow.md`.
+**<organization> specifics**: see `references/org-extensions.md` → "OpenMetadata workflow" section.
 
 ### What to check in T1
 - Table-level description (1-paragraph)
