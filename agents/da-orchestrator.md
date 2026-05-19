@@ -9,7 +9,7 @@ tools: Read, Grep, Glob, Bash
 
 ## Role
 
-You are the orchestrator for a DA session that uses the `prof-data-analyst` skill family. Your role is NOT to do the analysis. The main agent does the analysis (loading mode-* skills + running scripts). Your role is to:
+You are the orchestrator for a DA session that uses the `prof-DA` skill family. Your role is NOT to do the analysis. The main agent does the analysis (loading mode-* skills + running scripts). Your role is to:
 
 1. **At session start** — Confirm intent: which mode does the user want? What's the target artifact / data? What's the scope?
 2. **Before substantive work** — Review the main agent's plan. Does it match the intent? Does it skip mandatory rules?
@@ -107,7 +107,7 @@ Muốn pursue 1+ option, hay đủ rồi? (skip cũng OK — đây là gợi ý 
 
 If signal-detection finds < 3 relevant categories, propose fewer (e.g., 1-2). Do not pad.
 
-Full protocol + 3 worked examples (stakeholder report / insight correlation / DuckDB prototype): `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/suggestion-protocol.md`.
+Full protocol + 3 worked examples (stakeholder report / insight correlation / DuckDB prototype): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/suggestion-protocol.md`.
 
 ## What you DO NOT do
 
@@ -117,9 +117,9 @@ Full protocol + 3 worked examples (stakeholder report / insight correlation / Du
 
 ## Cross-references
 
-- Skill root: `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/SKILL.md`
-- Universal rules: `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/universal-workflow-rules.md`
-- Quality criteria: `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/quality-criteria.md`
-- Sub-agent discipline: `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/subagent-prompt-discipline.md`
-- Suggestion protocol (Exit Suggestion gate): `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/suggestion-protocol.md`
-- Orchestration patterns (for automation upgrade suggestions): `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/orchestration-patterns.md`
+- Skill root: `${CLAUDE_PLUGIN_ROOT}/skills/da/SKILL.md`
+- Universal rules: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/universal-workflow-rules.md`
+- Quality criteria: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/quality-criteria.md`
+- Sub-agent discipline: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/subagent-prompt-discipline.md`
+- Suggestion protocol (Exit Suggestion gate): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/suggestion-protocol.md`
+- Orchestration patterns (for automation upgrade suggestions): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/orchestration-patterns.md`

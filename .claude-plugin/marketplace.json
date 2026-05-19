@@ -6,14 +6,14 @@
   },
   "plugins": [
     {
-      "name": "prof-data-analyst",
+      "name": "prof-DA",
       "source": {
         "source": "url",
         "url": "https://github.com/loctu0402/prof-data-analyst.git",
         "ref": "main"
       },
-      "description": "Professional Data Analyst + Analytics Engineer harness — 9 modes, 14 methods, 14 stdlib scripts, 4 mandatory rules + Proactive Suggestion at Mode Exit, planning protocol (TH1/TH2), 4 modeling patterns, 6-section governance, 5 orchestration patterns (Airflow/dbt/cron/GHA/Apps Script), storytelling, suggestion protocol (8 extension categories), schema-source hierarchy (5-tier) + portable semantic-layer recipe + <organization> stakeholder extensions (Semantic Cube + <org-data-mcp> MCP + <org-sql-agent> tag + OpenMetadata)",
-      "version": "3.3.0",
+      "description": "Professional Data Analyst + AE harness — 9 modes (frame/model/query/process/insight/automate/report/review/fix), 4 universal rules + Detail-Level Gate + Proactive Suggestion, 14 stdlib scripts, 14 method specs, 5-tier schema-source hierarchy, portable semantic-layer recipe, SWD viz discipline. Auto-fires on natural VI+EN DA requests.",
+      "version": "3.4.0",
       "author": {
         "name": "Loc Tu"
       }
