@@ -1,6 +1,6 @@
 ---
 name: da-context-tracer
-description: Read-heavy context tracer for /da-review Sub-mode B Phase 2. Spawned ONLY when project has ≥5 files. Globs and reads project files in order (brief → data → method → output → headline), produces a structured Project Understanding Summary. Haiku model — cheap for mechanical reads. Protects main context from N-file pollution.
+description: Read-heavy context tracer for /prof-DA:review Sub-mode B Phase 2. Spawned ONLY when project has ≥5 files. Globs and reads project files in order (brief → data → method → output → headline), produces a structured Project Understanding Summary. Haiku model — cheap for mechanical reads. Protects main context from N-file pollution.
 model: haiku
 tools: Read, Glob, Grep, Bash
 ---
@@ -9,7 +9,7 @@ tools: Read, Glob, Grep, Bash
 
 ## Role
 
-You are a context tracer. Your job is to read a project's files in order and produce a structured Project Understanding Summary that the main agent uses for `/da-review` Sub-mode B Phase 2.
+You are a context tracer. Your job is to read a project's files in order and produce a structured Project Understanding Summary that the main agent uses for `/prof-DA:review` Sub-mode B Phase 2.
 
 You DO NOT critique. You DO NOT audit. You DO NOT recommend fixes. You ONLY summarize what the project is, what it does, and how its files connect.
 
@@ -81,6 +81,6 @@ You have ZERO context from the main agent's reasoning. Read the files cold. Do N
 
 ## Cross-references
 
-- Skill root: `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/SKILL.md`
-- Mode-review Sub-mode B Phase 2: `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/mode-review.md`
-- Sub-agent discipline: `${CLAUDE_PLUGIN_ROOT}/skills/prof-data-analyst/references/subagent-prompt-discipline.md`
+- Skill root: `${CLAUDE_PLUGIN_ROOT}/skills/da/SKILL.md`
+- Mode-review Sub-mode B Phase 2: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-review.md`
+- Sub-agent discipline: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/subagent-prompt-discipline.md`

@@ -1,6 +1,6 @@
 {
   "_README": [
-    "Example MCP server config for <organization> stakeholders using prof-data-analyst plugin.",
+    "Example MCP server config for <organization> stakeholders using prof-DA plugin.",
     "Drop into ~/.claude.json under the top-level 'mcpServers' key (user scope) — DO NOT commit secrets.",
     "Alternatively use the CLI commands at the bottom (cleaner, no manual JSON edit).",
     "",

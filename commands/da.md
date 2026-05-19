@@ -1,20 +1,29 @@
 ---
-description: Professional Data Analyst — master entry. Lists 7 modes (Query→Process→Insight→Automation→Report + Review + Fix) and routes user to the right one.
+description: prof-DA — master entry. Confirms intent + Detail Level (Quick / Standard / Deep), then routes to 1 of 9 modes.
 ---
 
-Invoke the `prof-data-analyst` skill. The user typed `/da` without a mode — list the 7 available modes briefly:
+Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm intent + detail level, then route to one of the 9 modes:
 
-Standard DA flow:
-- `/da-query` — BQ semantic-first SQL workflow
-- `/da-process` — Raw data → ML-ready features (DuckDB DWH, M1-M5, ExecSum)
-- `/da-insight` — Hypothesis → diagnostic → recommendation
-- `/da-automate` — Pipeline setup + email-on-fail
-- `/da-report` — Build stakeholder report from template
+**Front-of-workflow:**
+- `/prof-DA:frame` — Business Understanding → Metric Define → Data Plan (PLANNING.md)
+- `/prof-DA:model` — Data modeling (Kimball / dbt / Medallion / DuckDB layered)
 
-Orthogonal helpers:
-- `/da-review` — Code / output review or stakeholder questioning
-- `/da-fix` — Debug existing pipeline / report bug
+**Standard DA flow:**
+- `/prof-DA:query` — Engine-agnostic NL→SQL + 5-tier schema discovery + Step 0 Request Intake
+- `/prof-DA:process` — Raw → staged → cleaned → mart → ML-ready (6-step EDA, ExecSum per phase)
+- `/prof-DA:insight` — Hypothesis → diagnostic (causal-method matching) → recommendation
+- `/prof-DA:automate` — Pipeline setup + email-on-fail + cache discipline
+- `/prof-DA:report` — Build stakeholder report from template + chart anatomy + storyline
+
+**Orthogonal helpers:**
+- `/prof-DA:review` — 3 sub-modes (A Delivery / B Full Project / C Stakeholder Q)
+- `/prof-DA:fix` — Surgical pipeline / report debug + patch-ceiling escalation
 
 User's optional context for routing: $ARGUMENTS
 
-If user's intent maps clearly to one mode, suggest it and invoke skill with that mode. Otherwise ask 1 question to disambiguate, then invoke.
+**Detail Level Gate** — before routing, ask the user the desired depth (NO time estimates):
+- **Quick** — fastest path, single-pass, minimal validators. Use when speed > completeness.
+- **Standard** *(default)* — full workflow, all hard rules, scripts called, validators run.
+- **Deep** — Standard + extra validators, falsification, robustness, sensitivity, advanced methods, multi-pass review.
+
+If user's intent maps clearly to one mode, propose it + suggested detail level, ask user to confirm. Otherwise ask 1 question to disambiguate, then invoke.

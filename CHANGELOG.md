@@ -1,8 +1,24 @@
 # Changelog
 
-All notable changes to `prof-data-analyst` plugin.
+All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3.3).
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## [3.4.0] — 2026-05-19
+
+**BREAKING — major UX refactor.** Plugin rename + skill auto-fire overhaul + Detail Level Gate. To upgrade: `/plugin uninstall prof-data-analyst` then `/plugin install prof-DA@loctu-marketplace`.
+
+### Changed (BREAKING)
+- **Plugin renamed** `prof-data-analyst` → `prof-DA`. Shorter slash command namespace (`/prof-DA:query` instead of `/prof-data-analyst:da-query`). `package.json` + `marketplace.json` + `plugin.json` `name` fields updated.
+- **Skill folder + name `da-` prefix dropped** for all 9 modes: `skills/da-frame/` → `skills/frame/`, `skills/da-query/` → `skills/query/`, …, `skills/da-fix/` → `skills/fix/`. Root skill folder `skills/prof-data-analyst/` → `skills/da/`. Slash commands renamed accordingly (`commands/da-query.md` → `commands/query.md`).
+- **All 10 SKILL.md frontmatter `description` fields rewritten** with aggressive natural Vietnamese + English auto-fire triggers. Real-world failing prompts that motivated this change include "cho mình số liệu của Vay Nhanh 17 ngày đầu tiên của tháng 5..." and "the savings product có tính năng nạp tiền tự động... tìm phương pháp tính cho tôi lượng tiền tiềm năng ở <organization>, xét trên tập user MFU..." — neither triggered the v3.3 descriptions. New descriptions include literal natural phrases like "cho mình số liệu", "lấy data", "tỷ lệ X", "breakdown theo Y", "điều gì xảy ra", "tại sao X", "tìm phương pháp tính", "đo lượng X", "potential size", "MFU cohort", "user cohort", "xét trên tập user", "kickoff", "không biết bắt đầu", "stakeholder muốn", etc.
+
+### Added
+- **Rule 5 — Detail Level Gate** added to `references/universal-workflow-rules.md`. Every mode entry confirms Quick / Standard / Deep before executing. NO time estimates surfaced — Claude routinely under-estimates duration; the user controls depth as the lever instead. Hooked into `commands/da.md` and the root `skills/da/SKILL.md` mode router.
+- **README "What changed in v3.4" + upgrade-from-v3.3 instructions** with the explicit uninstall-then-install commands.
+
+### Why
+v3.3 auto-fire descriptions used jargon phrases ("viết SQL", "NL→SQL", "phân tích insight") that real stakeholder DM prompts never contain. Two stakeholder-shaped prompts tested live, neither invoked the plugin. Root cause: trigger-phrase mismatch between description vocabulary and how users actually phrase data asks. v3.4 inverts the design — descriptions now mirror conversational Vietnamese + English DA vocabulary; jargon stays in the body where it belongs. Detail Level Gate solves the orthogonal complaint that "Standard" workflow occasionally exceeds what a quick stakeholder ping needs (and conversely, advanced cases want falsification / robustness / sensitivity stacked).
 
 ## [3.3.0] — 2026-05-18
 
@@ -25,7 +41,7 @@ Minor release: schema-discovery hierarchy + portable semantic-layer recipe + vis
 - **`references/mode-model.md`** — Added "Schema Evolution" section. 9-row safe-migration recipe (add column / rename / drop / split / merge / type change / grain change / partition-key change) with 7 discipline rules + 4 anti-patterns.
 - **`references/mode-automation.md`** — Added "Backfill Workflow" section. Decision tree (why → cost → idempotency → lower-bound preservation → cross-validation), 4 execution patterns (`--backfill-from` / chunked / shadow / full rebuild) + 5 anti-patterns.
 - **`SKILL.md` "Where to Read Next" + mode router** — Added pointers to schema-source-hierarchy, semantic-layer-setup, org-extensions, storytelling-with-data. Process mode router row updated with data quality trigger phrases.
-- **`commands/da-process.md`** — Updated to surface 3 entry granularities at command-invocation time.
+- **`commands/prof-DA:process.md`** — Updated to surface 3 entry granularities at command-invocation time.
 - **`README.md`** — Bumped to v3.3; added Visualization discipline section + Schema discovery + semantic layer section + Optional org-specific extensions section.
 
 ## [3.2.2] — 2026-05-15
@@ -99,7 +115,7 @@ Additive release: front-of-workflow planning + data engineering hooks + brief-ti
   - `references/metric-framework.md` — 8 frameworks (NSM / OMTM / Growth Loop / HEART / Diagnostic / Counter-metric / AARRR / Unit Economics) + 10-step KPI design protocol
   - `references/governance.md` — 6-section practical framework (Metric & Definition / Modeling & Grain / Quality & Validation / Access & Privacy / Reporting & Consumption / Mindset) + STAR example + 5-implementation starter checklist
   - `references/orchestration-patterns.md` — 4 patterns (Airflow with TaskGroup + DagSensor + alerts / dbt + Cloud or GitHub Actions / Cron / GitHub Actions) + hybrid pattern + decision table
-- **Sub-mode A0 (Brief tier)** in `/da-review`: 5-min snapshot — rubric_audit + outline check + 1-paragraph Ship / Fix / Rebuild verdict. Solves review overbloat (previously every review defaulted to A or B; A0 gives quick verdict for low-stakes / non-academic case).
+- **Sub-mode A0 (Brief tier)** in `/prof-DA:review`: 5-min snapshot — rubric_audit + outline check + 1-paragraph Ship / Fix / Rebuild verdict. Solves review overbloat (previously every review defaulted to A or B; A0 gives quick verdict for low-stakes / non-academic case).
 - **Storytelling pattern** added to `mode-report.md` Step 5: storyline > dashboard; complete-sentence slide titles; conclusion-led headlines.
 - **Orchestration pointer** added to `mode-automation.md` Schedule Layers: decision table + cross-ref to `orchestration-patterns.md`.
 - **2 new commands:** `/prof-data-analyst:da-frame` + `/prof-data-analyst:da-model`.
@@ -136,7 +152,7 @@ First plugin-format release.
 ### Changed
 - Refactored `causal-inference-toolkit.md` to decision table + 1-paragraph per method + pointer to `methods/<name>.md`
 - Refactored `validation-evaluation-methods.md` to decision table + summary + pointer
-- `/da-review` split into 3 sub-modes (Sub-mode A Delivery Refine, Sub-mode B Full Project Refine, Sub-mode C Stakeholder Questioning) with explicit option choice at invocation
+- `/prof-DA:review` split into 3 sub-modes (Sub-mode A Delivery Refine, Sub-mode B Full Project Refine, Sub-mode C Stakeholder Questioning) with explicit option choice at invocation
 - Added Outline / Story Flow Check to self-check-protocol Section A2 + mode-review Phase 3.5 + Sub-mode B Pass 6
 - Added BQ Safety Protocol (5-gate) + Query Logic Card audit trail to `mode-query`
 - Added 6-Step EDA Sequence + Source-pending discipline to `mode-process`
