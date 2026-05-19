@@ -4,6 +4,18 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.4.1] — 2026-05-19
+
+**BREAKING — GitHub repo renamed.** `loctu0402/prof-data-analyst` → `loctu0402/prof-DA`. Marketplace registration command + remote URL in `marketplace.json` updated. Existing users must `/plugin marketplace remove loctu-marketplace` then `/plugin marketplace add loctu0402/prof-DA` to clear the stale cache.
+
+### Why
+v3.4.0 plugin install failed with `Plugin "prof-DA" not found in marketplace "loctu-marketplace"` on machines that had `loctu-marketplace` cached from a `prof-data-analyst` marketplace add. The cache held the old plugin identifier and didn't auto-refresh. Renaming the repo + bumping version forces a full cache invalidation.
+
+### Changed
+- **`marketplace.json` source URL** → `https://github.com/loctu0402/prof-DA.git`
+- **`marketplace.json` + `plugin.json` version** → `3.4.1`
+- **README install commands** — `loctu0402/prof-data-analyst` → `loctu0402/prof-DA`. Removed the v3.4.0 footnote that claimed "repo name unchanged" (no longer true).
+
 ## [3.4.0] — 2026-05-19
 
 **BREAKING — major UX refactor.** Plugin rename + skill auto-fire overhaul + Detail Level Gate. To upgrade: `/plugin uninstall prof-data-analyst` then `/plugin install prof-DA@loctu-marketplace`.

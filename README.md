@@ -1,4 +1,4 @@
-# prof-DA v3.4
+# prof-DA v3.4.1
 
 > Professional Data Analyst + Analytics Engineer workflow as a Claude Code plugin. **9 routable modes** that auto-fire on natural Vietnamese + English DA requests (no need to memorize slash commands). 14 stdlib scripts, 14 method specs (causal + validation), 4 mandatory universal rules + **Detail Level Gate** (Quick / Standard / Deep) + **Proactive Suggestion at Mode Exit**, planning protocol (TH1/TH2), 4 data modeling patterns, 6-section governance, 5 orchestration patterns, 5-tier schema-source hierarchy, portable semantic-layer recipe, visualization discipline (SWD), 8-category suggestion protocol. 1-stop-shop end-to-end DA harness.
 
@@ -21,17 +21,17 @@ Claude Code marketplaces follow a **2-step pattern** (analogous to `apt-add-repo
 
 ```bash
 # Step 1 — Register the marketplace (once per machine)
-/plugin marketplace add loctu0402/prof-data-analyst
+/plugin marketplace add loctu0402/prof-DA
 
 # Step 2 — Install the plugin from that marketplace
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
 /plugin list
-# → prof-DA v3.4.0 should appear
+# → prof-DA v3.4.1 should appear
 ```
 
-> Note: the marketplace registration command still uses the GitHub repo path `loctu0402/prof-data-analyst` (repo name unchanged). Only the *plugin* identifier is `prof-DA`.
+> Repo renamed from `loctu0402/prof-data-analyst` → `loctu0402/prof-DA` in v3.4.1. If you previously added the old marketplace path, remove + re-add it: `/plugin marketplace remove loctu-marketplace` then `/plugin marketplace add loctu0402/prof-DA`.
 
 **Both steps required.** If `/plugin install` returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped — re-run it first.
 
