@@ -57,7 +57,7 @@ Total: 1.5-3 hrs for a new project. Worth it: saves 5-10× downstream.
 2. **Cost ceilings respected at Gate 3.** TH2 schema discovery: $0.01 schema scan / $0.10 sample / $1.00 validation. Hit ceiling → STOP + surface.
 3. **Metric contract MUST include all 10 fields.** Half-defined metrics cause downstream conflict. Use template from `metric-framework.md` Step 10.
 4. **TH1 vs TH2 explicit choice.** Don't pretend data exists when it doesn't. Don't over-model when it does.
-5. **Output is a doc**, not chat. `PLANNING.md` lives in project folder. Future sessions read it, don't re-frame.
+5. **Output is a doc**, not chat. `PLANNING.md` lives in the project folder — create the standard scaffold FIRST (`project-scaffold.md`) so PLANNING.md + all downstream outputs land in a predictable layout, not flat. Future sessions read it, don't re-frame.
 
 ## Phase routing (after Gate 4)
 
@@ -86,6 +86,7 @@ Orchestrator gate (if invoked via `/prof-DA:frame` after `/da`): confirm Next Mo
 | **No PLANNING.md** | Plan lives in chat history; lost on session restart | Gate 4 mandatory output |
 
 ## Cross-references
+- Project scaffold (create before Gate 4 output): `project-scaffold.md`
 - Workflow detail: `planning-protocol.md`
 - Metric design deep dive: `metric-framework.md`
 - Data modeling patterns: `mode-model.md`

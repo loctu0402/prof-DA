@@ -133,8 +133,9 @@ scripts/
     ├── action_brief.py           # checks 8-field brief
     ├── ai_tell_scan.py           # scans for ===, em-dash, ≈, → in stakeholder text
     ├── rubric_audit.py           # mechanical ~30-check compliance audit (Rules 1-4 + style + code); --project flag walks a folder
+    ├── report_consistency_audit.py # hybrid hard-gate (.html/.md): empty-as-finding / diacritics / scaffold / portal receipt / freestyle-palette
     ├── method_maturity_audit.py  # heuristic: method-vs-claim mismatch + falsification gap + validation stacking + advanced-method opportunities (Sub-mode B Pass 3)
-    └── self_check.py             # full pre-ship checklist runner
+    └── self_check.py             # full pre-ship runner (orientation + ai-tell + action-brief + consistency gate)
 ```
 
 Run pattern:
@@ -163,6 +164,8 @@ Full list in `references/style-rules.md`. Top blockers:
 - ✓ Per-chart inline `→ takeaway` verdict (drop / negligible / candidate / strong)
 - ✓ Local-language with proper diacritics for stakeholder-facing output (e.g., Vietnamese with full marks)
 - ✓ Chart theme = your organization's brand (any consistent theme; <organization> theme is one example)
+- ✓ Report deliverables pass the binding pre-ship gate → `references/report-standard-checklist.md` (`[GATE]`: scaffold / portal link / no empty-as-finding / diacritics / AI-tells — run `self_check.py`)
+- ✓ Stakeholder reports implement a LOCKED template (fork-or-fail) — never freestyle a bespoke visual (root cause of style drift)
 
 ## Coding Discipline (when writing or editing code)
 
@@ -210,6 +213,9 @@ Once mode is selected:
 - Universal workflow rules → `references/universal-workflow-rules.md` (Rules 1-4)
 - Coding discipline → `references/coding-discipline.md`
 - Style + AI-tells + numbers + charts → `references/style-rules.md`
+- Project scaffold (Step 0 layout) → `references/project-scaffold.md`
+- Report standard checklist (binding pre-ship gate) → `references/report-standard-checklist.md`
+- Evaluation rubric (C-level scorecard) → `references/evaluation-rubric.md`
 - Self-check protocol (pre-ship) → `references/self-check-protocol.md`
 
 **Quality framework (whole-artifact checks):**

@@ -16,6 +16,28 @@ Rules:
 - Technical terms (API, endpoint, deploy, pipeline, query, mart, dry-run) stay in English in ANY language
 - For Vietnamese specifically: all diacritics required — `ệ`, `ỉ`, `ổ`, `à`, `ă`
 
+## No Meta-Leak — your instructions never reach the audience (CRITICAL)
+
+Every deliverable is read by a THIRD PARTY (stakeholder / recipient), not by the person who briefed you. From
+the audience's view, the USER is the author and the one who did the work; you (the agent) are invisible. So
+NOTHING from the you-and-user working channel may appear in any output:
+
+- The user's notes / asides / instructions TO you ("đừng ước lượng thời gian", "make it short", "dùng theme
+  đỏ đô") DIRECT your work — they are NEVER content. Never echo them into a question, label, caption, report
+  line, chart note, speaker note, or commit message.
+- Your own agent-directives (skill / gate rules like "NO time estimates", "ask Quick / Standard / Deep") are
+  HOW you behave, not text to display. Strip the parenthetical directive before showing anything.
+- No "as you requested" / "per your note" / "bạn bảo mình" framing — the audience never saw the request.
+
+Test before shipping ANY line (including interactive prompts): would this make sense to a reader who never
+saw the brief and believes the user authored it? If it only makes sense as a note between you and the user →
+DELETE it.
+
+WRONG (gate echoed the directive): `Detail level cho phần investigation? (không ước lượng thời gian)`
+RIGHT: `Detail level cho phần investigation? (Quick / Standard / Deep)`
+
+This generalizes the candidate-voice / no-meta-framing rule to EVERY deliverable and every interactive prompt.
+
 ## AI-Tell Symbol Ban (hiring + professional deliverables)
 
 Forbidden in stakeholder text and hiring submissions:
@@ -292,3 +314,33 @@ Apply to:
 - Statistical-test outputs
 
 Show số without business reading = academic theatre. Complementary to Connect-the-Dots Reasoning (analytical layer); this rule = presentation layer.
+
+## Report Conventions (recent rules)
+
+### Business language over jargon (stakeholder UI)
+Translate ALL technical jargon to the stakeholder's business language in UI labels: <product-b> / z-score / σ /
+p-value / BH-FDR / CV / SDLM / MTD / Expected-vs-Actual → plain business terms (full Vietnamese for VN
+stakeholders). A translation table is mandatory for any dashboard. Jargon is allowed ONLY in code / docstring
+/ a methodology popover. Verdict icons carry language-appropriate labels. Audience = non-statistician;
+jargon friction = lost trust.
+
+### Email reports — force light mode (never OS-adaptive)
+Stakeholder email HTML MUST force light mode with a 3-layer override: `<meta name="color-scheme" content="light only">`
++ Outlook `[data-ogsc] / [data-ogsb]` hack + `@media (prefers-color-scheme: dark) { ...!important }` reset.
+Test on Gmail mobile with dark mode ON.
+
+### Data card on hover — show full underlying data
+Interactive chart points / KPI cards MUST reveal the full underlying data on hover (all contributing values,
+not just the headline). A hover that shows nothing is a dead interaction and erodes trust.
+
+### Projection chart — delta-change FLAT band, NOT random-walk cone
+A projection / forecast band MUST use delta-change with a FLAT ±σ band (constant width = `sigma_delta` over an
+N-day lookback): `expected_t = value_today + delta_avg × t ± sigma_delta`. NEVER a random-walk cone
+(σ × √n widening) — it produces absurd ranges. Add a one-line business note on what the band means.
+
+### Daily stakeholder report — dual archetype (editorial paper vs ops dashboard)
+A daily report serves two use cases; one artifact covering both is a compromise. Split:
+- **V1 Editorial Paper** — 5-min exec read, static, top-down info-block density (Label + Big number + Facts
+  row + Takeaway + Note + Verdict icon).
+- **V2 Ops Dashboard** — interactive filter / drill.
+Share the same data + compute; render differently.
