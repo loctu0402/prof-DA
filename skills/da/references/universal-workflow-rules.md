@@ -261,6 +261,7 @@ The Detail Level Gate makes depth an explicit user choice instead of a hidden de
 - [ ] Asked user Quick / Standard / Deep BEFORE running workflow
 - [ ] Defaulted to Standard if no answer + announced default explicitly
 - [ ] Did NOT surface a time estimate
+- [ ] Did NOT echo an agent-directive or the user's note-to-you into the question/output (No Meta-Leak — see style-rules)
 - [ ] Respected user override mid-stream ("actually go Deep on the recommendations")
 - [ ] Skipped the gate when user already declared intent
 

@@ -53,9 +53,10 @@ Give user a fast Ship/Fix/Rebuild verdict on a single deliverable. NO multi-pass
 
 ### Phase 1 — Mechanical audit only
 ```bash
+python scripts/validators/self_check.py <deliverable-path>   # .html/.md: includes the consistency gate
 python scripts/validators/rubric_audit.py <deliverable-path>
 ```
-Read TSV. Count BLOCKER + HIGH severity. That's the data point.
+Read TSV + JSON. Count BLOCKER + HIGH, plus any consistency `[GATE]` fail (scaffold / portal / AI-tell / diacritics / empty-as-finding). That's the data point.
 
 ### Phase 2 — Outline / Story Flow Check (60 sec)
 - Extract all headings + section opening lines from the deliverable
@@ -117,10 +118,12 @@ Polish 1 deliverable (report / dashboard / notebook / SQL file) for shipping. Co
 
 ### Phase 2 — Run the mechanical audit
 ```bash
-python scripts/validators/rubric_audit.py <deliverable-path>
+python scripts/validators/self_check.py <deliverable-path>               # orientation + ai-tell + action-brief + consistency gate
+python scripts/validators/rubric_audit.py <deliverable-path>             # ~30 Rules 1-4 + style + code checks
+python scripts/validators/report_consistency_audit.py <deliverable-path> # scaffold / portal / palette / diacritics / empty-as-finding
 ```
 
-Bundles ~30 checks (Rules 1-4 + style + code + output-path). Output: TSV/JSON gap table with `rule_id | severity | location | what_missing | how_to_fix | why_it_matters`.
+Bundles ~30 checks (Rules 1-4 + style + code + output-path) plus the consistency hard-gate. Output: TSV/JSON gap table with `rule_id | severity | location | what_missing | how_to_fix | why_it_matters`. Then SCORE the result against `references/evaluation-rubric.md` — the 7-category weighted C-level grade + must-fix gate is the standard scorecard every review session must produce (so verdicts are comparable across sessions).
 
 Severity assignment:
 

@@ -33,16 +33,30 @@ Full template catalog: `<your-workspace>/shared/templates/_catalog.md` (or equiv
 
 ## Workflow
 
+### Step 0 — Detect or create project scaffold (BEFORE any output)
+Run the Step-0 protocol in `project-scaffold.md`: glob the target project dir; align to an existing layout, or
+create the standard one (`queries/ scripts/ cache/ data/ output/{reports,charts,data}/` + `README.md`) and move
+artifacts in. Never dump the deliverable flat next to source files. Announce the scaffold in one line.
+`[GATE]` — `scripts/validators/report_consistency_audit.py` flags `scaffold_missing`.
+
 ### Step 1 — Confirm Audience & Output Format
 - Audience: team / manager / cross-functional / C-level?
 - Format: HTML SPA / PDF / email body / Gchat / slides?
 - Language: Vietnamese with diacritics (stakeholder) or English (internal docs)?
 - Length: 1-page summary or multi-section?
 
-### Step 2 — Fork Template
-- Read template's `_index.md` for usage notes
-- Copy template files to `output/projects/<project-name>/` or `output/reports/`
-- NEVER edit the template source directly during report build — fork first
+### Step 2 — Fork a locked template (fork-or-fail, NEVER freestyle)
+- Pick the template from the Decision Tree; read its `_index.md`; copy it to the project's `output/`.
+- NEVER edit the template source during a build — fork first.
+- **Fork-or-fail — do NOT invent a bespoke visual.** Claude Code is biased to "ship something working" and
+  produces a generic per-report design; that is the root cause of "every report a different style". If the
+  chosen template is a README-only stub with no forkable HTML/CSS, STOP and do ONE of:
+  (a) reuse the closest real template + its canonical theme (`shared/themes/<organization>_chart_theme.py`: pink
+  `#d82d8b`, cream `#fdf6ee`, teal `#00b4a0`);
+  (b) prepare a `DESIGN_HANDOFF_REQUEST.md` per `claude-design-handoff-not-freestyle` and wait for the spec;
+  (c) flag that the template library needs this archetype built (Phase B), then implement 1:1 once locked.
+  `[GATE]` — `report_consistency_audit.py` flags `freestyle_palette` when a build defines a bespoke palette
+  with no reference to a locked template/theme.
 
 ### Step 3 — Wire Data
 - For daily snapshots: pipeline already populated CSV / JSON cache → load and render
@@ -157,8 +171,13 @@ Per recommendation:
 
 OR full prose with 8 fields (Question, Goal, Why, What, Who, When, Where, How).
 
-### Step 7 — Self-Check
-Run through `references/self-check-protocol.md`. Top blockers for reports:
+### Step 7 — Self-Check (run the hybrid gate)
+Run the gate first, then the protocol:
+```bash
+python scripts/validators/self_check.py <deliverable>   # orientation + ai-tell + action-brief + consistency
+```
+Any `[GATE]` failure in `references/report-standard-checklist.md` blocks "done" (scaffold, portal, AI-tells,
+diacritics, empty-as-finding, orientation). Then walk `references/self-check-protocol.md`. Top blockers for reports:
 - Numbers reconcile across cards / tables / charts
 - AI-tell symbols absent (`===`, `-----`, em-dash, `≈`, `→`)
 - Vietnamese diacritics complete
@@ -191,6 +210,24 @@ See `feedback_inspection_audit_when_screenshot_unreliable.md` for the past incid
 - `output/projects/<project>/` for project-tied output
 - Filename: `<topic>_<YYYY-MM-DD>.html` (e.g., `daily_snapshot_2026-05-08.html`)
 - Also write `<topic>_latest.html` symlink / copy for stakeholder bookmark
+
+### Step 9 — Publish to portal (the always-forgotten step)
+After save + verify, publish the deliverable to a shareable 72h link. This is NOT auto-sending to people
+(that still waits for "send") — it produces the LINK form of the deliverable, which the user needs almost
+every time (especially daily auto-reports) and the agent routinely forgets.
+
+```bash
+# one-off:
+python shared/portal_upload.py upload <report>.html --duration 72
+# recurring report (keep the SAME link across days — reuse stored UUID):
+python shared/portal_upload.py replace-or-create <stable_uuid> <report>.html --duration 72
+```
+- Save the receipt in the project's `cache/`: `latest_portal_url.json` + `portal_stable_uuid.txt`. For
+  recurring/daily reports, reuse the stable UUID so stakeholders' saved links keep working (content replaced, URL unchanged).
+- Constraints: file `≤ 1MB`; `.html`/`.md` only; `duration ∈ {1,6,12,24,48,72}` (72 = max). Dashboard > 1MB
+  → trim / inline-minify before publish.
+- Give the user the returned `https://a01preview.web.app/view/<uuid>` link.
+- Skip ONLY if the user explicitly says "no link". `[GATE]` — `report_consistency_audit.py` flags `portal_missing`.
 
 ## Master Checklist Items (top-of-mind)
 
@@ -255,6 +292,9 @@ See `feedback_stabilize_to_template.md`.
 
 Before building any report:
 1. `references/universal-workflow-rules.md` — Orientation + Ladder + Action Brief
-2. `references/style-rules.md` — style polish
-3. THIS file — template choice + workflow
-4. `references/self-check-protocol.md` — pre-ship checks
+2. `references/project-scaffold.md` — Step 0 layout (detect or create)
+3. `references/style-rules.md` — style polish
+4. THIS file — template choice + workflow (Step 0 scaffold → … → Step 9 portal)
+5. `references/report-standard-checklist.md` — the binding pre-ship gate (`[GATE]` / `[ADVISORY]`)
+6. `references/self-check-protocol.md` — pre-ship checks
+7. `references/evaluation-rubric.md` — how the result will be scored (7-category C-level grade)

@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """
 Pre-ship self-check runner — combines orientation_block + ai_tell_scan + action_brief
-and reports a single rolled-up verdict per the self-check protocol.
+(+ report_consistency_audit for .html/.md) and reports a single rolled-up verdict per
+the self-check protocol.
 
-Runs the 3 cheap checks in sequence on a deliverable, prints a pass/fail summary.
+Runs the cheap checks in sequence on a deliverable, prints a pass/fail summary.
 Statistical-rigor checks (Rung 2 noise) are intentionally NOT bundled here —
 they require human input (baseline + n + sd) per metric.
+
+The consistency audit (empty-as-finding, diacritics, scaffold, portal receipt, palette)
+is the hybrid hard-gate for stakeholder report deliverables; it runs only on .html/.md.
 
 Exit:
   0 = all checks pass
@@ -48,7 +52,7 @@ def main() -> int:
     p.add_argument("--type", choices=("auto", "text", "code"), default="auto",
                    help="Type passed to orientation_block.py")
     p.add_argument("--section", help="Section name for action-brief check")
-    p.add_argument("--skip", choices=("orientation", "ai-tell", "action-brief"), action="append", default=[])
+    p.add_argument("--skip", choices=("orientation", "ai-tell", "action-brief", "consistency"), action="append", default=[])
     p.add_argument("--strict", action="store_true", help="Strict mode for ai-tell scan")
     args = p.parse_args()
 
@@ -72,6 +76,11 @@ def main() -> int:
         if args.section:
             brief_args.extend(["--section", args.section])
         summary["checks"]["action_brief"] = run_validator("action_brief.py", brief_args)
+
+    if "consistency" not in args.skip and args.path.suffix.lower() in (".html", ".md", ".markdown"):
+        summary["checks"]["report_consistency_audit"] = run_validator(
+            "report_consistency_audit.py", [str(args.path), "--json"]
+        )
 
     failures = [name for name, c in summary["checks"].items() if c.get("exit_code", 0) != 0]
     summary["failed_checks"] = failures

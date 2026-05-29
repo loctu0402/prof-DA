@@ -21,7 +21,7 @@ Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm i
 
 User's optional context for routing: $ARGUMENTS
 
-**Detail Level Gate** — before routing, ask the user the desired depth (NO time estimates):
+**Detail Level Gate** — before routing, ask the user the desired depth using ONLY the option names below. (Agent directives — do NOT echo into the question shown to the user: never surface time estimates; never paste this parenthetical. See style-rules "No Meta-Leak".)
 - **Quick** — fastest path, single-pass, minimal validators. Use when speed > completeness.
 - **Standard** *(default)* — full workflow, all hard rules, scripts called, validators run.
 - **Deep** — Standard + extra validators, falsification, robustness, sensitivity, advanced methods, multi-pass review.

@@ -184,8 +184,8 @@ When refactoring schema descriptions (e.g. HTML→markdown cleanup, content fix,
 
 1. **Discovery** — fetch full schema, dump to UTF-8 file for diffability, count cols, scan formats
 2. **Audit** (read-only) — compare against any local domain notes that exist; spot-check 5-10 cols; categorize issues (format / content / structural)
-3. **Build** (dry-run) — write script with `--push` flag (default = dry-run); output old vs new side-by-side
-4. **Push** — single PATCH with batched ops array (atomic); patch only changed cols; verify version bumped
+3. **Build** (dry-run) — write script with `--push` flag (default = dry-run); output old vs new side-by-side. Add a `--one-at-a-time` flag from the start (see hard rule below)
+4. **Push** — PATCH only changed cols; verify version bumped. Small ASCII batch → single atomic ops array. **Large or rich-Vietnamese batch (≈20+ ops, ~8KB total) FAILS with HTTP 400 `"Invalid name <...>"` (misleading error) → switch to one-op-per-request (`--one-at-a-time`).**
 5. **Cross-validate + record** — verify sibling tables (daily ↔ monthly) consistent; update your local domain notes
 
 ### Hard rules
@@ -201,6 +201,7 @@ When refactoring schema descriptions (e.g. HTML→markdown cleanup, content fix,
 | Bi-directional sibling reference MANDATORY | "For monthly grain → `<monthly>` (30× cheaper)" + reverse; without this, 30× cost incurred silently |
 | Dry-run to file, READ IT, then push | Don't trust transformation function from samples alone |
 | Independent-review checkpoint before push when scope expands beyond mechanical | A large auto-adapt plan can quietly corrupt sibling tables if source has content bugs; a fresh-eyes pass catches what the author misses |
+| Large / rich-Vietnamese batch PATCH (~20+ ops) → push `--one-at-a-time` | A single big ops array 400s with a misleading `"Invalid name"` error; 1 op/request succeeds. Build the script with the flag from the start |
 
 ### When to push T1 fix vs flag for owner
 
@@ -276,7 +277,21 @@ claude mcp add -s user powerbi-modeling -- <path-to-vscode-ext-server>
 
 See `<plugin_root>/mcp/example-org-mcp.json` for the JSON form (drop-in for `~/.claude.json` user scope).
 
-## 7. Cross-references
+## 7. <organization> reporting conventions (<product> / wealth)
+
+Apply in `report` mode for <organization> wealth / <product> products:
+
+- **NSM anchor = AUM total + Balance per user.** The other 6 metric families (cashin / cashout / netflow /
+  users / rate / term) are DRIVERS that explain AUM movement — not co-equal heroes. Anchor the two NSM cards first.
+- **MAU / MFU = DISTINCT users within the calendar month (1st → today, MTD)**, NOT a rolling 30-day window.
+  Resets on the 1st. Persist the daily snapshot so next-month SDLM compare needs no re-query.
+- **Waterfall breakdowns MUST overlay the <product-b> expected** (tick marker + color saturation by |z| + verdict
+  icon + cumulative ghost line). Without it, bar magnitude is meaningless — a perennially-big bar can be
+  normal, while a +50% vs baseline is the actionable one. Apply to Netcash decomp, AUM identity, Driver Table.
+- **CRM ticket SENTIMENT** = 7 Vietnamese labels (Hài lòng / Rất hài lòng / Trung lập / Bối rối / Khó chịu /
+  Tức giận / NULL), NOT English positive/neutral/negative; filter `Is_last_ticket = TRUE`.
+
+## 8. Cross-references
 
 **Within this plugin**:
 - Schema tier ladder → `references/schema-source-hierarchy.md`

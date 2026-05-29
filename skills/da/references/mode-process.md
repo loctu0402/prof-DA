@@ -319,7 +319,8 @@ Process mode itself is engine-agnostic — pipeline anatomy is the ML-supervised
 
 ## Output File Discipline
 
-Process artifacts land per type:
+Create the standard project scaffold FIRST (`project-scaffold.md`) — detect or create
+`queries/ scripts/ cache/ data/ output/`; never dump artifacts flat. Process artifacts then land per type:
 
 | Artifact | Destination |
 |----------|-------------|

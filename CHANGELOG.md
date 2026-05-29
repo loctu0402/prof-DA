@@ -4,6 +4,28 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.5.0] — 2026-05-29
+
+Report standardization release: a binding C-level evaluation rubric + hybrid consistency gate, project-scaffold discipline, mandatory portal publish (the always-forgotten step), fork-or-fail template discipline, and recent-rule sync.
+
+### Added
+- **`references/evaluation-rubric.md`** — single front-door C-level / DA-grade scorecard. 7 weighted categories (Framing & Logic / Data Integrity / Insight Quality / Visual & Design / Language & Tone / Delivery & PM / Verdict), per-criterion GOOD/BAD/score/severity, weighted grade A-F + must-fix gate. Composes existing rules (cross-links, no duplication); grounded in the BA weighted-decision-matrix framework.
+- **`references/report-standard-checklist.md`** — the binding pre-ship checklist with `[GATE]` (hard-stop, machine-checked) vs `[ADVISORY]` (scored) items. Same list every session → consistent deliverable shape across Claude sessions.
+- **`references/project-scaffold.md`** — Step 0 detect-or-create standard layout (`queries/ scripts/ cache/ data/ output/`); fixes flat-file dumps.
+- **`scripts/validators/report_consistency_audit.py`** — hybrid hard-gate validator: empty-as-finding, Vietnamese diacritics, project scaffold, portal-publish receipt; freestyle-palette advisory. Number-reconcile deliberately NOT automated (a naive >10× flag false-positives on legit encodings like `data-countup="2964" data-fmt="tenth"` → 296.4). Wired into `self_check.py` for `.html/.md`.
+
+### Changed
+- **`mode-report.md`** — added Step 0 (scaffold), Step 9 (portal publish via `shared/portal_upload.py`, 72h TTL, stable UUID), fork-or-fail at Step 2 (never freestyle a bespoke visual when the template is a README-only stub), consistency gate at Step 7. Reading-order updated. `skills/report/SKILL.md` stub synced.
+- **`mode-review.md`** — Sub-mode A0/A now run the consistency gate + score against `evaluation-rubric.md`.
+- **`mode-frame.md` / `mode-process.md`** — scaffold-first pointer added.
+- **`style-rules.md`** — recent report conventions: business-language-over-jargon (UI), email force-light-mode, data-card-on-hover, projection delta-change flat band (not random-walk cone), editorial-paper-vs-ops-dashboard dual archetype.
+- **`style-rules.md` + gate (`commands/da.md`, `universal-workflow-rules.md`)** — added **No Meta-Leak** rule: the user's notes/meta-instructions to the agent and the agent's own directives (e.g. "no time estimate") must NEVER appear in any audience-facing output. Fixes a gate bug where `(không ước lượng thời gian)` leaked into the Detail-Level question shown to the user.
+- **`org-extensions.md`** — OM curation: large/rich-Vietnamese batch PATCH (~20+ ops) must push `--one-at-a-time` (a single big array 400s with a misleading "Invalid name" error) — corrects the prior "single atomic batch" advice. Added §7 <organization> reporting conventions (AUM/Balance NSM anchor, MAU/MFU calendar-month, waterfall <product-b> overlay, CRM sentiment VN labels).
+- **`SKILL.md`** — registered the new validator + reference docs.
+
+### Why
+Real use on the MOAT `tko_tui_plus_ytd_2026` deep-dive surfaced the gaps: every report drifted in visual style (README-only template stubs → freestyle), files dumped flat (no scaffold), the portal link was never published, and recent memory rules (design-handoff, OM batch-patch, projection band, etc.) weren't encoded. The plugin enforced *rules* but not *visual consistency, project structure, or delivery*. v3.5.0 makes those a hybrid gate (hard-stop mechanical + advisory qualitative) so any Claude session produces the same deliverable shape. Validated: the gate FAILs the MOAT report (scaffold + portal missing) and PASSes a `generate_v9.py` output.
+
 ## [3.4.1] — 2026-05-19
 
 **BREAKING — GitHub repo renamed.** `loctu0402/prof-data-analyst` → `loctu0402/prof-DA`. Marketplace registration command + remote URL in `marketplace.json` updated. Existing users must `/plugin marketplace remove loctu-marketplace` then `/plugin marketplace add loctu0402/prof-DA` to clear the stale cache.
