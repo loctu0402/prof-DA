@@ -4,6 +4,22 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.6.0] - 2026-06-01
+
+Enforcement + companion release: a Stop-hook validation gate that makes the report consistency check non-skippable, plus the `loctu-da-stack` companion plugin for guided MCP setup. README rewritten overview-to-detail.
+
+### Added
+- **`hooks/stop_gate.py` + `hooks/hooks.json`** - a receipt-targeted, hard-block Stop hook. `report` mode drops `<project>/.prof-da/pending-validation.json`; on Stop the gate runs `report_consistency_audit` on the listed deliverable(s) and BLOCKS the turn from ending until it passes (clearing the receipt on pass). Loop-bounded (attempts <= 5) and fail-open (any internal error allows the stop). Silent on every non-report session (no receipt, no action), so it never false-blocks a README / REVIEW / scratch edit. Gates on `report_consistency_audit` only: the markdown-doc checks (`orientation_block` / `action_brief` / `ai_tell_scan`) false-fail rendered HTML and would trap every report. Verified: silent on no-receipt, BLOCKS the MOAT report (scaffold + portal missing), PASSES + clears on a good v9 report.
+- **`loctu-da-stack`** - second plugin in the marketplace (source `./loctu-da-stack`): a guided-setup skill for the DA workflow MCP stack (<organization> Data Portal / exa / Google Drive + Gmail / on-demand Playwright). Ships no credentials; placeholders + local login. A guide, not a bundle (bundling would duplicate user-scope servers + auto-fail off-VPN).
+
+### Changed
+- **`mode-report.md` + `skills/report/SKILL.md`** - Step 8 drops the `.prof-da/pending-validation.json` receipt that arms the Stop gate; Step 7 documents the gate + that the doc-checks are advisory for rendered HTML.
+- **`README.md`** - rewritten overview-to-detail (tagline, why, install, modes, internals); changelog demoted to a link; stale `v3.4.1` corrected to `3.6.0`; script count corrected 14 to 16.
+- **`plugin.json` + `marketplace.json`** - version `3.6.0`; script count 14 to 16; a stray registry em-dash cleaned.
+
+### Why
+prof-DA enforced rules in skill text but nothing made the validation step non-skippable: a model could finish a report without ever running the gate. The Stop hook closes that. Receipt-targeting (not file mtime) is what makes it precise: it fires exactly when report mode produced a deliverable, and never otherwise.
+
 ## [3.5.0] — 2026-05-29
 
 Report standardization release: a binding C-level evaluation rubric + hybrid consistency gate, project-scaffold discipline, mandatory portal publish (the always-forgotten step), fork-or-fail template discipline, and recent-rule sync.

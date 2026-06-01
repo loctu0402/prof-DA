@@ -190,6 +190,17 @@ diacritics, empty-as-finding, orientation). Then walk `references/self-check-pro
 - Every chart has ALL 7 anatomical elements (Figure / title / axes / legend / total cards / insight line / notes / download)
 - Sentiment color matches the dashboard context (override mapping documented if non-default — see `style-rules.md`)
 
+**Enforced by a Stop hook (v3.6):** the bundled `hooks/stop_gate.py` blocks your turn from ending while a
+pending report deliverable fails the consistency gate. It is RECEIPT-DRIVEN: it acts ONLY if Step 8 wrote
+`<project>/.prof-da/pending-validation.json`, and is silent on every non-report session. For rendered
+HTML/dashboard deliverables, `orientation_block` / `action_brief` inside `self_check` are ADVISORY (the
+orientation lives in the layout, recommendations in the Recommendations section); the HARD gate the hook
+enforces is `report_consistency_audit` (scaffold / portal receipt / empty-as-finding / dropped diacritics).
+Run that one to see exactly what the gate will check:
+```bash
+python scripts/validators/report_consistency_audit.py <deliverable>
+```
+
 ### Step 7.5 — HTML SPA verification (when screenshot unreliable)
 
 For HTML report deliverables: a screenshot in a constrained preview pane may miss layout issues (clipped content, hidden tabs, empty cells, broken scroll). Substitute structural JS inspection.
@@ -210,6 +221,12 @@ See `feedback_inspection_audit_when_screenshot_unreliable.md` for the past incid
 - `output/projects/<project>/` for project-tied output
 - Filename: `<topic>_<YYYY-MM-DD>.html` (e.g., `daily_snapshot_2026-05-08.html`)
 - Also write `<topic>_latest.html` symlink / copy for stakeholder bookmark
+- **Drop the validation receipt (this is what arms the Stop-hook gate):** write
+  `<project>/.prof-da/pending-validation.json` =
+  `{"deliverables": ["<saved report path, relative to project root>"], "attempts": 0}`.
+  The bundled Stop hook then blocks finishing until the report passes `report_consistency_audit`, and
+  deletes the receipt automatically on pass. Without this receipt the gate stays silent, so report mode
+  MUST write it; that is what makes Step 7 non-skippable for a report deliverable.
 
 ### Step 9 — Publish to portal (the always-forgotten step)
 After save + verify, publish the deliverable to a shareable 72h link. This is NOT auto-sending to people
