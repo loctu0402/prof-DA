@@ -1,6 +1,6 @@
 {
   "name": "prof-DA",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "description": "Professional Data Analyst + Analytics Engineer harness as a Claude Code plugin. 9 routable modes (frame / model / query / process / insight / automate / report / review / fix). Engine-agnostic SQL (BQ / Postgres / Snowflake / Redshift / DuckDB). 4 universal rules + Detail-Level Gate + Proactive Suggestion at Mode Exit. 16 stdlib scripts (stats / causal / format / validators). 14 method specs (causal + validation families). 5-tier schema-source hierarchy. Portable semantic-layer recipe. Visualization discipline (SWD). Auto-fires on natural Vietnamese + English DA requests (cho mình số liệu / điều gì xảy ra / tìm phương pháp tính / phân tích / báo cáo / build dashboard / etc).",
   "author": {
     "name": "Loc Tu",
