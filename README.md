@@ -1,16 +1,17 @@
 # prof-DA
 
-> A Claude Code plugin that makes Claude work like a disciplined data analyst: ask for a number, a chart, or "why did X drop" in plain Vietnamese or English, and it runs a structured analyst workflow instead of improvising.
+**prof-DA turns Claude Code into a disciplined data analyst.** Ask for a number, a chart, or "why did X drop", in Vietnamese or English, and it runs a fixed analyst workflow instead of improvising.
 
-`v3.5.0` · MIT · engine-agnostic (BigQuery / Postgres / Snowflake / Redshift / DuckDB) · auto-fires on natural language
+- **What it is:** a Claude Code plugin that wraps Claude in 9 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `review` / `fix`) behind one natural-language entry point.
+- **Who it's for:** data analysts and analytics engineers who work in Claude Code and want rigor and consistency, not improvisation.
+- **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Nothing is reproducible.
+- **The guarantee:** any session, on any engine, produces work that reads like the same senior analyst made it.
 
-## Why prof-DA exists
+`v3.7.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
-Ask a stock LLM for "số liệu X" and it free-styles. It guesses which metric you meant, writes SQL against a schema it never checked, hands back a bare number with no sense of whether the move is real or noise, and formats the report a different way every time. Across a team nothing is reproducible, and no two deliverables look alike.
+## How it works
 
-prof-DA replaces that with a fixed analyst process. Before touching data it confirms what you actually want and how deep to go. It discovers the real schema before writing a query. It runs statistics in audited scripts rather than guessing them inline. It checks every number for signal versus noise. And it ships a deliverable with the same structure every time. The point is simple: any Claude session, on any engine, produces work that reads like the same senior analyst made it.
-
-It is built for data analysts and analytics engineers who live in Claude Code and want rigor and consistency instead of improvisation.
+prof-DA runs the same fixed process on every request: confirm intent and depth before touching data, discover the real schema before querying, run statistics in audited scripts (never inline guesses), judge every number for signal versus noise, and ship a same-shape deliverable each time. The 9 modes below cover the analyst lifecycle; the 4 universal rules are what keep each step rigorous and consistent across sessions.
 
 **Jump to:** [Install](#install) · [First run](#first-run) · [The 9 modes](#the-9-modes) · [What it enforces](#what-it-enforces) · [What is inside](#what-is-inside) · [Configuration](#configuration)
 
@@ -26,7 +27,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.5.0 should appear
+/plugin list      # prof-DA 3.7.0 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
@@ -123,7 +124,11 @@ Schema discovery follows a 5-tier hierarchy (owner-curated tag -> catalog API ->
 
 ## Versioning
 
-Current version `3.5.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.7.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+
+## Contributing
+
+Issues and pull requests are welcome at [loctu0402/prof-DA](https://github.com/loctu0402/prof-DA). prof-DA is distilled from one analyst's daily practice, so real-world gaps and counter-examples are the most useful feedback.
 
 ## License
 
