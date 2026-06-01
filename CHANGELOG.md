@@ -4,6 +4,19 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.7.0] - 2026-06-01
+
+Self-improving release: a bundled learning loop that captures feedback + corrections from conversation so prof-DA personalises itself, mirroring the host's session-end memory hooks.
+
+### Added
+- **`hooks/feedback_capture.py` (Stop) + `hooks/correction_detector.py` (UserPromptSubmit) + `references/learning-protocol.md`.** The agent does the distillation; the hooks are reminders + a real-time flag (a shell script cannot distill a conversation).
+  - `correction_detector` is the REAL-TIME catch: when the user's message looks like a correction of an established practice ("you forgot", "we always do X", "dù đã làm nhiều lần") it injects a note to resolve + persist IMMEDIATELY and, for a forgotten practice, fix the instruction so it cannot recur.
+  - `feedback_capture` is the session-end catch-all. **Detect-and-defer:** it stays silent when the host already runs its own memory loop (e.g. `~/.claude/hooks/session_end_sync.py`), so it never double-reminds; for users without one it is the only loop. Dedup per session, `stop_hook_active` guard, fail-open.
+  - `learning-protocol.md`: detect the memory target (lt-memory / CLAUDE.md / project-local), qualify hard (anti-bloat), and for a FORGOTTEN practice update the instruction layer via a visible agent Edit (never a hook blind-write), not just a memory note.
+
+### Why
+prof-DA enforced rules but did not LEARN from being corrected. A recurring forgetting (the same correction twice) is the signal that the fix belongs in the instruction the agent reads next time, not only in recalled memory. This loop closes that path. It defers entirely to a host that already has a memory system, and is the whole loop for users who do not.
+
 ## [3.6.0] - 2026-06-01
 
 Enforcement + companion release: a Stop-hook validation gate that makes the report consistency check non-skippable, plus the `loctu-da-stack` companion plugin for guided MCP setup. README rewritten overview-to-detail.
