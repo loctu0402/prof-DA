@@ -44,6 +44,7 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
 - Format: HTML SPA / PDF / email body / Gchat / slides?
 - Language: Vietnamese with diacritics (stakeholder) or English (internal docs)?
 - Length: 1-page summary or multi-section?
+- **Baseline / comparator (ALWAYS ask, never assume):** which reference does each metric compare against? Menu: prior period (DoD / WoW / MoM) / trailing average (7d / 28d) / SDLM or same-period-last-year (YoY) / target-or-plan or <product-b>-expected / competitor-market benchmark / cohort baseline. A bare number is noise (Rule 2) - never ship one. Default for <product> daily = DoD + vs-7d-avg, but confirm per report. The chosen comparator(s) fill the template's comparator slot (template-library handoff §4.10).
 
 ### Step 2 — Fork a locked template (fork-or-fail, NEVER freestyle)
 - Pick the template from the Decision Tree; read its `_index.md`; copy it to the project's `output/`.
