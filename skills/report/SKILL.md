@@ -27,7 +27,7 @@ Full: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/universal-workflow-rules.md`.
 6. Recommendations section with 8-field Action Brief
 7. Self-check — run `self_check.py` (orientation + ai-tell + action-brief + consistency gate) + outline check
 7.5. HTML SPA structural inspection via preview_eval (catches what screenshot misses)
-8. Save to output/projects/ or output/reports/ (NEVER root)
+8. Save to output/ + drop `<project>/.prof-da/pending-validation.json` receipt (arms the Stop-hook gate)
 9. Publish to portal — `shared/portal_upload.py` (72h link, stable UUID) `[GATE]` — the always-forgotten step
 
 Full workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-report.md`.
@@ -44,6 +44,7 @@ Narrative template (SCQR + Key Terms + Impact Cards): `${CLAUDE_PLUGIN_ROOT}/ski
 - NEVER edit generator for HTML patch (use update_report_vN.py overlay)
 - Step 0 scaffold FIRST, Step 9 portal-publish LAST — both `[GATE]` via `report_consistency_audit.py`
 - Fork-or-fail: a README-only template stub = STOP + handoff, NEVER freestyle (root cause of style drift)
+- Stop-hook gate (v3.6): Step 8 drops `.prof-da/pending-validation.json`; the bundled `hooks/stop_gate.py` BLOCKS finishing until the report passes `report_consistency_audit` (clears the receipt on pass). Receipt-driven, silent on non-report sessions
 
 ## Cross-references
 - Full mode workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-report.md`
