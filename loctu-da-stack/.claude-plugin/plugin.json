@@ -1,0 +1,23 @@
+{
+  "name": "loctu-da-stack",
+  "version": "0.1.0",
+  "description": "Guided setup for the DA workflow MCP stack: <organization> Data Portal (<org-data-mcp>), exa web search, Google Drive + Gmail, and on-demand Playwright/Chrome. Ships NO credentials - it walks you through login, keys, and registration so every connector is wired before you analyze. Companion to prof-DA. Auto-fires on 'set up MCP', 'kết nối MCP', 'cài MCP', 'connect <org-data-mcp>', 'add exa', 'onboard máy mới'.",
+  "author": {
+    "name": "Loc Tu",
+    "email": ""
+  },
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "setup",
+    "onboarding",
+    "<org-data-mcp>",
+    "exa",
+    "google-drive",
+    "gmail",
+    "playwright",
+    "data-analyst",
+    "companion",
+    "prof-da"
+  ]
+}
