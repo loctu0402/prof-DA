@@ -1,0 +1,52 @@
+{
+  "_README": [
+    "Reference ONLY - placeholder config for the DA workflow MCP stack.",
+    "This companion plugin uses the GUIDE approach (skills/setup-stack/SKILL.md), NOT force-bundled servers,",
+    "because <org-data-mcp> + exa are usually already registered at user scope (bundling would duplicate them).",
+    "Use these snippets if you wire a server manually or bundle it in your OWN plugin.",
+    "NEVER commit a real SERVER_ID or API key - everything here is a placeholder."
+  ],
+
+  "_claude_mcp_add_recipes": {
+    "<org-data-mcp>": "claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://mdp-mcp-gateway.<internal-host>/servers/<SERVER_ID>/mcp",
+    "exa": "claude mcp add -s user --transport http exa \"https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY>\"",
+    "playwright (on-demand)": "claude mcp add -s user playwright -- npx -y @playwright/mcp@latest",
+    "google-drive + gmail": "claude.ai NATIVE connectors - enable in Claude settings -> Connectors -> Google OAuth (NOT claude mcp add)"
+  },
+
+  "_user_scope_mcp_json_form": {
+    "_note": "Drop into ~/.claude.json under the top-level mcpServers key (user scope). Placeholders only. mac/linux: replace cmd/c with a direct npx call.",
+    "mcpServers": {
+      "<org-data-mcp>": {
+        "command": "cmd",
+        "args": ["/c", "npx", "-y", "mcp-remote", "https://mdp-mcp-gateway.<internal-host>/servers/<SERVER_ID>/mcp"]
+      },
+      "exa": {
+        "type": "http",
+        "url": "https://mcp.exa.ai/mcp?exaApiKey=<EXA_API_KEY>"
+      }
+    }
+  },
+
+  "_plugin_userConfig_bundle_form": {
+    "_note": "ADVANCED + usually skip. If bundling in a plugin: plugin.json declares userConfig, .mcp.json references ${user_config.*}, prompted at enable time. Caveat: auto-starts on enable, cannot be disabled individually, and DUPLICATES any server you already run at user scope.",
+    "plugin_json_userConfig": {
+      "<organization>_server_id": { "type": "string", "title": "<organization> MCP SERVER_ID", "description": "Per-team server id from the <organization> Data Platform team", "required": false },
+      "exa_api_key": { "type": "string", "title": "exa API key", "description": "From the exa.ai dashboard", "required": false }
+    },
+    "mcp_json": {
+      "mcpServers": {
+        "<org-data-mcp>": {
+          "command": "cmd",
+          "args": ["/c", "npx", "-y", "mcp-remote", "https://mdp-mcp-gateway.<internal-host>/servers/${user_config.<organization>_server_id}/mcp"]
+        },
+        "exa": {
+          "type": "http",
+          "url": "https://mcp.exa.ai/mcp?exaApiKey=${user_config.exa_api_key}"
+        }
+      }
+    }
+  },
+
+  "_verify": "After setup: `claude mcp list` should show each target server as Connected. <organization> services require <organization> VPN."
+}
