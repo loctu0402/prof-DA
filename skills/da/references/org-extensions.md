@@ -2,16 +2,16 @@
 
 This reference bundles the <organization>-specific tooling (Semantic Cube, <org-data-mcp> MCP, <org-sql-agent> tags, OpenMetadata curation) that make this plugin a **complete harness for <organization> DA stakeholders**. The rest of the plugin is portable across companies; this file is the org-specific layer.
 
-**Audience**: anyone using this plugin within <organization>'s data platform (Semantic Cube + <org-data-mcp> MCP + `<data-catalog-host>`). Non-<organization> users can ignore this file entirely — the plugin's portable behavior is unaffected.
+**Audience**: anyone using this plugin within <organization>'s data platform (Semantic Cube + <org-data-mcp> MCP + `<DATA_CATALOG_HOST>`). Non-<organization> users can ignore this file entirely — the plugin's portable behavior is unaffected.
 
 ## What <organization> adds on top of the portable plugin
 
 | Capability | <organization> tool | Plugin reference (generic) |
 |-----------|-----------|---------------------------|
 | Semantic layer | Semantic Cube (<semantic-tech> + Cube.js) at `<semantic-layer-host>` | `references/semantic-layer-setup.md` |
-| Schema catalog | OpenMetadata at `<data-catalog-host>` | `references/schema-source-hierarchy.md` T1 |
+| Schema catalog | OpenMetadata at `<DATA_CATALOG_HOST>` | `references/schema-source-hierarchy.md` T1 |
 | LLM-grade schema tag | `<org-catalog>.*` tag namespace | `references/schema-source-hierarchy.md` T0 |
-| MCP gateway | `<org-data-mcp>` MCP (gateway: `mdp-mcp-gateway.<internal-host>`) | (none — <organization>-only) |
+| MCP gateway | `<org-data-mcp>` MCP (gateway: `<MCP_GATEWAY_HOST>`) | (none — <organization>-only) |
 | NL→SQL agent | <org-sql-agent> (via MCP `<org-sql-agent>`) | `references/mode-query.md` Step 2 semantic-first |
 | event-tracking | Mini-app event explorer | (none — <organization>-only) |
 | Data Portal | Documentation governance | (none — <organization>-only) |
@@ -26,11 +26,11 @@ This reference bundles the <organization>-specific tooling (Semantic Cube, <org-
 **Quick links**:
 - Production: `https://<semantic-layer-host>/docs/intro`
 - the standard specification (mandatory): `https://<semantic-layer-host>/docs/basic/data_modeling/cubejs_model_specification`
-- Support: Google Chat group ["Claude With <organization> Data"](https://chat.google.com/app/chat/AAQAokD9l24)
+- Support: your data-platform team's chat channel
 
 **Workflow (5 steps, abbreviated)**:
-1. **Create Team** — ping `son.hua1@` or `chinh.nguyen2@` with team name + admin list (1 business day)
-2. **Create Data Source** — BQ / Lakehouse (Hive) / StarRocks (MySQL connector). BQ needs Service Account + Billing Project ID (request via `hai.nguyen1@`)
+1. **Create Team** — ping your Semantic Cube admins with team name + admin list (1 business day)
+2. **Create Data Source** — BQ / Lakehouse (Hive) / StarRocks (MySQL connector). BQ needs Service Account + Billing Project ID (request via your data-platform team)
 3. **Build Model (Cube)** — write YAML manually or auto-generate from `catalog.dataset.table`; MUST follow the standard specification; prefer Git-versioned YAML
 4. **Test via Explore** — measures + dimensions interactively; check generated SQL + result sanity
 5. **Deliver** — Looker Studio / Ad-hoc Explore / Claude Desktop (MCP) / REST API / Alert
@@ -49,7 +49,7 @@ For building a brand-new semantic layer (anywhere, not just <organization>), use
 
 ## 2. <org-data-mcp> MCP — the gateway
 
-<organization> runs a unified MCP gateway at `https://mdp-mcp-gateway.<internal-host>/servers/<server_id>/mcp` exposing multiple data tools through one HTTP MCP server. The plugin user adds it to their MCP config (see `<plugin_root>/mcp/example-org-mcp.json`) to unlock these tools.
+<organization> runs a unified MCP gateway at `https://<MCP_GATEWAY_HOST>/servers/<server_id>/mcp` exposing multiple data tools through one HTTP MCP server. The plugin user adds it to their MCP config (see `<plugin_root>/mcp/example-org-mcp.json`) to unlock these tools.
 
 ### Tool groups bundled in `<org-data-mcp>` MCP
 
@@ -123,21 +123,21 @@ Use <org-sql-agent> MCP when the question is "give me data X" and you don't want
 
 ### 3b. <org-sql-agent> as a tag namespace (T0 schema source)
 
-Within OpenMetadata (`<data-catalog-host>`), the tag namespace `<org-catalog>.*` flags tables that owners have **deliberately curated for LLM / AI agent consumption**. Tagged tables typically have:
+Within OpenMetadata (`<DATA_CATALOG_HOST>`), the tag namespace `<org-catalog>.*` flags tables that owners have **deliberately curated for LLM / AI agent consumption**. Tagged tables typically have:
 
 - Rich plain-language descriptions per column (not just type)
 - Sample query patterns
 - Business meaning + edge cases
 - Cross-references to related tables
 
-**Example**: the <product> mart `daily_user_mart` carries tag `<org-catalog>.<domain-tag>` (URL: `https://<data-catalog-host>/tag/<org-catalog>.<domain-tag>`). When you encounter a table with a `<org-catalog>.*` tag, **read the tag content FIRST** — it's the highest-quality schema source available (T0 in the schema-source-hierarchy ladder).
+**Example**: the <product> mart `daily_user_mart` carries tag `<org-catalog>.<domain-tag>` (URL: `https://<DATA_CATALOG_HOST>/tag/<org-catalog>.<domain-tag>`). When you encounter a table with a `<org-catalog>.*` tag, **read the tag content FIRST** — it's the highest-quality schema source available (T0 in the schema-source-hierarchy ladder).
 
 **Discovery flow**:
 ```python
 import requests
 H = {"Authorization": f"Bearer {PAT}"}
 tbl = requests.get(
-    f"https://<data-catalog-host>/api/v1/tables/name/bigquery.<data-project>.<dataset>.<table>?fields=tags,columns,description",
+    f"https://<DATA_CATALOG_HOST>/api/v1/tables/name/bigquery.<data-project>.<dataset>.<table>?fields=tags,columns,description",
     headers=H,
 ).json()
 <org-catalog>_tags = [t for t in tbl.get("tags", []) if t["tagFQN"].startswith("<org-catalog>.")]
@@ -145,7 +145,7 @@ if <org-catalog>_tags:
     # T0 hit — read tag content for LLM-grade schema
     for tag in <org-catalog>_tags:
         tag_info = requests.get(
-            f"https://<data-catalog-host>/api/v1/tags/name/{tag['tagFQN']}",
+            f"https://<DATA_CATALOG_HOST>/api/v1/tags/name/{tag['tagFQN']}",
             headers=H,
         ).json()
         # tag_info has owner-curated content
@@ -153,16 +153,16 @@ if <org-catalog>_tags:
 
 ## 4. OpenMetadata workflow (T1 schema source + curation)
 
-OpenMetadata (`<data-catalog-host>`) is <organization>'s canonical data catalog. Two layers:
+OpenMetadata (`<DATA_CATALOG_HOST>`) is <organization>'s canonical data catalog. Two layers:
 1. **Auto-ingested** (column names, types, partition keys synced from BQ) — never edit
 2. **Curated** (table desc, column desc, tags, ownership, lineage) — humans + agents own this
 
-Full playbook (fetch → audit → dry-run → push → cross-validate) is summarized below; deep mechanics are at `https://<data-catalog-host>/swagger`. Key API mechanics:
+Full playbook (fetch → audit → dry-run → push → cross-validate) is summarized below; deep mechanics are at `https://<DATA_CATALOG_HOST>/swagger`. Key API mechanics:
 
 ### Auth + endpoints
 
 ```python
-BASE = "https://<data-catalog-host>"
+BASE = "https://<DATA_CATALOG_HOST>"
 PAT = "<bearer_token>"   # rotate weekly via OM UI → user settings → access tokens
 H = {"Authorization": f"Bearer {PAT}"}
 
@@ -266,7 +266,7 @@ Example MCP config snippet (`<plugin_root>/mcp/example-org-mcp.json`) provides r
 
 ```bash
 # Install <org-data-mcp> MCP (gateway)
-claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://mdp-mcp-gateway.<internal-host>/servers/<server_id>/mcp
+claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://<MCP_GATEWAY_HOST>/servers/<server_id>/mcp
 
 # Install <org-sql-agent> MCP (NL→SQL)
 claude mcp add -s user <org-sql-agent> -- <path-to-<org-catalog>-mcp-launcher>
@@ -303,7 +303,7 @@ Apply in `report` mode for <organization> wealth / <product> products:
 
 **External (docs)**:
 - Semantic Cube: `https://<semantic-layer-host>/docs/intro`
-- OpenMetadata Swagger: `https://<data-catalog-host>/swagger`
+- OpenMetadata Swagger: `https://<DATA_CATALOG_HOST>/swagger`
 - Cube.js core docs: `https://cube.dev/docs`
 - <semantic-tech>: `https://<semantic-tech>.org`
 
