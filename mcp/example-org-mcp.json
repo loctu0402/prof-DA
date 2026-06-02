@@ -14,7 +14,7 @@
   "mcpServers": {
     "<org-data-mcp>": {
       "_purpose": "<organization> unified data MCP gateway. Bundles Semantic Cube + Data Portal + Journey Data + <event-system> (mini-app tracking). See references/org-extensions.md §2.",
-      "_replace_server_id": "Replace <SERVER_ID> below with your team's MCP server ID provided by <organization> Data Platform team. Ping in Google Chat 'Claude With <organization> Data' group.",
+      "_replace_server_id": "Replace <SERVER_ID> below with your team's MCP server ID provided by your data-platform team.",
       "type": "stdio",
       "command": "cmd",
       "args": [
@@ -22,7 +22,7 @@
         "npx",
         "-y",
         "mcp-remote",
-        "https://mdp-mcp-gateway.<internal-host>/servers/<SERVER_ID>/mcp"
+        "https://<MCP_GATEWAY_HOST>/servers/<SERVER_ID>/mcp"
       ]
     },
 
@@ -44,7 +44,7 @@
 
   "_CLI_install_commands": {
     "_note": "Alternative to manual JSON edit — run these in PowerShell/bash to register MCPs at user scope.",
-    "<org-data-mcp>": "claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://mdp-mcp-gateway.<internal-host>/servers/<SERVER_ID>/mcp",
+    "<org-data-mcp>": "claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://<MCP_GATEWAY_HOST>/servers/<SERVER_ID>/mcp",
     "<org-sql-agent>": "claude mcp add -s user <org-sql-agent> -- python <PATH_TO_ORG_SQL>/mcp_server.py"
   },
 

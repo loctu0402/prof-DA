@@ -31,10 +31,10 @@ Each healthy server shows `- Connected`. Anything missing, `Needs authentication
 
 The unified <organization> gateway (semantic cube + data portal + journey + <event-system>). The gateway host is stable; the per-team `<SERVER_ID>` is the only variable.
 
-Prereq: be on <organization> VPN, and get your team `<SERVER_ID>` from the <organization> Data Platform team (Google Chat group "Claude With <organization> Data"). Never commit a real SERVER_ID.
+Prereq: be on your org VPN, and get your team `<SERVER_ID>` from your data-platform team. Never commit a real SERVER_ID.
 
 ```bash
-claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://mdp-mcp-gateway.<internal-host>/servers/<SERVER_ID>/mcp
+claude mcp add -s user <org-data-mcp> -- cmd /c npx -y mcp-remote https://<MCP_GATEWAY_HOST>/servers/<SERVER_ID>/mcp
 ```
 
 Then trigger the one-time login:
