@@ -11,9 +11,9 @@
 
 ## How it works
 
-prof-DA runs the same fixed process on every request: confirm intent and depth before touching data, discover the real schema before querying, run statistics in audited scripts (never inline guesses), judge every number for signal versus noise, and ship a same-shape deliverable each time. The 9 modes below cover the analyst lifecycle; the 4 universal rules are what keep each step rigorous and consistent across sessions.
+prof-DA runs the same fixed process on every request: confirm intent and depth before touching data, discover the real schema before querying, run statistics in audited scripts (never inline guesses), judge every number for signal versus noise, and ship a same-shape deliverable each time. The 10 modes below cover the analyst lifecycle; the 4 universal rules are what keep each step rigorous and consistent across sessions.
 
-**Jump to:** [Install](#install) · [First run](#first-run) · [The 9 modes](#the-9-modes) · [What it enforces](#what-it-enforces) · [What is inside](#what-is-inside) · [Configuration](#configuration)
+**Jump to:** [Install](#install) · [First run](#first-run) · [The 10 modes](#the-10-modes) · [What it enforces](#what-it-enforces) · [What is inside](#what-is-inside) · [Configuration](#configuration)
 
 ## Install
 
@@ -56,11 +56,11 @@ prof-DA detects the request, confirms intent and a detail level (Quick / Standar
 /prof-DA:da     # confirm intent + detail level, then route to a mode
 ```
 
-## The 9 modes
+## The 10 modes
 
-The standard lifecycle runs left to right; `review` and `fix` are orthogonal and run any time.
+The standard lifecycle runs left to right; `review`, `fix`, and `workspace` are orthogonal and run any time.
 
-`frame -> model -> query -> process -> insight -> automate -> report`  +  `review` / `fix`
+`frame -> model -> query -> process -> insight -> automate -> report`  +  `review` / `fix` / `workspace`
 
 | Mode | What it does | Sample natural triggers |
 |------|--------------|------------------------|
@@ -73,6 +73,7 @@ The standard lifecycle runs left to right; `review` and `fix` are orthogonal and
 | **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. | "build báo cáo", "làm report", "build dashboard" |
 | **review** | Audit a deliverable or a whole project. 3 sub-modes: delivery refine, full project audit, stakeholder questioning. | "review report", "OK chưa", "audit project", "góp ý" |
 | **fix** | Surgically debug a pipeline or report, with a patch-ceiling escalation rule. | "fix pipeline", "report sai", "wrong number", "pipeline fail" |
+| **workspace** | Scaffold, organize, and index a whole workspace into a navigable harness (taxonomy + memory layer + index). Guide-first for non-technical users; secrets-first, safe `git mv` on a branch, index last. | "dọn workspace", "sắp xếp lại thư mục", "file nằm khắp nơi", "organize my workspace", "rebuild index" |
 
 Each mode auto-fires on phrases like these, so a command is rarely needed; the full trigger lists live in each mode's `SKILL.md`. For the deeper structure, `frame` runs 4 planning gates and `model` offers 4 warehouse patterns: see [mode-frame](skills/da/references/mode-frame.md) and [mode-model](skills/da/references/mode-model.md).
 
@@ -98,8 +99,8 @@ skills/
   da/                      root skill: rules, protocols, references
     references/            deep docs (modes, methods, governance, SWD, schema)
     scripts/               16 stdlib scripts (run, never inline, statistics)
-  frame, model, query ...  9 thin mode stubs that load the root skill
-commands/                  10 slash commands (1 entry + 9 modes)
+  frame, model, query ...  10 thin mode stubs that load the root skill
+commands/                  11 slash commands (1 entry + 10 modes)
 agents/                    3 support sub-agents
 ```
 
