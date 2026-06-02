@@ -13,7 +13,19 @@
 
 prof-DA runs the same fixed process on every request: confirm intent and depth before touching data, discover the real schema before querying, run statistics in audited scripts (never inline guesses), judge every number for signal versus noise, and ship a same-shape deliverable each time. The 10 modes below cover the analyst lifecycle; the 4 universal rules are what keep each step rigorous and consistent across sessions.
 
-**Jump to:** [Install](#install) · [First run](#first-run) · [The 10 modes](#the-10-modes) · [What it enforces](#what-it-enforces) · [What is inside](#what-is-inside) · [Configuration](#configuration)
+**Jump to:** [Why not vanilla Claude?](#why-not-just-vanilla-claude-code) · [Install](#install) · [First run](#first-run) · [The 10 modes](#the-10-modes) · [What it enforces](#what-it-enforces) · [What is inside](#what-is-inside) · [Configuration](#configuration)
+
+## Why not just vanilla Claude Code?
+
+Plain Claude Code can write SQL and charts, but nothing makes it consistent or checkable. prof-DA adds the enforcement layer:
+
+| Vanilla Claude Code | prof-DA |
+|---------------------|---------|
+| Guesses which metric you meant; queries a schema it never checked | Confirms intent, then discovers the real schema (5-tier) before any query |
+| Eyeballs significance inline | Runs statistics in 16 audited scripts (effect size, MDE, bootstrap CI, DiD), never guessed |
+| Formats every report differently | Reports fork one of 11 build-once-locked templates 1:1, so style drift is gone |
+| "Looks done," trusted on faith | A Stop-hook blocks the turn from ending until the report passes the consistency gate |
+| Forgets your corrections next session | A learning loop captures corrections and updates the rule the agent reads next time |
 
 ## Install
 
@@ -89,6 +101,8 @@ Every deliverable passes 4 universal rules plus an entry gate. This is what keep
 The **Detail-Level Gate** sits in front of all four: every mode confirms Quick / Standard / Deep before running. Depth is the lever you control. The plugin deliberately does not surface time estimates, because LLMs routinely mis-estimate duration.
 
 On top of the rules sit a 5-criteria quality check and a 5-gate quality pipeline (scope -> data -> analysis -> visuals -> review). Stakeholder visuals follow Storytelling-with-Data discipline (action titles, grey plus one accent, no pie or 3D): see [storytelling-with-data](skills/da/references/storytelling-with-data.md).
+
+Two mechanisms make these non-optional rather than advisory. A **Stop-hook** blocks a `report`-mode turn from ending until the deliverable passes the consistency gate (the model cannot quietly skip validation). A **learning loop** captures your corrections at session end and updates the rule the agent reads next time, so a repeated mistake becomes a permanent fix instead of a recurring one.
 
 ## What is inside
 
