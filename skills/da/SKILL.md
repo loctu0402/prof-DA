@@ -1,6 +1,6 @@
 ---
 name: da
-description: Professional Data Analyst entry — auto-fires on ANY data-analyst-shaped request and routes to one of 9 modes (frame / model / query / process / insight / automate / report / review / fix). Use this skill PROACTIVELY whenever the user asks for data, numbers, breakdowns, comparisons, trends, root cause, calculation methodology, stakeholder report, dashboard, pipeline, or any analysis — even in conversational Vietnamese or English. Natural trigger phrases include but are not limited to "cho mình số liệu", "lấy data", "check số liệu", "số liệu của X", "tỷ lệ X", "breakdown theo Y", "X tháng/tuần/quý vừa rồi", "compare X vs Y", "show me data", "điều gì xảy ra", "tại sao X giảm/tăng", "why is X dropping", "what's happening", "root cause", "tìm phương pháp tính", "đo lượng X", "tính tiềm năng", "potential size", "MFU cohort", "user cohort", "phân tích X", "analyze X", "diagnostic", "build báo cáo", "làm báo cáo", "report cho stakeholder", "build dashboard", "làm dashboard", "set up pipeline", "schedule job", "automation", "review report", "audit project", "OK chưa", "fix pipeline", "debug", "sửa bug", "frame project", "kickoff", "không biết bắt đầu", "stakeholder muốn", "metric nào phù hợp", "dimension nào nên dùng", or explicit `/prof-DA:da`. Confirms intent + detail level (Quick / Standard / Deep) before routing. Enforces 4 universal rules (Orientation / Baseline-Noise-Impact / 5W1H / Why-Explanation) + Karpathy coding discipline + AI-tell ban.
+description: Professional Data Analyst entry — auto-fires on ANY data-analyst-shaped request and routes to one of 10 modes (frame / model / query / process / insight / automate / report / review / fix / workspace). Use this skill PROACTIVELY whenever the user asks for data, numbers, breakdowns, comparisons, trends, root cause, calculation methodology, stakeholder report, dashboard, pipeline, or any analysis — even in conversational Vietnamese or English. Natural trigger phrases include but are not limited to "cho mình số liệu", "lấy data", "check số liệu", "số liệu của X", "tỷ lệ X", "breakdown theo Y", "X tháng/tuần/quý vừa rồi", "compare X vs Y", "show me data", "điều gì xảy ra", "tại sao X giảm/tăng", "why is X dropping", "what's happening", "root cause", "tìm phương pháp tính", "đo lượng X", "tính tiềm năng", "potential size", "MFU cohort", "user cohort", "phân tích X", "analyze X", "diagnostic", "build báo cáo", "làm báo cáo", "report cho stakeholder", "build dashboard", "làm dashboard", "set up pipeline", "schedule job", "automation", "review report", "audit project", "OK chưa", "fix pipeline", "debug", "sửa bug", "frame project", "kickoff", "không biết bắt đầu", "stakeholder muốn", "metric nào phù hợp", "dimension nào nên dùng", or explicit `/prof-DA:da`. Confirms intent + detail level (Quick / Standard / Deep) before routing. Enforces 4 universal rules (Orientation / Baseline-Noise-Impact / 5W1H / Why-Explanation) + Karpathy coding discipline + AI-tell ban.
 metadata:
   author: Loc Tu
   handle: loctu
@@ -43,7 +43,7 @@ MAX 3 suggestions per exit. Each suggestion: specific + cited trigger + 1-line W
 
 Pick the mode matching the current task, then read the matching reference file. If task spans multiple modes, read all relevant references before starting. If unsure, default to **insight** (covers reasoning + analysis).
 
-Modes follow the standard DA flow: **Frame → Model → Query → Process → Insight → Automation → Report**, plus orthogonal helpers (review + fix-pipeline). Frame + Model are the new front-of-workflow planning modes (v3.1).
+Modes follow the standard DA flow: **Frame → Model → Query → Process → Insight → Automation → Report**, plus orthogonal helpers (review + fix-pipeline + workspace). Frame + Model are the new front-of-workflow planning modes (v3.1).
 
 | Mode | Trigger phrases | Reference file |
 |------|-----------------|----------------|
@@ -56,6 +56,7 @@ Modes follow the standard DA flow: **Frame → Model → Query → Process → I
 | **report** | "build báo cáo", "làm report", "stakeholder report", "/prof-DA:report" | `references/mode-report.md` |
 | **review** | "review code", "audit project", "OK chưa", "snapshot review", "/prof-DA:review" (4 tiers: A0 Brief / A Polish / B Full / C Stakeholder Q) | `references/mode-review.md` |
 | **fix-pipeline** | "fix pipeline", "debug pipeline", "sửa pipeline", "/prof-DA:fix" | `references/mode-fix-pipeline.md` |
+| **workspace** | "dọn workspace", "sắp xếp lại thư mục", "hệ thống lại workspace", "file nằm khắp nơi", "organize my workspace", "rebuild index", "/prof-DA:workspace" | `references/mode-workspace.md` |
 
 ## Five Universal Rules (apply to EVERY mode, every deliverable)
 
@@ -259,7 +260,7 @@ Once mode is selected:
 - Example MCP config (<org-catalog> + <org-data-mcp> + powerbi-modeling) → `<plugin_root>/mcp/example-org-mcp.json`
 
 **Mode-specific:**
-- `references/mode-{frame,model,query,process,insight,automation,report,review,fix-pipeline}.md`
+- `references/mode-{frame,model,query,process,insight,automation,report,review,fix-pipeline,workspace}.md`
 
 ---
 

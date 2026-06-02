@@ -1,8 +1,8 @@
 ---
-description: prof-DA — master entry. Confirms intent + Detail Level (Quick / Standard / Deep), then routes to 1 of 9 modes.
+description: prof-DA — master entry. Confirms intent + Detail Level (Quick / Standard / Deep), then routes to 1 of 10 modes.
 ---
 
-Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm intent + detail level, then route to one of the 9 modes:
+Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm intent + detail level, then route to one of the 10 modes:
 
 **Front-of-workflow:**
 - `/prof-DA:frame` — Business Understanding → Metric Define → Data Plan (PLANNING.md)
@@ -18,6 +18,7 @@ Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm i
 **Orthogonal helpers:**
 - `/prof-DA:review` — 3 sub-modes (A Delivery / B Full Project / C Stakeholder Q)
 - `/prof-DA:fix` — Surgical pipeline / report debug + patch-ceiling escalation
+- `/prof-DA:workspace` — Scaffold / organize / index a whole workspace (guide-first, secrets-first, git-mv-on-branch, index-last)
 
 User's optional context for routing: $ARGUMENTS
 

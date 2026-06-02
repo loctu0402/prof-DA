@@ -4,6 +4,21 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.8.0] - 2026-06-02
+
+Workspace governance release: a 10th mode that scaffolds, organizes, and indexes an ENTIRE workspace into a navigable harness — the workspace-level counterpart to the per-project `project-scaffold` discipline. Guide-first for non-technical users.
+
+### Added
+- **`/prof-DA:workspace` mode** — `skills/workspace/SKILL.md` (stub) + `commands/workspace.md` + `references/mode-workspace.md`. The survey -> propose -> safe-migrate -> memory -> index loop, generic and domain-neutral (works for a data, marketing, or research workspace). Hard rules: secrets-first, plan->approve->execute, grep-before-move, archive-don't-delete, `git mv` on a branch, index-LAST + reverse-existence check. Includes a guide sub-flow that walks a non-technical user one plain-language step at a time.
+
+### Changed
+- **`skills/da/SKILL.md`** — mode router + description: 9 -> 10 modes (added `workspace` as an orthogonal helper); reading-order brace list updated.
+- **`commands/da.md`, `README.md`** — mode count 9 -> 10, `workspace` listed; README modes table + structure map updated.
+- **`.claude-plugin/plugin.json` + `marketplace.json`** — version 3.7.0 -> 3.8.0; description 9 -> 10 modes.
+
+### Why
+The plugin had `project-scaffold.md` (one project's Step-0 layout) and `governance.md` (data governance), but nothing covered the WHOLE-workspace concern: a workspace that accumulated scattered files, has no memory layer, and no index. That is the most common real starting state — especially for non-technical users who began without a system. The mode encodes the safe-migration protocol (distinguish on-disk junk that `.gitignore` already handles from tracked-misplaced files; never move a live-pipeline file without fixing its references) so reorganizing an in-use workspace doesn't silently break scheduled jobs.
+
 ## [3.7.0] - 2026-06-01
 
 Self-improving release: a bundled learning loop that captures feedback + corrections from conversation so prof-DA personalises itself, mirroring the host's session-end memory hooks.
