@@ -27,7 +27,7 @@ Full workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-workspace.md`.
 | **2 — Propose** | per-item plan (move/archive/delete) with recommended defaults | Approve, or change which items? |
 | **3 — Safe-migrate** | moves done on a branch (`git mv`, archive not delete) | — |
 | **4 — Memory** | `memory/` layer set up + filled with USER's domain | What domains do you work on? |
-| **5 — Index LAST** | `.index/` built + reverse-existence check | — |
+| **5 — Index LAST** | root `.index/` + a local `_index.md` per deep/knowledge-dense folder; reverse-existence check | — |
 | **6 — Verify** | grep moved paths in code; dry-run pipeline paths | — |
 
 ## Hard rules (golden)
@@ -38,9 +38,11 @@ Full workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-workspace.md`.
 - **Never delete tracked work** — archive to `_archive/` or `git rm` only with the user's OK.
 - **`git mv` on a dedicated branch** — keep pre-existing uncommitted work separate; never `git add -A`.
 - **Index LAST** — after moves settle, then reverse-existence check.
+- **Progressive disclosure** — index ≤200 lines (1 line/entry), atoms ≤300 lines, cross-link never re-paste; deep knowledge folders get their own local `_index.md`.
 - **Guide-first for non-technical users** — one plain-language step at a time, recommended defaults, reassure reversibility.
 
 ## Cross-references
 - Full workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-workspace.md`
+- Index format + progressive disclosure + recursive per-folder rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`
 - Per-project layout (Step-0): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/project-scaffold.md`
 - Universal rules: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/universal-workflow-rules.md`

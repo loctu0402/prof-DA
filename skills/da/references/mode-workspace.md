@@ -1,6 +1,6 @@
 # Workspace Mode — Scaffold, Organize & Index a Whole Workspace
 
-> WORKSPACE-LEVEL governance: turn a scattered workspace into a navigable, self-documenting harness — clean folder taxonomy + a memory layer + an index. Distinct from `project-scaffold.md` (one project's Step-0 layout) and `governance.md` (data governance). This mode operates on the whole workspace; it INVOKES project-scaffold per project.
+> WORKSPACE-LEVEL governance: turn a scattered workspace into a navigable, self-documenting harness — clean folder taxonomy + a memory layer + an index. Distinct from `project-scaffold.md` (one project's Step-0 layout) and `governance.md` (data governance). This mode operates on the whole workspace; it INVOKES project-scaffold per project. Self-contained — it needs nothing outside prof-DA. The pattern (treat a workspace as a structured document with a tree, a graph, and an entity map) follows the BookRAG concept (arXiv:2512.03413).
 
 ## When to use
 
@@ -63,8 +63,11 @@ Present the inventory as a table: each item → current → proposed action → 
 ### Step 4 — Memory layer
 Create/align `memory/` (or `lt-memory/`): `_index.md` (1 line per note) + `rules/ knowledge/ decisions/` + optional `domains/<topic>/` L1/L2/L3 hubs. Fill it with the USER's domain (ask 2-3 questions) — never pre-fill with someone else's content. Obey the llm-wiki contract (index ≤200 lines, atom ≤300 lines, cross-link never re-paste).
 
-### Step 5 — Index LAST
-Only after moves settle, build/update `.index/` (see `index-format.md` style: `_root _tree _graph _entities`). Then run the **reverse-existence check**: every pointer already in the index still resolves on disk (moves create dead pointers forward-only scans miss).
+### Step 5 — Index LAST (progressive disclosure)
+Only after moves settle, build/update the root `.index/` (`_root _tree _graph _entities`). The index is **read-first, navigable by lookup** — keep it cheap: index ≤200 lines, 1 line per entry, atoms ≤300 lines, cross-link never re-paste, read index → link → targeted range.
+**Recursive / per-folder index:** when a sub-folder becomes a knowledge collection read on its own terms (a memory layer, a domain hub, a notes vault, a project's `docs/`) — deep or numerous enough that listing every leaf would blow the index budget — give it its **own local `_index.md`** and point the root index at that sub-index, not the leaves. Pure containers (`projects/` parent, `output/`, `shared/`) do not earn one; the root tree already covers them. The test is information role + atom count, not raw file count.
+Then run the **reverse-existence check**: every pointer already in the index still resolves on disk (moves create dead pointers forward-only scans miss).
+Full format + the recursive rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`.
 
 ### Step 6 — Verify
 Grep the codebase for moved filenames — a match inside the moved file is fine; a match in a pipeline script is a break to fix. Dry-run any scheduled job's paths. Report exactly what moved / was deleted vs archived, and the verification result.
@@ -78,11 +81,18 @@ Grep the codebase for moved filenames — a match inside the moved file is fine;
 5. `git mv` on a dedicated branch; keep pre-existing work separate.
 6. Index LAST + reverse-existence check.
 
+## Run-safe gotchas (hard-won)
+
+- **Author batch moves and index builds in code, not a shell loop.** On Windows, CRLF line endings corrupt `while`/`case` shell loops silently — use Python or a glob API.
+- **A failed `git push`/`fetch` under a tool sandbox can lie.** It may report `Host key verification failed` even when SSH and the network are fine — the sandbox blocked it before git reached SSH. Distinguish from a real block (which fails earlier, at key exchange), retry outside the sandbox, and don't chase VPN / known_hosts / config first.
+- **Orphaned gitlink.** A `160000` tree entry that is NOT in `.gitmodules` is an embedded repo added without registering a submodule. If it carries its own uncommitted content, push/clean it inside that repo first; never `git rm --cached` it blindly — that strands unpushed work.
+
 ## Guide mode (non-technical user)
 
 One question at a time. Plain language ("folder" not "directory"; "back up first" not "git stash"). Explain WHY before each step. Offer a recommended default for every choice. Reassure: nothing deleted without asking, everything reversible (branch + archive). Narrate the same loop above, but each step is a simple question the user answers. End with 3 maintenance habits (new project → ask to scaffold it · finished one-off → goes to `output/` · periodically → "update the index").
 
 ## Cross-references
+- Index format + progressive disclosure + recursive per-folder rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`
 - Per-project internal layout (Step-0): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/project-scaffold.md`
 - Output location policy: `.claude/rules/output-policy.md` (or this mode creates one)
 - Data governance (different concern — metrics/grain/quality): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/governance.md`
