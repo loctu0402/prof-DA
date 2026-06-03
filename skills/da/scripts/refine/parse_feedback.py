@@ -11,15 +11,24 @@ ANCH = re.compile(r"^\[anchor:\s*(.+?)\]\s*$")
 NUMS = re.compile(r"^- So lieu:\s*(.*)$")
 FB   = re.compile(r"^- SUA DOI / FEEDBACK:\s*(.*)$")
 
+DELIM = re.compile(r"^-{6,}$")
+
 def parse(text):
-    blocks, cur = [], None
+    blocks, cur, collecting_fb = [], None, False
     for line in text.splitlines():
         m = SECT.match(line.strip())
         if m:
             if cur: blocks.append(cur)
-            cur = {"title": m.group(1).strip(), "section": None, "anchors": [], "feedback": ""}
+            cur = {"title": m.group(1).strip(), "section": None, "anchors": [], "feedback": []}
+            collecting_fb = False
             continue
         if cur is None:
+            continue
+        if DELIM.match(line.strip()):
+            collecting_fb = False
+            continue
+        if collecting_fb:
+            cur["feedback"].append(line)
             continue
         a = ANCH.match(line.strip())
         if a:
@@ -31,11 +40,15 @@ def parse(text):
             continue
         fb = FB.match(line)
         if fb:
-            cur["feedback"] = fb.group(1).strip(); continue
+            cur["feedback"] = [fb.group(1)]
+            collecting_fb = True
+            continue
     if cur: blocks.append(cur)
     out = []
     for b in blocks:
-        if b["feedback"]:
+        feedback = "\n".join(b["feedback"]).strip()
+        if feedback:
+            b["feedback"] = feedback
             if not b["anchors"]:
                 b["anchors"] = [b["section"]] if b["section"] else []
             out.append(b)

@@ -22,7 +22,7 @@ def leaf_of(bind):
 class Extractor(HTMLParser):
     def __init__(self):
         super().__init__()
-        self.cur_title = "Mo dau"
+        self.cur_title = None
         self.in_h2 = False
         self.cur_bind = None
         self.buf = []
@@ -46,7 +46,7 @@ class Extractor(HTMLParser):
             pre, leaf = prefix_of(bind), leaf_of(bind)
             if pre not in self.seen:
                 self.seen[pre] = len(self.sections)
-                self.sections.append([pre, self.cur_title])
+                self.sections.append([pre, self.cur_title or pre])
             self.values[(pre, leaf)] = text
             self.cur_bind = None
 
