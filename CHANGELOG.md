@@ -4,6 +4,19 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.11.0] - 2026-06-03
+
+Tier 3 inline annotation: completes the 3-tier refine menu with a browser-based select-and-comment harness.
+
+### Added
+- `scripts/refine/annotate_overlay.js` - self-contained vanilla JS widget: text selection -> "Them gop y" button -> comment popup -> pinned marker -> Export button downloads `comments.json` and mirrors into `#comments-out` textarea.
+- `scripts/refine/wrap_annotation_harness.py` - injects the overlay into a copy of the report (`<report>.annotate.html`); the final shipped report is never touched.
+- `scripts/refine/parse_comments.py` - `comments.json` -> `[{section, title, anchors, feedback}]` change-set; identical output shape to `parse_feedback.py` so the existing apply step consumes both without modification.
+
+### Changed
+- `references/refine-worksheet.md` - Tier 3 section updated from "not yet built" to the real flow.
+- `skills/da/SKILL.md` - three new refine scripts registered in the Bundled Scripts tree.
+
 ## [3.10.0] - 2026-06-03
 
 Refine protocol (worksheet MVP): a trigger-gated, per-section feedback loop that replaces long imprecise re-prompts and doubles as a fresh-session handoff (context-bloat fix).
