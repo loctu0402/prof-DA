@@ -131,7 +131,10 @@ scripts/
 │   └── number_format.py          # K/M/B/T units, sentiment colors
 ├── refine/
 │   ├── generate_worksheet.py     # report HTML -> non-tech per-section worksheet (stdlib only)
-│   └── parse_feedback.py         # filled worksheet -> JSON of filled sections (mechanical extraction)
+│   ├── parse_feedback.py         # filled worksheet -> JSON of filled sections (mechanical extraction)
+│   ├── wrap_annotation_harness.py # report HTML -> <report>.annotate.html with inline overlay injected
+│   ├── annotate_overlay.js       # self-contained select-and-comment widget (loaded by wrap script)
+│   └── parse_comments.py         # comments.json (from overlay) -> change-set JSON (same shape as parse_feedback)
 └── validators/
     ├── orientation_block.py      # checks SCQR / docstring / 3-line intro present
     ├── action_brief.py           # checks 8-field brief
