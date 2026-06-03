@@ -265,6 +265,8 @@ The Detail Level Gate makes depth an explicit user choice instead of a hidden de
 - [ ] Respected user override mid-stream ("actually go Deep on the recommendations")
 - [ ] Skipped the gate when user already declared intent
 
+- **Refine-trigger:** after 2-3 consecutive output-fix rounds on the same deliverable, OR one feedback round with 3+ distinct change points, OR the keywords "gop y tung phan" / "tao worksheet" / "refine tung phan" -> offer the refine menu (`references/refine-worksheet.md`). One or two small fixes stay on plain prompt.
+
 ## Connect-the-Dots Reasoning (cross-cutting)
 
 When stating any finding, the reasoning chain MUST link:
