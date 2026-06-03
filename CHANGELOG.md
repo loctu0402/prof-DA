@@ -4,6 +4,23 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.9.0] - 2026-06-03
+
+Workspace mode — progressive-disclosure indexing: `/prof-DA:workspace` now teaches recursive, per-folder indexing (a deep knowledge folder earns its own local `_index.md`) and ships the index format it referenced.
+
+### Added
+- **`references/index-format.md`** — the workspace index spec the mode pointed at but never shipped (the reference was dangling). Covers the 4-file root `.index/` format, the progressive-disclosure contract (index ≤200 lines / atoms ≤300 / cross-link never re-paste / read index → link → targeted range), the **recursive per-folder index rule**, build/update/rebuild, and the reverse-existence check.
+- **`mode-workspace.md` — run-safe gotchas block:** author batch moves/index in code not a shell loop (CRLF corrupts shell loops on Windows); a sandboxed `git push/fetch` can falsely report `Host key verification failed`; an orphaned `160000` gitlink (not in `.gitmodules`) with uncommitted content must be pushed before untracking.
+
+### Changed
+- **`mode-workspace.md` Step 5** — expanded from a one-line "build `.index/`" into progressive disclosure + the recursive per-folder index rule (a knowledge collection read on its own terms earns a local `_index.md`; pure containers do not). Marked the mode self-contained; attributed the pattern to the BookRAG concept.
+- **`skills/workspace/SKILL.md`** — Step-5 row + a progressive-disclosure hard rule + index-format cross-reference.
+- **`README.md`** — opening summary corrected 9 -> 10 modes (`workspace` was missing from the headline list).
+- **version** 3.8.0 -> 3.9.0.
+
+### Why
+The mode could organize a workspace and build one top-level index, but its headline claim — navigable by lookup, not guessing — breaks once any sub-tree grows into a knowledge collection: a flat root index either omits the leaves or blows its line budget. Recursive per-folder indexing keeps lookup cheap at any depth, and it was the one piece the mode described but never shipped (the `index-format.md` reference 404'd).
+
 ## [3.8.0] - 2026-06-02
 
 Workspace governance release: a 10th mode that scaffolds, organizes, and indexes an ENTIRE workspace into a navigable harness — the workspace-level counterpart to the per-project `project-scaffold` discipline. Guide-first for non-technical users.

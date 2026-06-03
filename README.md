@@ -2,12 +2,12 @@
 
 **prof-DA turns Claude Code into a disciplined data analyst.** Ask for a number, a chart, or "why did X drop", in Vietnamese or English, and it runs a fixed analyst workflow instead of improvising.
 
-- **What it is:** a Claude Code plugin that wraps Claude in 9 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `review` / `fix`) behind one natural-language entry point.
+- **What it is:** a Claude Code plugin that wraps Claude in 10 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `review` / `fix` / `workspace`) behind one natural-language entry point.
 - **Who it's for:** data analysts and analytics engineers who work in Claude Code and want rigor and consistency, not improvisation.
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, produces work that reads like the same senior analyst made it.
 
-`v3.8.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.9.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## How it works
 
@@ -39,7 +39,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.8.0 should appear
+/plugin list      # prof-DA 3.9.0 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
