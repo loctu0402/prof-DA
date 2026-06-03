@@ -449,6 +449,8 @@ See `superpowers:brainstorming` skill for the formal flow if scope is large.
 
 ## Connect to Other Modes
 
+For multi-point or repeated feedback, switch to the refine protocol (`references/refine-worksheet.md`) instead of free-form prompts.
+
 After Sub-mode A or B delivers, fix flow goes through:
 - Issues are code-only → mode-fix-pipeline
 - Issues are reasoning / method → mode-insight (re-run analysis correctly)
