@@ -4,6 +4,18 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.10.0] - 2026-06-03
+
+Refine protocol (worksheet MVP): a trigger-gated, per-section feedback loop that replaces long imprecise re-prompts and doubles as a fresh-session handoff (context-bloat fix).
+
+### Added
+- `references/refine-worksheet.md` - 3-tier feedback protocol (prompt / worksheet / inline), anchor system, apply flow, fresh-session handoff. Tier 3 (inline annotation) is a follow-up.
+- `scripts/refine/generate_worksheet.py` - report HTML -> non-tech per-section worksheet (stdlib only).
+- `scripts/refine/parse_feedback.py` - filled worksheet -> JSON of filled sections (mechanical extraction).
+
+### Changed
+- `mode-report.md` (Step 8b refine loop), `mode-review.md`, `mode-fix.md`, `universal-workflow-rules.md` (trigger rule). No new mode.
+
 ## [3.8.0] - 2026-06-02
 
 Workspace governance release: a 10th mode that scaffolds, organizes, and indexes an ENTIRE workspace into a navigable harness — the workspace-level counterpart to the per-project `project-scaffold` discipline. Guide-first for non-technical users.
