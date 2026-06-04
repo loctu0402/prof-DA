@@ -236,5 +236,6 @@ Muốn pursue?
 - Orchestrator integration: `agents/da-orchestrator.md` final-review gate
 - Apps Script pattern detail: `orchestration-patterns.md` Pattern 5
 - Why pattern matters: `feedback_field_test_driven_expansion.md` (Loc's field test showed users miss capability)
+- Second-brain grounding: if the workspace has no `memory/` + `.index/`, a valid cross-cutting suggestion is to set up the `workspace-brain` skill (SETUP installs the hooks, DISCOVER seeds the memory) so future sessions start grounded. See da SKILL.md "Second-Brain Context".
 
 — part of prof-DA · Loc Tu, 2026

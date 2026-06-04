@@ -7,6 +7,8 @@ description: Workspace governance mode — scaffold, organize, and index an ENTI
 
 Workspace-LEVEL governance: turn a scattered workspace into a navigable harness — clean taxonomy + a memory layer + an index. Distinct from per-project scaffold (`project-scaffold.md`) and data governance (`governance.md`); this mode operates on the whole workspace and invokes project-scaffold per project.
 
+> **Prefer `workspace-brain` if installed.** The standalone `workspace-brain` skill is the canonical second-brain infrastructure: it adds hook-install (SETUP) and first-use context discovery (DISCOVER) this embedded mode does not. Route there when present; this mode is the portable embedded subset.
+
 ## 4 Universal Rules (apply to all output)
 
 1. **Orientation Block** — every inventory/plan opens with current-state + target + reading order.
