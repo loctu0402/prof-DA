@@ -2,6 +2,8 @@
 description: Professional Data Analyst — workspace mode. Scaffold / organize / index an ENTIRE workspace into a navigable harness (taxonomy + memory layer + index). Guide-first for non-technical users. Secrets-first, plan→approve→execute, git-mv-on-branch, index-last.
 ---
 
+> **Prefer `workspace-brain` if installed.** The standalone `workspace-brain` skill is the canonical second-brain infrastructure: it adds hook-install (SETUP) and first-use context discovery (DISCOVER) that this embedded mode does not. If it is installed, route there. This mode is the portable embedded subset for setups without it.
+
 Invoke the `da` skill in **workspace mode**. Read these references before acting:
 1. `references/mode-workspace.md` — the full survey → propose → safe-migrate → memory → index workflow
 2. `references/project-scaffold.md` — per-project Step-0 layout (applied inside each project)

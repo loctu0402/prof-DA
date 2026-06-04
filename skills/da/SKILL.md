@@ -30,6 +30,15 @@ SKILL.md is lean. Mode-specific details live in `references/mode-*.md`, loaded o
 ### Portable First, Niche Optional
 Mode-specific references treat any company-specific tooling, mart, or benchmark as **example**, not requirement. The same workflow runs against any SQL engine, any BI stack, any notification channel.
 
+### Second-Brain Context (read first, v3.10)
+If the workspace has a second brain (a `memory/` or `lt-memory/` layer plus a `.index/`), READ `.index/_root.md` and the relevant memory hub FIRST, before running the mode, to ground the work in the user's real domains, data, metrics, and conventions. Do not start blind when context already exists on disk.
+
+If no second brain is present and the task would clearly benefit from persistent context (a recurring report, a domain analysis, new-domain work), suggest the standalone `workspace-brain` skill ONCE: its SETUP installs the governance hooks, its DISCOVER seeds the memory layer.
+
+Division of labor: **workspace-brain builds and seeds the second brain; prof-DA consumes it.** prof-DA never builds the brain itself, it reads what workspace-brain seeded.
+
+Reason (Operational): every mode is sharper when grounded in the user's actual context; re-learning the domain each session wastes the user's time and risks generic output.
+
 ### Proactive Suggestion at Mode Exit (v3.2)
 At every mode exit, agent MUST run the 3-step Suggestion Loop: (1) detect context (mode + data + output + available MCPs + stakeholder hints), (2) map to 1-3 of the 8 extension categories (data source expansion / automation upgrade / quality validation stack / method upgrade / audience expansion / format expansion / downstream connection / MCP-tooling expansion), (3) propose with opt-in phrasing (specific + cite trigger + Why + effort estimate + explicit skip path).
 

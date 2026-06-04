@@ -1,7 +1,7 @@
 {
   "name": "prof-DA",
-  "version": "3.9.0",
-  "description": "Professional Data Analyst + Analytics Engineer harness as a Claude Code plugin. 10 routable modes (frame / model / query / process / insight / automate / report / review / fix / workspace). Engine-agnostic SQL (BQ / Postgres / Snowflake / Redshift / DuckDB). 4 universal rules + Detail-Level Gate + Proactive Suggestion at Mode Exit. 16 stdlib scripts (stats / causal / format / validators). 14 method specs (causal + validation families). 5-tier schema-source hierarchy. Portable semantic-layer recipe. Visualization discipline (SWD). Auto-fires on natural Vietnamese + English DA requests (cho mình số liệu / điều gì xảy ra / tìm phương pháp tính / phân tích / báo cáo / build dashboard / etc).",
+  "version": "3.10.0",
+  "description": "Professional Data Analyst + Analytics Engineer harness as a Claude Code plugin. 10 routable modes (frame / model / query / process / insight / automate / report / review / fix / workspace). Engine-agnostic SQL (BQ / Postgres / Snowflake / Redshift / DuckDB). 4 universal rules + Detail-Level Gate + Proactive Suggestion at Mode Exit. 16 stdlib scripts (stats / causal / format / validators). 14 method specs (causal + validation families). 5-tier schema-source hierarchy. Portable semantic-layer recipe. Visualization discipline (SWD). Auto-fires on natural Vietnamese + English DA requests (cho mình số liệu / điều gì xảy ra / tìm phương pháp tính / phân tích / báo cáo / build dashboard / etc). Consumes a workspace-brain second brain when present: reads memory/ + .index/ on entry to ground every mode in the user's real context.",
   "author": {
     "name": "Loc Tu",
     "email": ""
