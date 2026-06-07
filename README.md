@@ -7,7 +7,7 @@
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, produces work that reads like the same senior analyst made it.
 
-`v3.11.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.12.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## How it works
 
@@ -39,7 +39,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.11.0 should appear
+/plugin list      # prof-DA 3.12.0 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
@@ -139,7 +139,7 @@ Schema discovery follows a 5-tier hierarchy (owner-curated tag -> catalog API ->
 
 ## Versioning
 
-Current version `3.11.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.12.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 

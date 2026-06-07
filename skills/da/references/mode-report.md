@@ -233,6 +233,9 @@ See `feedback_inspection_audit_when_screenshot_unreliable.md` for the past incid
   deletes the receipt automatically on pass. Without this receipt the gate stays silent, so report mode
   MUST write it; that is what makes Step 7 non-skippable for a report deliverable.
 
+### Step 8b - Refine loop (trigger-gated)
+After the draft, if the user requests changes: 1-2 small fixes -> apply via prompt (Tier 1). On the 2nd-3rd consecutive output-fix round, OR a single feedback listing 3+ change points, offer the menu (Tier 1 prompt / Tier 2 worksheet / Tier 3 inline). Full protocol: `references/refine-worksheet.md`. For Tier 2: `scripts/refine/generate_worksheet.py <report>.html > <project>/refine/worksheet.txt`, user fills it, `scripts/refine/parse_feedback.py` -> apply per section + re-render. Empty feedback = section signed off.
+
 ### Step 9 — Publish to portal (the always-forgotten step)
 After save + verify, publish the deliverable to a shareable 72h link. This is NOT auto-sending to people
 (that still waits for "send") — it produces the LINK form of the deliverable, which the user needs almost
