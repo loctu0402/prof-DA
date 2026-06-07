@@ -142,6 +142,8 @@ except Exception as exc:
 
 ## Patch Ceiling — Escalate to Rebuild
 
+For multi-point or repeated feedback, switch to the refine protocol (`references/refine-worksheet.md`) instead of free-form prompts.
+
 After ≥3 distinct bugs in the same artifact across 2-3 patch rounds:
 - STOP patching
 - Surface to user: "rebuild / handoff / switch tool" options

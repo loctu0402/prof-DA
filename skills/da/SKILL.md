@@ -138,6 +138,12 @@ scripts/
 │   └── parallel_trends_test.py   # falsification test for DiD/Event Study
 ├── format/
 │   └── number_format.py          # K/M/B/T units, sentiment colors
+├── refine/
+│   ├── generate_worksheet.py     # report HTML -> non-tech per-section worksheet (stdlib only)
+│   ├── parse_feedback.py         # filled worksheet -> JSON of filled sections (mechanical extraction)
+│   ├── wrap_annotation_harness.py # report HTML -> <report>.annotate.html with inline overlay injected
+│   ├── annotate_overlay.js       # self-contained select-and-comment widget (loaded by wrap script)
+│   └── parse_comments.py         # comments.json (from overlay) -> change-set JSON (same shape as parse_feedback)
 └── validators/
     ├── orientation_block.py      # checks SCQR / docstring / 3-line intro present
     ├── action_brief.py           # checks 8-field brief
@@ -227,6 +233,7 @@ Once mode is selected:
 - Report standard checklist (binding pre-ship gate) → `references/report-standard-checklist.md`
 - Evaluation rubric (C-level scorecard) → `references/evaluation-rubric.md`
 - Self-check protocol (pre-ship) → `references/self-check-protocol.md`
+- Refine protocol (3-tier feedback loop, worksheet, handoff) → `references/refine-worksheet.md`
 
 **Quality framework (whole-artifact checks):**
 - 5 Quality Criteria (Interconnect / Compact / Insightful / Sufficient / Logical Reason) → `references/quality-criteria.md`

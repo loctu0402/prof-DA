@@ -4,6 +4,26 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.12.0] - 2026-06-07
+
+Merge of two parallel development lines that had each independently reused versions 3.10.0 and 3.11.0. Brings the **refine-protocol** feature onto `main` alongside the **A12 slide-deck / PPTX** channel. The refine line (worksheet MVP + Tier 3 inline annotation) was developed off-main and force-removed from `main` before the A12 release; it had self-numbered 3.10.0 / 3.11.0 on its own branch. Those parallel numbers are folded into this entry; the 3.11.0 (A12) and 3.10.0 (second-brain) entries below are the `main` line.
+
+### Added (refine-protocol, merged in)
+- **`references/refine-worksheet.md`** — 3-tier feedback protocol (prompt / worksheet / inline annotation), anchor system, apply flow, fresh-session handoff.
+- **`scripts/refine/generate_worksheet.py`** — report HTML to a non-technical per-section worksheet (stdlib only).
+- **`scripts/refine/parse_feedback.py`** — filled worksheet to a JSON change-set.
+- **`scripts/refine/parse_comments.py`** — `comments.json` to the same change-set shape (so the apply step consumes both).
+- **`scripts/refine/annotate_overlay.js`** — self-contained browser select-and-comment widget; exports `comments.json`.
+- **`scripts/refine/wrap_annotation_harness.py`** — injects the overlay into a report copy (`<report>.annotate.html`); the shipped report is untouched.
+- **`scripts/refine/tests/`** — unit tests for the worksheet / feedback / comments / harness scripts.
+
+### Changed (refine-protocol wiring)
+- `mode-report.md` (Step 8b refine loop), `mode-review.md`, `mode-fix-pipeline.md`, `universal-workflow-rules.md` (trigger rule), `skills/da/SKILL.md` (refine scripts registered in the Bundled Scripts tree). No new mode.
+- **version** 3.11.0 -> 3.12.0 (`plugin.json` + `marketplace.json` + README).
+
+### Why
+Two devices advanced prof-DA in parallel and both bumped to 3.10.0 then 3.11.0 with different features; `main` ended up carrying only the A12 line. Rather than lose the refine-protocol work (a full feature with tests), this release merges it onto `main` and resolves the numbering collision at 3.12.0.
+
 ## [3.11.0] - 2026-06-07
 
 Slide-deck / editable-PPTX output channel: `report` mode can now project any analysis into a presented deck or an editable PPTX handoff, with the deck-authoring contract that survives the export.
