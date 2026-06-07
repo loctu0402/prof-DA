@@ -4,6 +4,36 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.11.0] - 2026-06-07
+
+Slide-deck / editable-PPTX output channel: `report` mode can now project any analysis into a presented deck or an editable PPTX handoff, with the deck-authoring contract that survives the export.
+
+### Added
+- **`references/output-slide-deck.md`** — portable deck-authoring + editable-PPTX contract: one-message-per-slide / action titles, the 24px legibility floor, real `<table>` for native tabular export, capture-safe CSS, static-HTML-slide-bodies, no-AI-tell glyphs, entrance-end-state-is-base. Plus the report-archetype to deck-shape projection map and the **two export paths**: `gen_pptx` editable mode (claude.ai / Claude cowork) and the `pptx` skill's `html2pptx.js` (Claude Code CLI — a different per-slide contract). Tool-specific export params stay in the house template's DESIGN-SPEC, not in this portable file.
+
+### Changed
+- **`references/mode-report.md`** — decision tree gains a "Presentation deck / editable PPTX" branch; Step 1 (format) + Step 5 (storyline) + Reading-Order-Recap point at `output-slide-deck.md`; the storyline section now splits slide CONTENT (there) from deck FORM + export (the new reference).
+- **`skills/report/SKILL.md`** — cross-reference + hard-rule for the deck / PPTX path; auto-fire triggers add `pptx` / `convert sang PPTX` / `editable deck` / `Google Slides`.
+- **`references/coding-discipline.md`** — the stakeholder-file "use the template builder" rule now points at `output-slide-deck.md` for the HTML-deck case.
+- **`references/suggestion-protocol.md`** — the format-expansion (convert-to-PPTX) suggestion cites the deck reference.
+- **`references/org-extensions.md`** — new §8 "Slide-deck / PPTX house template (A12)": the concrete `shared/templates/A12-slide-deck-pptx/` template, the Trầm / magenta / IBM Plex house skin, the swimlane / RACI / mapping hero components, the MOAT reference deck, and the cowork-only `gen_pptx` note.
+- **version** 3.10.0 -> 3.11.0 (`plugin.json` + `marketplace.json` + README); CHANGELOG backfilled for 3.10.0 (below).
+
+### Why
+The library renders scrolling HTML reports; nothing guaranteed a deck that reads at the back of a room AND survives an editable-PPTX export with native text boxes + tables. A12 (designed in the report-template library, now locked into `shared/templates/`) is that output channel. This release teaches `report` mode to author A12-compliant decks and routes the export correctly: `gen_pptx` exists only in cowork, while in CC-CLI the path is the `pptx` skill — wiring the two as if interchangeable was the latent foot-gun this documents away.
+
+## [3.10.0] - 2026-06-04
+
+Second-brain context consumption: every mode now reads the host workspace's memory + index on entry to ground in the user's real domains and data. (Reconstructed entry — v3.10.0 shipped a `plugin.json` version bump without a CHANGELOG record; sourced from commit `1f96dc4`.)
+
+### Added
+- **"Second-Brain Context" core principle in `skills/da/SKILL.md`** — if the workspace has a `memory/` or `lt-memory/` layer plus a `.index/`, modes READ `.index/_root.md` + the relevant memory hub FIRST, before running; if absent and the task would benefit, suggest the standalone `workspace-brain` skill once. Division of labor: **workspace-brain builds + seeds the brain; prof-DA consumes it.**
+
+### Changed
+- **`commands/workspace.md` + `skills/workspace/SKILL.md`** — prefer the standalone `workspace-brain` skill when installed (canonical infra: hook-install + first-use discovery); the embedded workspace mode is the portable fallback subset.
+- **`references/suggestion-protocol.md`** — second-brain grounding added as a valid cross-cutting mode-exit suggestion.
+- **version** 3.9.0 -> 3.10.0 (`plugin.json` only at the time; `marketplace.json` + README were not bumped, reconciled to 3.11.0 in this release).
+
 ## [3.9.0] - 2026-06-03
 
 Workspace mode — progressive-disclosure indexing: `/prof-DA:workspace` now teaches recursive, per-folder indexing (a deep knowledge folder earns its own local `_index.md`) and ships the index format it referenced.

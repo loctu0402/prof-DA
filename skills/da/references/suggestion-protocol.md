@@ -48,7 +48,7 @@ Per signal, check which extension categories fit:
 | 3 | **Quality validation stack** | Insight mode used; causal claim present; no validation visible | "Bạn vừa làm DiD. Muốn add robustness check (3 specs) + falsification (placebo period) + bootstrap CI để tăng rigor không?" |
 | 4 | **Method upgrade** | Simple method used; advanced method better fits | "Hiện dùng Pearson correlation. Với causal claim này, DiD hoặc IV phù hợp hơn — muốn upgrade method không?" |
 | 5 | **Audience expansion** | Output is technical; non-technical stakeholder context mentioned | "Notebook này technical. Muốn build thêm 1-pager non-academic version cho manager không?" |
-| 6 | **Format expansion** | Output in 1 format; another format adds value | "Bạn có report HTML. Muốn convert sang PPTX cho present hoặc Apps Script dashboard auto-refresh không?" |
+| 6 | **Format expansion** | Output in 1 format; another format adds value | "Bạn có report HTML. Muốn convert sang PPTX cho present hoặc Apps Script dashboard auto-refresh không?" (PPTX deck path: `references/output-slide-deck.md`) |
 | 7 | **Downstream connection** | Output stands alone; could feed pipeline | "Output này có thể wire vào daily Slack alert nếu metric breach threshold — muốn setup không?" |
 | 8 | **MCP / tooling expansion** | MCP available but not used; relevant to current task | "Session có MCP `<org-catalog>` (semantic layer) — có thể cross-check kết quả với canonical metric. Muốn run validation không?" |
 

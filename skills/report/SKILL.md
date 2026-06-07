@@ -1,6 +1,6 @@
 ---
 name: report
-description: Build stakeholder deliverable from template (HTML SPA / PDF / email / Gchat / slides). SCQR + Key Terms + Impact Cards skeleton. Chart 7-anatomical-elements. Dual-comparison KPIs. Sentiment color with context override. HTML SPA structural inspection. Use this skill whenever the user needs to produce a stakeholder-facing report, dashboard, slide deck, executive summary, or share-out. Auto-fires on natural Vietnamese + English. Natural triggers include "build báo cáo", "làm báo cáo", "làm report", "viết report", "stakeholder report", "report cho stakeholder", "báo cáo cho sếp", "executive summary", "exec summary", "build dashboard", "làm dashboard", "build slide", "làm slide", "deck cho", "share-out", "HTML report", "HTML SPA", "PDF report", "email blast", "Gchat card", "<organization> brand", "biểu đồ", "chart cho stakeholder", "trình bày kết quả", or explicit /prof-DA:report.
+description: Build stakeholder deliverable from template (HTML SPA / PDF / email / Gchat / slides). SCQR + Key Terms + Impact Cards skeleton. Chart 7-anatomical-elements. Dual-comparison KPIs. Sentiment color with context override. HTML SPA structural inspection. Use this skill whenever the user needs to produce a stakeholder-facing report, dashboard, slide deck, executive summary, or share-out. Auto-fires on natural Vietnamese + English. Natural triggers include "build báo cáo", "làm báo cáo", "làm report", "viết report", "stakeholder report", "report cho stakeholder", "báo cáo cho sếp", "executive summary", "exec summary", "build dashboard", "làm dashboard", "build slide", "làm slide", "deck cho", "pptx", "convert sang PPTX", "editable deck", "Google Slides", "share-out", "HTML report", "HTML SPA", "PDF report", "email blast", "Gchat card", "<organization> brand", "biểu đồ", "chart cho stakeholder", "trình bày kết quả", or explicit /prof-DA:report.
 ---
 
 # Report Mode — Stakeholder Deliverable
@@ -42,12 +42,14 @@ Narrative template (SCQR + Key Terms + Impact Cards): `${CLAUDE_PLUGIN_ROOT}/ski
 - Sentiment color context-aware: cashout↑ = RED for AUM context, may flip for liquidity context (document override)
 - NEVER auto-send stakeholder reports (but DO publish the 72h portal link — that is the deliverable form, not sending to people)
 - NEVER edit generator for HTML patch (use update_report_vN.py overlay)
+- Slide deck / editable PPTX: see `output-slide-deck.md` (deck-authoring contract + 2 export paths; `gen_pptx` is cowork-only, `html2pptx.js` is the CC-CLI path)
 - Step 0 scaffold FIRST, Step 9 portal-publish LAST — both `[GATE]` via `report_consistency_audit.py`
 - Fork-or-fail: a README-only template stub = STOP + handoff, NEVER freestyle (root cause of style drift)
 - Stop-hook gate (v3.6): Step 8 drops `.prof-da/pending-validation.json`; the bundled `hooks/stop_gate.py` BLOCKS finishing until the report passes `report_consistency_audit` (clears the receipt on pass). Receipt-driven, silent on non-report sessions
 
 ## Cross-references
 - Full mode workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-report.md`
+- Slide deck / editable PPTX: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/output-slide-deck.md`
 - Project scaffold (Step 0): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/project-scaffold.md`
 - Binding pre-ship gate: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/report-standard-checklist.md`
 - Scoring rubric (C-level): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/evaluation-rubric.md`

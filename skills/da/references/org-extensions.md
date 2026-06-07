@@ -16,6 +16,7 @@ This reference bundles the <organization>-specific tooling (Semantic Cube, <org-
 | event-tracking | Mini-app event explorer | (none — <organization>-only) |
 | Data Portal | Documentation governance | (none — <organization>-only) |
 | Journey Data | User journey analytics | (none — <organization>-only) |
+| Slide-deck / PPTX skin | A12 deck template (`shared/templates/A12-slide-deck-pptx/`) + Trầm / IBM Plex skin; `gen_pptx` export in cowork | `references/output-slide-deck.md` |
 
 ## 1. Semantic Cube (<semantic-tech> + Cube.js)
 
@@ -291,7 +292,28 @@ Apply in `report` mode for <organization> wealth / <product> products:
 - **CRM ticket SENTIMENT** = 7 Vietnamese labels (Hài lòng / Rất hài lòng / Trung lập / Bối rối / Khó chịu /
   Tức giận / NULL), NOT English positive/neutral/negative; filter `Is_last_ticket = TRUE`.
 
-## 8. Cross-references
+## 8. Slide-deck / PPTX house template (A12)
+
+The portable deck-authoring + export contract is `references/output-slide-deck.md`. This is the <organization> binding:
+the concrete template, the house skin, and the export path.
+
+- **House template (fork this):** `<your-workspace>/shared/templates/A12-slide-deck-pptx/` — `boilerplate.html`
+  (forkable deck skeleton) + `deck-stage.js` (the slide web component) + `DESIGN-SPEC.md` (the full contract,
+  including the §5b editable-PPTX export rules). Locked alongside A1–A11; fork it, swap data only.
+- **House skin:** canonical **Trầm** (warm-grey base), single accent <organization> magenta `#d82d8b`, IBM Plex
+  Serif / Sans / Mono triad scaled up for projection, teal `#00b4a0` as a data-viz / diagram series (NOT a
+  second UI accent). Brand-forward `pink` and `burgundy` are `data-theme` swaps. The <product-b> verdict pill rides
+  along ONLY on <product> projections (never on a training / idea / data-quality deck).
+- **Hero diagram components** in the boilerplate (all real `<table>` / grid that export native): swimlane,
+  RACI matrix, two-column framework-mapping table.
+- **Export = `gen_pptx` editable mode, which runs in claude.ai / Claude cowork, NOT in Claude Code CLI.**
+  Author the deck here (CC-CLI or cowork); run the editable-PPTX export in cowork following `DESIGN-SPEC.md`
+  §5b verbatim. If you need a `.pptx` produced inside CC-CLI instead, use the `pptx` skill's `html2pptx.js`
+  (a different per-slide contract — see `references/output-slide-deck.md` §4 Path B).
+- **Reference deck (worked example):** the MOAT Data-Modeling deck — `reference/design-theme/MOAT Deck.html`
+  + `reference/design-theme/export/MOAT-Data-Modeling-Deck.pptx` (15 slides, live-proven editable export).
+
+## 9. Cross-references
 
 **Within this plugin**:
 - Schema tier ladder → `references/schema-source-hierarchy.md`
@@ -300,6 +322,7 @@ Apply in `report` mode for <organization> wealth / <product> products:
 - Data modeling patterns → `references/mode-model.md`
 - Governance → `references/governance.md`
 - MCP suggestion at mode-exit → `references/suggestion-protocol.md` (MCP-tooling expansion category)
+- Slide deck / editable PPTX (portable contract) → `references/output-slide-deck.md`
 
 **External (docs)**:
 - Semantic Cube: `https://<semantic-layer-host>/docs/intro`
@@ -309,4 +332,4 @@ Apply in `report` mode for <organization> wealth / <product> products:
 
 ## Why this file exists
 
-The portable plugin is engine-agnostic (deliberately so), but <organization> DAs need one-stop access to <organization>-specific tooling (Semantic Cube, <org-data-mcp> MCP, <org-sql-agent> tag, OpenMetadata curation). Without this file, every new <organization> session re-discovers "wait, what MCP do I use for that?". This file consolidates the 5 <organization>-specific entry points (Cube + MCP + tag + catalog + portal) into one reference, hooked into the portable plugin's schema-discovery ladder. Adding a new <organization>-only feature → extend this file, not the portable references.
+The portable plugin is engine-agnostic (deliberately so), but <organization> DAs need one-stop access to <organization>-specific tooling (Semantic Cube, <org-data-mcp> MCP, <org-sql-agent> tag, OpenMetadata curation). Without this file, every new <organization> session re-discovers "wait, what MCP do I use for that?". This file consolidates the <organization>-specific entry points (Cube + MCP + tag + catalog + portal + slide-deck skin) into one reference, hooked into the portable plugin's schema-discovery ladder. Adding a new <organization>-only feature → extend this file, not the portable references.
