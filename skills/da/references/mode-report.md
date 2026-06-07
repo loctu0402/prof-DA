@@ -19,8 +19,8 @@ What is the report for?
   ├─ App / dashboard performance monitoring
   │   └─ shared/templates/app-dashboard/
   │
-  ├─ Presentation deck (academic, training, leadership update)
-  │   └─ shared/templates/presentation/
+  ├─ Presentation deck / editable PPTX (present live, or a stakeholder-editable handoff)
+  │   └─ shared/templates/presentation/ + `references/output-slide-deck.md` (deck-authoring + PPTX export)
   │
   ├─ Google Chat webhook notification
   │   └─ shared/templates/gchat-webhook/
@@ -42,6 +42,7 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
 ### Step 1 — Confirm Audience & Output Format
 - Audience: team / manager / cross-functional / C-level?
 - Format: HTML SPA / PDF / email body / Gchat / slides?
+  - Slides / editable PPTX: see `references/output-slide-deck.md` (deck-authoring contract + the two export paths: `gen_pptx` in claude.ai/cowork, `html2pptx.js` in CC-CLI)
 - Language: Vietnamese with diacritics (stakeholder) or English (internal docs)?
 - Length: 1-page summary or multi-section?
 - **Baseline / comparator (ALWAYS ask, never assume):** which reference does each metric compare against? Menu: prior period (DoD / WoW / MoM) / trailing average (7d / 28d) / SDLM or same-period-last-year (YoY) / target-or-plan or <product-b>-expected / competitor-market benchmark / cohort baseline. A bare number is noise (Rule 2) - never ship one. Default for <product> daily = DoD + vs-7d-avg, but confirm per report. The chosen comparator(s) fill the template's comparator slot (template-library handoff §4.10).
@@ -79,6 +80,9 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
 - Number formatting: K / M / B / T per scale; 2 decimals; comma-separated people count
 
 #### Storyline > Dashboard (Consulting pattern)
+
+> **Deck FORM + export** (slide layout, the editable-PPTX contract, mapping a report archetype into slides):
+> `references/output-slide-deck.md`. This section covers the slide CONTENT (the storyline).
 
 **Why this matters (Empirical):** consulting firms (McKinsey/BCG/Bain) consistently use storyline-driven slides because senior decision-makers spend 10 seconds per slide. Dashboard-style slides (2-4 generic info clusters with vague titles) force readers to interpret charts themselves; storyline-style slides deliver the message directly.
 
@@ -316,3 +320,4 @@ Before building any report:
 5. `references/report-standard-checklist.md` — the binding pre-ship gate (`[GATE]` / `[ADVISORY]`)
 6. `references/self-check-protocol.md` — pre-ship checks
 7. `references/evaluation-rubric.md` — how the result will be scored (7-category C-level grade)
+- If the deliverable is a slide deck / editable PPTX: `references/output-slide-deck.md` (deck-authoring + the two export paths)

@@ -177,6 +177,8 @@ Examples:
 
 Rule: when producing stakeholder-facing files (XLSX / PPTX / PDF / HTML report / chart export), USE THE TEMPLATE BUILDER, not the raw library call. If your workspace doesn't have one yet, write a thin wrapper and SAVE it — every workspace eventually needs this layer.
 
+For an HTML-authored slide deck specifically, the deck-authoring contract + the two HTML-to-PPTX export paths are in `references/output-slide-deck.md`.
+
 Why — the difference between "intern-level output" and "senior analyst output" is exactly this layer. Stakeholders read polish before content; failing this gate makes correct work look unfinished.
 
 ## Patch Ceiling — Escalate to Rebuild

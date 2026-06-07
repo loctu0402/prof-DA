@@ -7,7 +7,7 @@
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, produces work that reads like the same senior analyst made it.
 
-`v3.9.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.11.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## How it works
 
@@ -23,7 +23,7 @@ Plain Claude Code can write SQL and charts, but nothing makes it consistent or c
 |---------------------|---------|
 | Guesses which metric you meant; queries a schema it never checked | Confirms intent, then discovers the real schema (5-tier) before any query |
 | Eyeballs significance inline | Runs statistics in 16 audited scripts (effect size, MDE, bootstrap CI, DiD), never guessed |
-| Formats every report differently | Reports fork one of 11 build-once-locked templates 1:1, so style drift is gone |
+| Formats every report differently | Reports fork one of 12 build-once-locked templates 1:1, so style drift is gone |
 | "Looks done," trusted on faith | A Stop-hook blocks the turn from ending until the report passes the consistency gate |
 | Forgets your corrections next session | A learning loop captures corrections and updates the rule the agent reads next time |
 
@@ -39,7 +39,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.9.0 should appear
+/plugin list      # prof-DA 3.11.0 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
@@ -139,7 +139,7 @@ Schema discovery follows a 5-tier hierarchy (owner-curated tag -> catalog API ->
 
 ## Versioning
 
-Current version `3.8.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.11.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 
