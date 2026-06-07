@@ -1,31 +1,51 @@
 # prof-DA
 
-**prof-DA turns Claude Code into a disciplined data analyst.** Ask for a number, a chart, or "why did X drop", in Vietnamese or English, and it runs a fixed analyst workflow instead of improvising.
+**prof-DA turns Claude Code into a disciplined data analyst that anyone can drive, analyst or not.** Ask for a number, a chart, a root cause, or a stakeholder report, in Vietnamese or English, and it runs a fixed, governed analyst workflow instead of improvising, so the answer is consistent, checkable, and reads the same every time.
 
 - **What it is:** a Claude Code plugin that wraps Claude in 10 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `review` / `fix` / `workspace`) behind one natural-language entry point.
-- **Who it's for:** data analysts and analytics engineers who work in Claude Code and want rigor and consistency, not improvisation.
-- **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Nothing is reproducible.
-- **The guarantee:** any session, on any engine, produces work that reads like the same senior analyst made it.
+- **Who it's for:** not only data analysts and analytics engineers. It is built so **business stakeholders and non-technical users can self-serve data** and still get an analyst-grade result, and so the experts get rigor and consistency instead of improvisation. The aim is **consistent, high-quality, trustworthy self-serve output**, first and foremost for <organization> stakeholders.
+- **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
+- **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
 `v3.12.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
-## How it works
+## Why this matters now
 
-prof-DA runs the same fixed process on every request: confirm intent and depth before touching data, discover the real schema before querying, run statistics in audited scripts (never inline guesses), judge every number for signal versus noise, and ship a same-shape deliverable each time. The 10 modes below cover the analyst lifecycle; the 4 universal rules are what keep each step rigorous and consistent across sessions.
+Anthropic's own write-up, [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude), shows Claude can already automate roughly 95% of business analytics queries, but **only once the foundation exists**: canonical data, a semantic source-of-truth, encoded skills, and validation. The same piece names the parts that stay hard: **concept-entity ambiguity** (a question maps to "hundreds of viable options"), **data staleness** ("definitions and schemas change constantly"), **retrieval failure**, and **silent failures**, the plausible answers that are simply wrong, which it flags as still unsolved.
 
-**Jump to:** [Why not vanilla Claude?](#why-not-just-vanilla-claude-code) · [Install](#install) · [First run](#first-run) · [The 10 modes](#the-10-modes) · [What it enforces](#what-it-enforces) · [What is inside](#what-is-inside) · [Configuration](#configuration)
+So the differentiator is no longer "can the agent query data." Vanilla Claude can run the steps. prof-DA is the layer that **operationalizes that blueprint for a real org**: it ships the skills, the validation, the consistency, and the grounding so you do not rebuild them every session, and so a non-expert's self-serve answer is one you can actually trust. The three things it adds beyond vanilla Claude are next.
+
+## What makes prof-DA different
+
+Three layers vanilla Claude leaves you to build yourself. Each maps onto a failure mode above.
+
+### 1. The build-once-lock report protocol: 12 archetypes, fork-or-fail
+
+Every deliverable **forks one of 12 locked report archetypes (A1-A12) 1:1** and swaps in data; it never freestyles a layout. The set covers the full DA surface: **A1** deep-dive, **A2** ops dashboard, **A3** editorial paper, **A4** daily email, **A5** Google Chat card, **A6** slide deck (the IA pin), **A7** exec one-pager, **A8** idea-verification, **A9** training, **A10** data-quality, **A11** projection, and **A12** slide-deck / editable-PPTX. They share one design contract: a token palette, the verdict vocabulary, the chart-choice matrix, and the AI-tell bans, all governed by a build-once-then-lock playbook.
+
+Why it matters: per-report style drift is the tell of an untrustworthy self-serve tool. When every output reads like the same senior analyst made it, a business stakeholder can trust it at a glance, with no analyst in the loop. `report` mode enforces fork-or-fail (a README-only template stub triggers a design handoff, never a freestyle). See [storytelling-with-data](skills/da/references/storytelling-with-data.md) and [output-slide-deck](skills/da/references/output-slide-deck.md); the locked archetype library lives in your workspace's `shared/templates/` (the A1-A12 set is <organization>'s reference instantiation).
+
+### 2. The workspace second brain
+
+`workspace` mode **builds** a second brain (a clean taxonomy, a memory layer of your domains, metrics, conventions, and past decisions, and a navigable index), and **every other mode reads it on entry** before acting. The agent starts grounded in your real entities instead of guessing them.
+
+Why it matters: this is the direct answer to the blog's three open problems. Grounding in curated domain memory collapses **concept-entity ambiguity**; the index makes the right context **retrievable** instead of lost; a maintained memory plus freshness discipline fights **staleness**. Division of labor: the standalone `workspace-brain` skill builds and seeds the brain, prof-DA consumes it. See [mode-workspace](skills/da/references/mode-workspace.md).
+
+### 3. The enforcement layer: the silent-failure killer
+
+The hardest unsolved problem is the plausible wrong answer. prof-DA makes validation non-optional: **4 universal rules** (orientation, baseline-noise-impact, action brief, why-explanation), **16 audited statistics scripts** (significance, effect size, bootstrap CI, DiD, run in code and never eyeballed inline), a **Stop-hook** that blocks a `report` turn from ending until the deliverable passes the consistency gate, and a **learning loop** that turns each correction you give into a permanent rule. A wrong-but-pretty answer has to survive all of it. Detail in [What it enforces](#what-it-enforces).
 
 ## Why not just vanilla Claude Code?
 
-Plain Claude Code can write SQL and charts, but nothing makes it consistent or checkable. prof-DA adds the enforcement layer:
+Same questions, sharpened against the failure modes Anthropic's blog names:
 
-| Vanilla Claude Code | prof-DA |
-|---------------------|---------|
-| Guesses which metric you meant; queries a schema it never checked | Confirms intent, then discovers the real schema (5-tier) before any query |
-| Eyeballs significance inline | Runs statistics in 16 audited scripts (effect size, MDE, bootstrap CI, DiD), never guessed |
-| Formats every report differently | Reports fork one of 12 build-once-locked templates 1:1, so style drift is gone |
-| "Looks done," trusted on faith | A Stop-hook blocks the turn from ending until the report passes the consistency gate |
-| Forgets your corrections next session | A learning loop captures corrections and updates the rule the agent reads next time |
+| The hard part | Vanilla Claude Code | prof-DA |
+|---|---|---|
+| Concept-entity ambiguity | Guesses which metric you meant | Confirms intent, grounds in the workspace second brain, discovers the real schema (5-tier) before any query |
+| Data staleness | No freshness notion | Freshness governance + a maintained memory/index; stale sources are flagged, not trusted |
+| Silent failures (plausible-but-wrong) | "Looks done," trusted on faith | Audited stat scripts + a Stop-hook consistency gate; no bare numbers (baseline-noise-impact on every figure) |
+| Style drift / inconsistency | Formats every report differently | Forks one of 12 build-once-locked archetypes 1:1 |
+| Forgets corrections | Repeats the mistake next session | Learning loop turns a correction into a permanent rule |
 
 ## Install
 
@@ -45,9 +65,9 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
 
 ```bash
-/plugin update prof-DA@loctu-marketplace       # update
-/plugin uninstall prof-DA                       # remove the plugin
-/plugin marketplace remove loctu-marketplace    # optional: drop the registry too
+/plugin update prof-DA@loctu-marketplace        # update
+/plugin uninstall prof-DA                        # remove the plugin
+/plugin marketplace remove loctu-marketplace     # optional: drop the registry too
 ```
 
 Upgrading from the old `prof-data-analyst` package (v3.3 or earlier)? Uninstall it first, then install `prof-DA`; the namespace and repo were both renamed. Details in [CHANGELOG.md](CHANGELOG.md).
@@ -82,16 +102,16 @@ The standard lifecycle runs left to right; `review`, `fix`, and `workspace` are 
 | **process** | Raw to staged to cleaned to mart, with 6-step EDA and a summary per phase. | "EDA notebook", "data quality", "kiểm tra data", "feature engineering" |
 | **insight** | Hypothesis to diagnostic to recommendation: matches the right causal method and guards against bias. | "điều gì xảy ra", "tại sao X giảm", "root cause", "vì sao", "phân tích sâu" |
 | **automate** | Wire a scheduled pipeline with fail-alerts and cache discipline. | "automation", "schedule job", "chạy hàng ngày", "alert khi lỗi" |
-| **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. | "build báo cáo", "làm report", "build dashboard" |
+| **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. | "build báo cáo", "làm report", "build dashboard", "làm slide", "convert sang PPTX" |
 | **review** | Audit a deliverable or a whole project. 3 sub-modes: delivery refine, full project audit, stakeholder questioning. | "review report", "OK chưa", "audit project", "góp ý" |
 | **fix** | Surgically debug a pipeline or report, with a patch-ceiling escalation rule. | "fix pipeline", "report sai", "wrong number", "pipeline fail" |
-| **workspace** | Scaffold, organize, and index a whole workspace into a navigable harness (taxonomy + memory layer + index). Guide-first for non-technical users; secrets-first, safe `git mv` on a branch, index last. | "dọn workspace", "sắp xếp lại thư mục", "file nằm khắp nơi", "organize my workspace", "rebuild index" |
+| **workspace** | Scaffold, organize, and index a whole workspace into the second brain above (taxonomy + memory layer + index). Guide-first for non-technical users; secrets-first, safe `git mv` on a branch, index last. | "dọn workspace", "sắp xếp lại thư mục", "file nằm khắp nơi", "organize my workspace", "rebuild index" |
 
-Each mode auto-fires on phrases like these, so a command is rarely needed; the full trigger lists live in each mode's `SKILL.md`. For the deeper structure, `frame` runs 4 planning gates and `model` offers 4 warehouse patterns: see [mode-frame](skills/da/references/mode-frame.md) and [mode-model](skills/da/references/mode-model.md).
+A non-technical user never has to learn these modes or their jargon: they ask in plain language and prof-DA routes, confirms intent, and runs the right one. Each mode auto-fires on phrases like these, so a command is rarely needed; the full trigger lists live in each mode's `SKILL.md`. For the deeper structure, `frame` runs 4 planning gates and `model` offers 4 warehouse patterns: see [mode-frame](skills/da/references/mode-frame.md) and [mode-model](skills/da/references/mode-model.md).
 
 ## What it enforces
 
-Every deliverable passes 4 universal rules plus an entry gate. This is what keeps output consistent and rigorous across sessions.
+Every deliverable passes 4 universal rules plus an entry gate. This is what keeps output consistent and rigorous across sessions and across whoever is driving.
 
 1. **Orientation block:** every deliverable opens with a short framing (SCQR, a 3-line intro, or a module docstring) so the reader gets the point before the detail.
 2. **Baseline, noise, impact:** every number is stated against a baseline, checked for whether it is real or noise, then given an impact verdict. No bare figures.
@@ -135,7 +155,13 @@ prof-DA is engine-agnostic and ships no credentials. It adapts to:
 
 Schema discovery follows a 5-tier hierarchy (owner-curated tag -> catalog API -> access-aware metadata -> INFORMATION_SCHEMA -> sampling): see [schema-source-hierarchy](skills/da/references/schema-source-hierarchy.md). Workspace-specific settings (project IDs, credentials, brand themes) live outside the plugin.
 
-**<organization> users:** an optional extension bundles the Semantic Cube, the <org-data-mcp> and <org-catalog> MCPs, and OpenMetadata curation. See [org-extensions](skills/da/references/org-extensions.md). Everyone else can ignore it.
+**<organization> users:** an optional extension bundles the Semantic Cube, the <org-data-mcp> and <org-catalog> MCPs, OpenMetadata curation, and the A1-A12 house slide/report skin. See [org-extensions](skills/da/references/org-extensions.md). Everyone else can ignore it.
+
+## A reference standard
+
+prof-DA hard-codes no engine, schema, or brand, and ships no credentials. The <organization> stack (Semantic Cube, the <org-data-mcp> and <org-catalog> MCPs, OpenMetadata, the A1-A12 house templates) is the **first instantiation**, isolated in [org-extensions](skills/da/references/org-extensions.md); everything else is portable.
+
+The intent is bigger than one plugin. prof-DA is meant as a **reference blueprint for the canonical agentic data workflow** (intent-gating, schema discovery, audited statistics, grounded memory, locked deliverables, enforced validation) that any future agentic data assistant, on any stack and for any org, can adopt and instantiate. <organization> is where it was proven first; the workflow is the part meant to outlive it.
 
 ## Versioning
 
