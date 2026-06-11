@@ -41,7 +41,7 @@ NOTE = (
 
 def main() -> int:
     try:
-        raw = sys.stdin.read()
+        raw = sys.stdin.buffer.read().decode("utf-8", "replace")
         data = json.loads(raw) if raw.strip() else {}
     except Exception:
         return 0
