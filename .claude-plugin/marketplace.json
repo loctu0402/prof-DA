@@ -13,7 +13,7 @@
         "ref": "main"
       },
       "description": "Professional Data Analyst + AE harness: 11 modes (frame/model/query/process/insight/automate/report/submit/review/fix/workspace), 4 universal rules + Detail-Level Gate + Proactive Suggestion, 17 stdlib scripts, 14 method specs, 5-tier schema-source hierarchy, portable semantic-layer recipe, SWD viz discipline. submit = final acceptance gate for recurring reports (<product> bi-weekly profile). Auto-fires on natural VI+EN DA requests via 3-layer trigger (descriptions + SessionStart dispatch protocol + deterministic prompt keyword detector).",
-      "version": "3.14.0",
+      "version": "3.15.0",
       "author": {
         "name": "Loc Tu"
       }

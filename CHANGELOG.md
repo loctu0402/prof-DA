@@ -4,6 +4,11 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.15.0] - 2026-06-11
+
+### Added
+- **`templates/proposal-walkthrough/`** (HTML + spec MD + README): reusable proposal / PoC-walkthrough template for a stakeholder proposal that goes general -> detail: Epic / Feature / Connextra user-story, per-step Acceptance-Criteria + Definition-of-Done, RAID, a 2-layer output (the UI deliverable AND the infra scaffold beneath, idempotent), and a linking-key-highlight discipline (color each cross-step key so the reader sees how info connects between tools/steps). Distilled from the looker-extract walkthrough. Fork `PROPOSAL-TEMPLATE.html`, fill the `[ ... ]` slots. Author: Loc Tu.
+
 ## [3.14.0] - 2026-06-11
 
 Auto-trigger overhaul: prof-DA now fires on natural prompts the way superpowers does, with three stacked layers instead of frontmatter descriptions alone. Driven by a real miss: "có sẵn template thực hiện các bài toán dự đoán dựa vào seasonal effect không" produced a generic workspace search instead of routing into the plugin.

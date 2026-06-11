@@ -1,0 +1,184 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- ======================================================================
+PROPOSAL / PoC WALKTHROUGH TEMPLATE  (fork me)
+Trình tự GENERAL -> DETAIL. Mỗi loại section có framing trực quan RIÊNG (đừng blend):
+  overview = flow connector | per-step = card AC/DoD | sim = uflow màu riêng | demo = file frame.
+Quy tắc: node ghi OUTPUT (không chỉ cơ chế) | full-id không viết tắt mơ hồ | mọi field tag nguồn
+  (nếu có provenance) | 0 AI-tell symbol (mũi tên vẽ bằng CSS, không dùng ký tự unicode) | VN đủ dấu,
+  giọng practitioner | mỗi bước có AC + DoD | có RAID | có Epic/Feature/User story | demo framed rõ.
+Thay mọi [ ... ] bằng nội dung dự án của bạn. Xoá các section không áp dụng.
+====================================================================== -->
+<title>[Tên dự án / feature]: [mục tiêu một dòng]</title>
+<style>
+:root{--sys:#0a7d34;--der:#1558b0;--rea:#b25e00;--bg:#fdf6ee;--ink:#1c1a17;--line:#e3d9c8;--pink:#d82d8b;--teal:#00b4a0;--ok:#0a7d34;--warn:#b25e00;--miss:#b00;}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:20px;margin:34px 0 10px;border-bottom:2px solid var(--pink);padding-bottom:4px}
+h3{font-size:16px;margin:22px 0 6px;color:#5a5347}
+.sub{color:#6b6253;margin:0 0 18px}.tagline{font-size:14px;color:var(--rea);font-weight:600;margin:0 0 10px}
+.src{font-size:11px;color:#8a8175;margin-left:6px}.muted{color:#8a8175;font-size:12px}
+.tag{font:700 10px/1 ui-monospace,monospace;padding:2px 5px;border-radius:4px;color:#fff;vertical-align:middle}
+.tag.sys{background:var(--sys)}.tag.der{background:var(--der)}.tag.rea{background:var(--rea)}
+.legend{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:10px 0}
+.legend .lh{font-size:13px;font-weight:700;margin-bottom:8px}.legend ul{margin:0;padding-left:22px}.legend li{font-size:13px;margin:6px 0}
+.note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--rea);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:13.5px}
+.vtable{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.vtable th,.vtable td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}.vtable th{background:#efe7d8}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card-h{font-size:15px;margin-bottom:8px}
+table.kv{width:100%;border-collapse:collapse;margin:8px 0;font-size:13.5px}
+table.kv td{border-top:1px solid var(--line);padding:5px 8px;vertical-align:top}table.kv td:first-child{width:200px;color:#6b6253;font-weight:600}
+.ev{font-size:12px;color:#0a7d34;background:#f0f7f1;border:1px solid #cfe6d6;border-radius:5px;padding:4px 8px;margin-top:5px}
+/* --- (3) FLOW OVERVIEW: connector vẽ bằng CSS, mỗi node ghi OUTPUT --- */
+.bpflow{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 22px 18px;margin:14px 0}
+.bp-tlabel{font-size:13px;font-weight:800;color:#5a5347;letter-spacing:.3px;margin:4px 0 11px}.bp-tlabel.alt{color:#9a6a00;margin-top:10px}
+.bp-track{display:flex;align-items:stretch;flex-wrap:nowrap}
+.bp-step{flex:1 1 0;min-width:0;border:2px solid var(--line);border-radius:10px;background:#fff;padding:12px}
+.bp-stephead{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;line-height:1.2}
+.bp-step .bp-n{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:23px;border-radius:11px;color:#fff;font-size:11px;font-weight:800;padding:0 6px}
+.bp-stepdesc{font-size:11px;color:#6b6253;line-height:1.4;margin-top:7px}
+.bp-step.sys{border-color:var(--sys)}.bp-step.sys .bp-n{background:var(--sys)}
+.bp-step.der{border-color:var(--der)}.bp-step.der .bp-n{background:var(--der)}
+.bp-step.rea{border-color:var(--rea)}.bp-step.rea .bp-n{background:var(--rea)}
+.bp-step.amber{border-color:#c9881e}.bp-step.amber .bp-n{background:#c9881e}
+.bp-step.pink{border-color:var(--pink)}.bp-step.pink .bp-n{background:var(--pink)}
+.bp-arrow{flex:0 0 16px;align-self:center;height:2px;background:#cbbfa8;position:relative}
+.bp-arrow::after{content:"";position:absolute;right:0;top:-4px;border-left:7px solid #cbbfa8;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.bp-cache{display:flex;align-items:center;justify-content:center;gap:9px;margin:14px 0;color:#7a7265;font-size:12px}
+.bp-cache .dn{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #b3a890}
+.bp-loopnote{font-size:11.5px;color:#9a6a00;font-style:italic;margin-top:12px;border-top:1px dashed #e0c9a0;padding-top:10px}
+.bp-info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:16px}
+.bp-card{background:#faf6ef;border:1px solid var(--line);border-radius:10px;padding:13px 16px}
+.bp-card .bp-ph{font-size:12px;font-weight:800;color:var(--pink);margin-bottom:9px}.bp-card ul{margin:0;padding-left:16px;font-size:12px}.bp-card li{margin:6px 0;color:#4a443b}
+.bp-stat{display:flex;justify-content:space-between;font-size:12.5px;margin:6px 0}.bp-stat b{color:var(--sys);font-weight:800}
+/* --- (6) SIMULATION: container màu riêng, KHÁC card per-step --- */
+.uflow{background:#fff8ef;border:1px solid #f0d9b8;border-left:5px solid #c9881e;border-radius:11px;padding:16px 18px 18px;margin:12px 0}
+.uflow-h{font-size:13px;font-weight:800;color:#9a6a00;letter-spacing:.3px;margin-bottom:12px;text-transform:uppercase}
+.ucard{background:#fff;border:1px solid var(--line);border-left:3px solid #c9881e;border-radius:9px;padding:13px 15px}
+.uarr{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:11px solid #d8a657;margin:8px auto}
+/* --- (7) DEMO SNAPSHOT: frame kiểu cửa sổ file --- */
+.demoframe{border:1px solid var(--line);border-radius:11px;overflow:hidden;margin:12px 0;box-shadow:0 3px 14px rgba(0,0,0,.08)}
+.demobar{background:#2a2622;padding:9px 14px;font-size:12px;display:flex;align-items:center;gap:9px}
+.demobar .dot{width:11px;height:11px;border-radius:50%;display:inline-block}.demobar .r{background:#ff5f56}.demobar .y{background:#ffbd2e}.demobar .g{background:#27c93f}
+.demobar .fn{font:12px ui-monospace,monospace;color:#cdbfa8;margin-left:5px}.demobar .tag-demo{margin-left:auto;background:var(--pink);color:#fff;font-size:10px;font-weight:800;padding:3px 9px;border-radius:5px;letter-spacing:.3px}
+.demobody{background:#fdf9f2;padding:18px}
+.scards{display:flex;gap:10px;flex-wrap:wrap;margin:2px 0 12px}.scard{flex:1 1 130px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:13px 8px;text-align:center}
+.scard .snum{font-size:25px;font-weight:800;line-height:1}.scard .slbl{font-size:11px;color:#6b6253;margin-top:5px}.scard.ok .snum{color:var(--sys)}.scard.miss .snum{color:#b00}.scard.warn .snum{color:#9a6a00}
+/* --- (8) verdict + change chips --- */
+.verdict{font-weight:700;padding:2px 8px;border-radius:5px}.verdict.ok{background:#d8f3df;color:#0a7d34}.verdict.warn{background:#fff1d6;color:#9a6a00}.verdict.miss{background:#ffe0e0;color:#b00}
+@media(max-width:760px){.bp-track{flex-wrap:wrap;gap:7px}.bp-arrow{display:none}.bp-info{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+
+<!-- ============ (0) HEADER: tiêu đề rõ mục tiêu (technical, không phèn) + tagline giá trị + meta ============ -->
+<h1>[Tên dự án / feature / luồng]: [mục tiêu cốt lõi, technical]</h1>
+<p class="tagline">[1 dòng giá trị / nguyên tắc xuyên suốt]</p>
+<p class="sub">[Đối tượng đọc] | [scope] | [nguồn dữ liệu / môi trường] | Cập nhật [YYYY-MM-DD].</p>
+
+<!-- ============ (1) PHẠM VI: Epic / Feature / User story ============ -->
+<h2>Phạm vi: Epic, Feature, User story</h2>
+<div class="note"><b>Epic</b>: [một câu mô tả mục tiêu lớn nhất, gồm các deliverable chính].</div>
+<!-- User story THEO FRAMEWORK (Connextra) - mỗi feature 1 block có cấu trúc, KHÔNG viết 1 đoạn văn dài. -->
+<div class="card"><div class="card-h"><b>F1 - [tên feature]</b> <span class="src">grain: [grain]</span></div>
+<table class="kv">
+<tr><td>Là (role)</td><td>[vai trò]</td></tr>
+<tr><td>Muốn (capability)</td><td>[hành động / năng lực, ngắn gọn]</td></tr>
+<tr><td>Để (value)</td><td>[giá trị / lý do]</td></tr>
+<tr><td>Output</td><td><code>[output]</code></td></tr>
+</table></div>
+<!-- lặp lại block cho F2, F3 ... -->
+<div class="card"><div class="card-h"><b>F2 - [tên feature]</b> <span class="src">grain: [grain]</span></div>
+<table class="kv">
+<tr><td>Là (role)</td><td>[...]</td></tr><tr><td>Muốn (capability)</td><td>[...]</td></tr><tr><td>Để (value)</td><td>[...]</td></tr><tr><td>Output</td><td><code>[output]</code></td></tr>
+</table></div>
+
+<!-- ============ (2) LEGEND / QUY ƯỚC (provenance tier nếu áp dụng) ============ -->
+<div class="legend">
+  <div class="lh">[Quy ước nguồn của mỗi thông tin, gắn tag ở mọi field để chống bias]:</div>
+  <ul>
+    <li><span class="tag sys">SYSTEM</span> [tool / hệ thống trả nguyên văn].</li>
+    <li><span class="tag der">DERIVED</span> [suy ra bằng code deterministic, có thể sai, cần verify].</li>
+    <li><span class="tag rea">REASONING</span> [suy luận / phán đoán, bắt buộc người duyệt trước khi thành canonical].</li>
+  </ul>
+</div>
+
+<!-- ============ (3) BỨC TRANH TOÀN CẢNH: flow nối connector, mỗi node ghi OUTPUT ============ -->
+<h2>0. Bức tranh toàn cảnh</h2>
+<p class="sub">[1-2 câu mô tả toàn cảnh]. Mỗi box ghi rõ OUTPUT bước đó trả về (gắn với feature); màu box = tầng nguồn.</p>
+<div class="bpflow">
+  <div class="bp-tlabel">[NHÁNH CHÍNH - mô tả]</div>
+  <div class="bp-track">
+    <div class="bp-step sys"><div class="bp-stephead"><span class="bp-n">1</span>[Bước 1]</div><div class="bp-stepdesc"><b>OUTPUT:</b>[output bước 1]</div></div>
+    <div class="bp-arrow"></div>
+    <div class="bp-step sys"><div class="bp-stephead"><span class="bp-n">2</span>[Bước 2]</div><div class="bp-stepdesc"><b>OUTPUT:</b>[output bước 2]</div></div>
+    <div class="bp-arrow"></div>
+    <div class="bp-step der"><div class="bp-stephead"><span class="bp-n">3</span>[Bước 3]</div><div class="bp-stepdesc"><b>OUTPUT:</b>[output bước 3]</div></div>
+    <div class="bp-arrow"></div>
+    <div class="bp-step rea"><div class="bp-stephead"><span class="bp-n">4</span>[Bước cuối]</div><div class="bp-stepdesc"><b>OUTPUT:</b>[deliverable cuối]</div></div>
+  </div>
+  <!-- (tùy chọn) nhánh thứ 2 (vd maintain/loop): bp-cache + bp-tlabel.alt + bp-track + bp-loopnote -->
+  <div class="bp-info">
+    <div class="bp-card"><div class="bp-ph">Số liệu</div><div class="bp-stat"><span>[KPI]</span><b>[số]</b></div><div class="bp-stat"><span>[KPI]</span><b>[số]</b></div></div>
+    <div class="bp-card"><div class="bp-ph">Tầng nguồn (màu box)</div><ul><li><span class="tag sys">SYSTEM</span> [...]</li><li><span class="tag der">DERIVED</span> [...]</li><li><span class="tag rea">REASONING</span> [...]</li></ul></div>
+    <div class="bp-card"><div class="bp-ph">Nguyên tắc</div><ul><li>[nguyên tắc 1]</li><li>[nguyên tắc 2]</li></ul></div>
+  </div>
+</div>
+
+<!-- ============ (4) CƠ CHẾ CHI TIẾT per-step: Action / Output / AC / DoD + tag + reason to believe ============ -->
+<h2>1. Cơ chế chi tiết từng bước</h2>
+<div class="card"><div class="card-h"><b>[Bước 1]</b> <span class="tag sys">SYSTEM</span></div>
+  <table class="kv">
+  <tr><td>Action</td><td>[làm gì, cụ thể]</td></tr>
+  <tr><td>Output</td><td>[trả về gì, có ví dụ thật]</td></tr>
+  <tr><td>Acceptance criteria</td><td>[điều kiện pass binary]</td></tr>
+  <tr><td>DoD</td><td>[trạng thái coi là xong]</td></tr>
+  </table>
+  <div class="ev"><b>Reason to believe</b>: [tại sao tin output đúng, bằng chứng đâu].</div>
+</div>
+<!-- lặp lại card cho từng bước -->
+
+<!-- ============ (5) RAID ============ -->
+<div class="card"><div class="card-h"><b>RAID</b></div><table class="kv">
+<tr><td>Risks</td><td>[rủi ro thật + cách giảm]</td></tr>
+<tr><td>Assumptions</td><td>[giả định đang dựa vào]</td></tr>
+<tr><td>Issues</td><td>[vấn đề đang mở]</td></tr>
+<tr><td>Dependencies</td><td>[phụ thuộc: quyền / tool / hệ thống]</td></tr>
+</table></div>
+
+<!-- ============ (6) MÔ PHỎNG LUỒNG: 1 ví dụ thật, framing RIÊNG (uflow) ============ -->
+<h2>1b. Mô phỏng luồng (1 ví dụ thật)</h2>
+<div class="uflow"><div class="uflow-h">[MÔ PHỎNG: tên kịch bản]</div>
+  <div class="ucard"><div class="card-h"><b>[Bước 1]</b></div><table class="kv"><tr><td>Action</td><td>[...]</td></tr><tr><td>Output</td><td>[kết quả thật bước này]</td></tr></table></div>
+  <div class="uarr"></div>
+  <div class="ucard"><div class="card-h"><b>[Bước 2]</b></div><table class="kv"><tr><td>Action</td><td>[...]</td></tr><tr><td>Output</td><td>[...]</td></tr></table></div>
+</div>
+
+<!-- ============ (7) OUTPUT THỰC NHẬN + DEMO SNAPSHOT (demo frame) ============ -->
+<h2>2. Output thực nhận (mẫu vài dòng) + demo</h2>
+<p class="sub">[Trích vài dòng output mẫu; đầy đủ ở file].</p>
+<table class="vtable"><tr><th>[cột]</th><th>[cột]</th><th>[cột]</th></tr>
+<tr><td>[...]</td><td>[...]</td><td>[...]</td></tr></table>
+<h3>Demo: deliverable cuối</h3>
+<div class="demoframe"><div class="demobar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fn">[output/ten_file.html]</span><span class="tag-demo">DEMO minh họa</span></div>
+  <div class="demobody">
+    <div class="scards"><div class="scard"><div class="snum">[N]</div><div class="slbl">[label]</div></div><div class="scard ok"><div class="snum">[N]</div><div class="slbl">[label]</div></div></div>
+    <p class="src">[mô tả: đây là snapshot của file deliverable cuối, người nhận sẽ thấy thế này].</p>
+  </div>
+</div>
+
+<!-- ============ (8) GIỚI HẠN: bảng có cấu trúc ============ -->
+<h2>3. Giới hạn</h2>
+<table class="vtable"><tr><th>Giới hạn</th><th>Vì sao xảy ra</th><th>Ảnh hưởng</th><th>Cách xử lý</th></tr>
+<tr><td><b>[tên]</b><br><span class="verdict miss">[trạng thái]</span></td><td>[nguyên nhân gốc]</td><td>[hệ quả]</td><td>[workaround]</td></tr>
+</table>
+
+<!-- ============ (9) PROVENANCE FOOTER + ROADMAP optional ============ -->
+<h2>Provenance footer</h2>
+<div class="note">
+<b>Tầng nguồn</b>: SYSTEM / DERIVED / REASONING (REASONING cần người duyệt).<br>
+<b>Độ tươi</b>: [snapshot date], [build date]. &nbsp; <b>Owner</b>: [email].<br>
+<b>Hướng long-term (optional)</b>: [mở rộng tương lai, vd versioned storage / CI / scale].<br>
+Author: [Tên bạn] ([email]).
+</div>
+
+</div></body></html>
