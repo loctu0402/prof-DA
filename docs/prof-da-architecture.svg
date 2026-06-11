@@ -1,0 +1,229 @@
+<svg viewBox="0 0 1560 2040" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8b97a8"/>
+    </marker>
+    <marker id="arrPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#d82d8b"/>
+    </marker>
+    <marker id="arrTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#00b4a0"/>
+    </marker>
+  </defs>
+  <style>
+    .h1{font-size:30px;font-weight:700;fill:#e6ecf5}
+    .h2{font-size:16px;font-weight:700;fill:#e6ecf5}
+    .h3{font-size:13px;font-weight:700}
+    .t{font-size:12px;fill:#aeb9c9}
+    .ts{font-size:11px;fill:#8b97a8}
+    .tw{font-size:12px;fill:#e6ecf5}
+    .lane{fill:none;stroke-dasharray:7 5;stroke-width:1.4;rx:10}
+    .box{rx:10;stroke-width:1.6}
+    .num{font-size:13px;font-weight:700;fill:#0c1018}
+    .flow{stroke:#8b97a8;stroke-width:1.6;fill:none}
+    .feed{stroke-dasharray:5 5;fill:none;stroke-width:1.5}
+  </style>
+
+  <!-- canvas -->
+  <rect width="1560" height="2040" fill="#0c1018"/>
+
+  <!-- header -->
+  <circle cx="52" cy="56" r="7" fill="#d82d8b"/>
+  <text x="72" y="64" class="h1">prof-DA: The Governed Analyst Loop, 6 Nested Loops</text>
+  <text x="72" y="92" class="t">From per-request to cross-session. Every loop feeds the next. Any driver, any engine, same senior analyst.</text>
+  <rect x="1320" y="38" width="200" height="34" rx="17" fill="#131a26" stroke="#d82d8b"/>
+  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.13.0 - MIT</text>
+
+  <!-- ===================== main frame ===================== -->
+  <rect x="40" y="120" width="1480" height="1030" rx="14" fill="#0f141f" stroke="#1d2940"/>
+
+  <!-- LANE A: cross-session -->
+  <rect x="60" y="145" width="1000" height="170" class="lane" stroke="#9b7fe8"/>
+  <text x="78" y="168" class="h3" fill="#9b7fe8">CROSS-SESSION (continuous)</text>
+  <!-- second brain store -->
+  <rect x="90" y="185" width="430" height="110" class="box" fill="#171326" stroke="#9b7fe8"/>
+  <text x="110" y="212" class="h3" fill="#cdbcff">SECOND BRAIN (store)</text>
+  <text x="110" y="234" class="t">memory hubs: domains / kpis / edge-cases</text>
+  <text x="110" y="252" class="t">.index/ map + locked template library</text>
+  <text x="110" y="274" class="ts">built by workspace-brain - consumed by every mode</text>
+  <!-- loop 6 learning -->
+  <circle cx="600" cy="200" r="15" fill="#d82d8b"/><text x="600" y="205" text-anchor="middle" class="num">6</text>
+  <rect x="625" y="185" width="410" height="110" class="box" fill="#251220" stroke="#d82d8b"/>
+  <text x="645" y="212" class="h3" fill="#ff9ccd">LEARNING LOOP (per session)</text>
+  <text x="645" y="234" class="t">your correction -> a permanent rule + memory atom</text>
+  <text x="645" y="252" class="t">next session starts already knowing</text>
+  <text x="645" y="274" class="ts">the same mistake never ships twice</text>
+  <path class="feed" stroke="#d82d8b" d="M625,250 L530,250" marker-end="url(#arrPink)"/>
+  <text x="540" y="242" class="ts" fill="#d82d8b">writes</text>
+
+  <!-- LANE B: per request -->
+  <rect x="60" y="335" width="1000" height="165" class="lane" stroke="#4ea3ff"/>
+  <text x="78" y="358" class="h3" fill="#4ea3ff">PER REQUEST (seconds)</text>
+  <!-- user chip -->
+  <rect x="90" y="385" width="170" height="90" class="box" fill="#131a26" stroke="#3a4a66"/>
+  <text x="175" y="420" text-anchor="middle" class="h3" fill="#e6ecf5">YOU</text>
+  <text x="175" y="442" text-anchor="middle" class="ts">plain VN / EN ask</text>
+  <text x="175" y="458" text-anchor="middle" class="ts">no jargon needed</text>
+  <!-- loop 1 -->
+  <circle cx="320" cy="400" r="15" fill="#4ea3ff"/><text x="320" y="405" text-anchor="middle" class="num">1</text>
+  <rect x="345" y="385" width="320" height="90" class="box" fill="#101c2c" stroke="#4ea3ff"/>
+  <text x="365" y="412" class="h3" fill="#9ccbff">INTENT GATE</text>
+  <text x="365" y="434" class="t">confirm WHAT you actually asked</text>
+  <text x="365" y="452" class="t">+ Detail Level: Quick / Standard / Deep</text>
+  <!-- loop 2 -->
+  <circle cx="710" cy="400" r="15" fill="#4ea3ff"/><text x="710" y="405" text-anchor="middle" class="num">2</text>
+  <rect x="735" y="385" width="300" height="90" class="box" fill="#101c2c" stroke="#4ea3ff"/>
+  <text x="755" y="412" class="h3" fill="#9ccbff">GROUNDING</text>
+  <text x="755" y="434" class="t">read second brain on entry</text>
+  <text x="755" y="452" class="t">5-tier schema discovery, no guessing</text>
+  <path class="flow" d="M260,430 L345,430" marker-end="url(#arr)"/>
+  <path class="flow" d="M665,430 L735,430" marker-end="url(#arr)"/>
+  <path class="feed" stroke="#9b7fe8" d="M880,385 L880,330 L420,330 L420,295" marker-end="url(#arr)"/>
+  <text x="893" y="345" class="ts" fill="#9b7fe8">reads on entry</text>
+
+  <!-- LANE C: per task -->
+  <rect x="60" y="520" width="1000" height="185" class="lane" stroke="#00b4a0"/>
+  <text x="78" y="543" class="h3" fill="#00b4a0">PER TASK (minutes)</text>
+  <circle cx="120" cy="585" r="15" fill="#00b4a0"/><text x="120" y="590" text-anchor="middle" class="num">3</text>
+  <rect x="145" y="565" width="560" height="120" class="box" fill="#0e211f" stroke="#00b4a0"/>
+  <text x="165" y="592" class="h3" fill="#7fe0d4">MODE RUN - 11 routable modes</text>
+  <text x="165" y="616" class="t">frame -> model -> query -> process -> insight -> automate -> report</text>
+  <text x="165" y="636" class="t">orthogonal: submit / review / fix / workspace</text>
+  <text x="165" y="660" class="ts">auto-fires on natural language, slash command rarely needed</text>
+  <rect x="735" y="565" width="300" height="120" class="box" fill="#0e211f" stroke="#00b4a0"/>
+  <text x="755" y="592" class="h3" fill="#7fe0d4">SCRIPT STDLIB</text>
+  <text x="755" y="616" class="t">17 audited scripts: stats, causal,</text>
+  <text x="755" y="634" class="t">formatting, validators</text>
+  <text x="755" y="658" class="ts">statistics run in code, never eyeballed</text>
+  <path class="flow" d="M705,625 L735,625" marker-end="url(#arr)"/>
+  <path class="flow" d="M890,475 L890,520" marker-end="url(#arr)"/>
+
+  <!-- LANE D: per deliverable -->
+  <rect x="60" y="725" width="1000" height="175" class="lane" stroke="#caa15a"/>
+  <text x="78" y="748" class="h3" fill="#caa15a">PER DELIVERABLE (before anything ships)</text>
+  <circle cx="120" cy="790" r="15" fill="#caa15a"/><text x="120" y="795" text-anchor="middle" class="num">4</text>
+  <rect x="145" y="770" width="890" height="110" class="box" fill="#231c10" stroke="#caa15a"/>
+  <text x="165" y="797" class="h3" fill="#f0d49a">GATE STACK - the silent-failure killer</text>
+  <text x="165" y="821" class="t">4 universal rules: orientation / baseline-noise-impact / action brief / why-explanation. No bare numbers.</text>
+  <text x="165" y="841" class="t">Fork 1 of 12 locked archetypes 1:1, never freestyle. Stop-hook receipt blocks the turn until the gate passes.</text>
+  <text x="165" y="865" class="ts">fail -> punch-list -> back to the mode run -> re-audit (loop)</text>
+  <path class="flow" d="M560,705 L560,725" marker-end="url(#arr)"/>
+  <path class="feed" stroke="#caa15a" d="M145,845 L100,845 L100,640 L120,640" marker-end="url(#arr)"/>
+
+  <!-- LANE E: per cycle -->
+  <rect x="60" y="920" width="1000" height="160" class="lane" stroke="#caa15a"/>
+  <text x="78" y="943" class="h3" fill="#caa15a">PER CYCLE (weekly / bi-weekly / monthly)</text>
+  <circle cx="120" cy="985" r="15" fill="#caa15a"/><text x="120" y="990" text-anchor="middle" class="num">5</text>
+  <rect x="145" y="965" width="890" height="100" class="box" fill="#231c10" stroke="#caa15a"/>
+  <text x="165" y="992" class="h3" fill="#f0d49a">CYCLE CONTRACT - submit acceptance gate</text>
+  <text x="165" y="1014" class="t">recurring report graded section-by-section vs the team's DoD + per-section quality_check + paste-ready payload</text>
+  <text x="165" y="1036" class="t">carry-forward: open items survive into next cycle until resolved (<product> bi-weekly profile ships built-in)</text>
+  <path class="flow" d="M560,880 L560,920" marker-end="url(#arr)"/>
+  <path class="feed" stroke="#d82d8b" d="M1035,1000 L1075,1000 L1075,250 L1035,250" marker-end="url(#arrPink)"/>
+  <text x="1086" y="630" class="ts" fill="#d82d8b" transform="rotate(90 1086 630)">gotchas + corrections feed the learning loop</text>
+
+  <!-- ============ right rail ============ -->
+  <rect x="1100" y="145" width="400" height="280" rx="10" fill="#131a26" stroke="#243047"/>
+  <text x="1120" y="172" class="h2">By the numbers</text>
+  <text x="1120" y="200" class="t">11 modes - 12 slash commands</text>
+  <text x="1120" y="222" class="t">17 stdlib scripts (stats / causal / validators)</text>
+  <text x="1120" y="244" class="t">14 causal method specs, each cited</text>
+  <text x="1120" y="266" class="t">12 locked report archetypes (A1-A12)</text>
+  <text x="1120" y="288" class="t">4 universal rules + Detail-Level gate</text>
+  <text x="1120" y="310" class="t">5-tier schema discovery - 5 SQL engines</text>
+  <text x="1120" y="332" class="t">3 support sub-agents, spawned on value</text>
+  <text x="1120" y="354" class="t">7-section <product> bi-weekly submit profile</text>
+  <text x="1120" y="382" class="ts">engine-agnostic: BigQuery / Postgres /</text>
+  <text x="1120" y="400" class="ts">Snowflake / Redshift / DuckDB - no credentials</text>
+
+  <rect x="1100" y="445" width="400" height="170" rx="10" fill="#131a26" stroke="#243047"/>
+  <text x="1120" y="472" class="h2">Color legend</text>
+  <rect x="1120" y="488" width="14" height="14" rx="3" fill="#101c2c" stroke="#4ea3ff"/><text x="1144" y="500" class="t">intent + grounding (per request)</text>
+  <rect x="1120" y="512" width="14" height="14" rx="3" fill="#0e211f" stroke="#00b4a0"/><text x="1144" y="524" class="t">mode run + scripts (per task)</text>
+  <rect x="1120" y="536" width="14" height="14" rx="3" fill="#231c10" stroke="#caa15a"/><text x="1144" y="548" class="t">gates + cycle contract (before ship)</text>
+  <rect x="1120" y="560" width="14" height="14" rx="3" fill="#251220" stroke="#d82d8b"/><text x="1144" y="572" class="t">learning loop (per session)</text>
+  <rect x="1120" y="584" width="14" height="14" rx="3" fill="#171326" stroke="#9b7fe8"/><text x="1144" y="596" class="t">second brain store - dashed = feeds</text>
+
+  <rect x="1100" y="635" width="400" height="290" rx="10" fill="#131a26" stroke="#243047"/>
+  <text x="1120" y="662" class="h2">vs vanilla Claude Code</text>
+  <text x="1120" y="690" class="t">guesses which metric you meant</text>
+  <text x="1140" y="708" class="tw">-> confirms intent, grounds in YOUR entities</text>
+  <text x="1120" y="736" class="t">no freshness notion</text>
+  <text x="1140" y="754" class="tw">-> stale sources flagged, never trusted</text>
+  <text x="1120" y="782" class="t">plausible-but-wrong ships on faith</text>
+  <text x="1140" y="800" class="tw">-> audited scripts + a blocking stop-gate</text>
+  <text x="1120" y="828" class="t">every report formatted differently</text>
+  <text x="1140" y="846" class="tw">-> forks 1 of 12 locked archetypes, 1:1</text>
+  <text x="1120" y="874" class="t">forgets your corrections</text>
+  <text x="1140" y="892" class="tw">-> learning loop writes permanent rules</text>
+
+  <rect x="1100" y="945" width="400" height="185" rx="10" fill="#1c1207" stroke="#caa15a" stroke-dasharray="7 5"/>
+  <text x="1130" y="975" class="h2" fill="#f0d49a">COMPOUND EFFECT</text>
+  <text x="1120" y="1003" class="t">correction (6) -> grounded entry (2)</text>
+  <text x="1120" y="1025" class="t">-> first-pass gate passes (4)</text>
+  <text x="1120" y="1047" class="t">-> more cycles shipped (5)</text>
+  <text x="1120" y="1075" class="tw">report on day 90 != report on day 1:</text>
+  <text x="1120" y="1097" class="tw">same analyst voice, deeper domain memory</text>
+
+  <!-- ===================== loops by time scale ===================== -->
+  <text x="48" y="1205" class="h2" style="letter-spacing:2px">LOOPS BY TIME SCALE</text>
+  <circle cx="62" cy="1240" r="13" fill="#4ea3ff"/><text x="62" y="1245" text-anchor="middle" class="num">1</text>
+  <text x="90" y="1238" class="h3" fill="#9ccbff">Intent Gate - per request</text>
+  <text x="90" y="1258" class="t">Never answers a guessed question: confirms the ask + a Detail Level (Quick / Standard / Deep) before any mode runs. Depth is the lever you control.</text>
+  <circle cx="62" cy="1295" r="13" fill="#4ea3ff"/><text x="62" y="1300" text-anchor="middle" class="num">2</text>
+  <text x="90" y="1293" class="h3" fill="#9ccbff">Grounding - per request</text>
+  <text x="90" y="1313" class="t">Reads the workspace second brain (memory hubs + index) on entry and discovers schema through a 5-tier hierarchy. Collapses concept-entity ambiguity before SQL exists.</text>
+  <circle cx="62" cy="1350" r="13" fill="#00b4a0"/><text x="62" y="1355" text-anchor="middle" class="num">3</text>
+  <text x="90" y="1348" class="h3" fill="#7fe0d4">Mode Run - per task</text>
+  <text x="90" y="1368" class="t">Routes to 1 of 11 analyst modes. Statistics (significance, effect size, bootstrap CI, DiD) always run inside 17 audited stdlib scripts, never inline guesswork.</text>
+  <circle cx="62" cy="1405" r="13" fill="#caa15a"/><text x="62" y="1410" text-anchor="middle" class="num">4</text>
+  <text x="90" y="1403" class="h3" fill="#f0d49a">Gate Stack - per deliverable</text>
+  <text x="90" y="1423" class="t">4 universal rules + validator scripts + fork-or-fail archetypes. A Stop-hook receipt blocks the turn from ending until the consistency gate passes.</text>
+  <circle cx="62" cy="1460" r="13" fill="#caa15a"/><text x="62" y="1465" text-anchor="middle" class="num">5</text>
+  <text x="90" y="1458" class="h3" fill="#f0d49a">Cycle Contract - per recurring cycle</text>
+  <text x="90" y="1478" class="t">submit mode grades the finished report section-by-section against the team's definition-of-done, emits the submission payload, and carries open items forward.</text>
+  <circle cx="62" cy="1515" r="13" fill="#d82d8b"/><text x="62" y="1520" text-anchor="middle" class="num">6</text>
+  <text x="90" y="1513" class="h3" fill="#ff9ccd">Learning Loop - per session</text>
+  <text x="90" y="1533" class="t">Each correction you give becomes a permanent rule or memory atom. The brain the next session reads is deeper than the one this session read.</text>
+
+  <!-- ===================== bottom cards ===================== -->
+  <rect x="40" y="1575" width="470" height="330" rx="12" fill="#131a26" stroke="#243047"/>
+  <circle cx="68" cy="1605" r="6" fill="#caa15a"/>
+  <text x="84" y="1611" class="h2">The compound chain</text>
+  <text x="64" y="1643" class="t">- Loop 6 turns corrections into rules</text>
+  <text x="64" y="1669" class="t">- clean rules make Loop 2 grounding richer</text>
+  <text x="64" y="1695" class="t">- grounded runs pass Loop 4 gates first try</text>
+  <text x="64" y="1721" class="t">- passing gates means more Loop 5 cycles ship</text>
+  <text x="64" y="1747" class="t">- every cycle inherits domain gotchas for free</text>
+  <text x="64" y="1781" class="tw">Trust compounds: stakeholders read every</text>
+  <text x="64" y="1801" class="tw">deliverable as the same senior analyst,</text>
+  <text x="64" y="1821" class="tw">because structurally it is.</text>
+
+  <rect x="545" y="1575" width="470" height="330" rx="12" fill="#131a26" stroke="#243047"/>
+  <circle cx="573" cy="1605" r="6" fill="#d82d8b"/>
+  <text x="589" y="1611" class="h2">What breaks without each loop</text>
+  <text x="569" y="1643" class="t">- no 1: answers the wrong question, confidently</text>
+  <text x="569" y="1669" class="t">- no 2: invents columns; metric ambiguity ships</text>
+  <text x="569" y="1695" class="t">- no 3: statistics by eyeball; silent numeric bugs</text>
+  <text x="569" y="1721" class="t">- no 4: plausible-but-wrong reaches stakeholders</text>
+  <text x="569" y="1747" class="t">- no 5: recurring report drifts section by section</text>
+  <text x="569" y="1773" class="t">- no 6: the same correction re-taught forever</text>
+  <text x="569" y="1807" class="tw">These are the failure modes Anthropic's</text>
+  <text x="569" y="1827" class="tw">self-serve analytics write-up names unsolved.</text>
+
+  <rect x="1050" y="1575" width="470" height="330" rx="12" fill="#131a26" stroke="#243047"/>
+  <circle cx="1078" cy="1605" r="6" fill="#00b4a0"/>
+  <text x="1094" y="1611" class="h2">Start in 3 steps</text>
+  <text x="1074" y="1643" class="t">1. /plugin marketplace add loctu0402/prof-DA</text>
+  <text x="1074" y="1669" class="t">2. /plugin install prof-DA@loctu-marketplace</text>
+  <text x="1074" y="1695" class="t">3. just ask, in Vietnamese or English:</text>
+  <text x="1094" y="1721" class="tw">"why did AUM drop last week?"</text>
+  <text x="1094" y="1747" class="tw">"build bao cao doanh thu cho stakeholder"</text>
+  <text x="1074" y="1781" class="t">explicit entry: /prof-DA:da</text>
+  <text x="1074" y="1807" class="t">submit a recurring report: /prof-DA:submit</text>
+  <text x="1074" y="1833" class="ts">modes auto-fire on natural language;</text>
+  <text x="1074" y="1851" class="ts">a command is rarely needed</text>
+
+  <!-- footer -->
+  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.13.0 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
+</svg>
