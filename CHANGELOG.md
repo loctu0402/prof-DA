@@ -4,6 +4,26 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.13.0] - 2026-06-11
+
+New **`submit` mode** (the 11th mode): a final acceptance gate that checks a finished recurring report against a team's external acceptance contract (required sections + per-section definition-of-done), routes gaps to the builder, runs the per-section quality_check, and emits a ready-to-paste submission payload. Distilled from the <organization> <product> bi-weekly `<report-mcp>` MCP (versioned guidance + per-section quality_check + carry-forward follow-ups), ported offline so the plugin stays engine-agnostic and server-independent.
+
+### Added
+- **`skills/submit/SKILL.md` + `commands/submit.md`** — the submit mode + `/prof-DA:submit` slash command. Orchestrates, never generates: a missing section is routed to `/report` or `/query` and re-audited; submit never drafts content and never calls the submission MCP (the user submits after connecting). Distinct from `/review` (which judges quality); submit judges COMPLETENESS, ACCEPTABILITY, and submit-readiness.
+- **`references/mode-submit.md`** — the Step 0-6 gate workflow (identify team + load contract, structure audit, gap punch-list + route, quality_check, carry-forward, build payload, readiness checklist), the `/review`-vs-`/submit` distinction, and the thin per-team profile model.
+- **`references/recurring-report-contract.md`** — the methodology: section contract + per-section DoD + carry-forward follow-ups, the `report-contract.json` format, engine-agnostic.
+- **`scripts/validators/section_contract_audit.py`** — per-section DoD gate (vs `rubric_audit.py`'s GLOBAL rules): every required section present, non-empty, no unrendered placeholder, each DoD item heuristically evident. Three modes: audit (JSON, exit 0/1/2), `--worksheet` (per-section quality_check), `--payload --author` (a `submit_contribution`-shaped JSON). Pure stdlib, BOM-tolerant (`utf-8-sig`).
+- **`references/submit-profiles/example-team.report-contract.json`** — the concrete <product> bi-weekly acceptance contract (7 sections, guidance v3: business_overview / satisfaction / cross_sell / segment_a_contribution / segment_b_contribution / segment_c_contribution / new_initiatives), section keys 1:1 with the <report-mcp> `submit_contribution` guidance.
+
+### Changed
+- **Wiring (30 insertions):** `skills/da/SKILL.md` (submit registered in the mode table), `commands/da.md` (submit under orthogonal helpers), `planning-protocol.md` (Gate 2.4: lock a Section Contract beside the Metric Contract for recurring reports), `report-standard-checklist.md` (optional section-contract gate), `scripts-guide.md` (`section_contract_audit.py` usage), `skills/report/SKILL.md` (cross-reference to the recurring-report contract).
+- **`references/mode-report.md`** — fork-or-fail now points at the workspace design-token contract (`shared/templates/_contract/THEME-TOKEN-CONTRACT.html`) as the token source when present, instead of re-deriving hexes per report.
+- **README** — 10 -> 11 modes everywhere (headline, modes table + submit row, lifecycle line, "What is inside" tree, script count 16 -> 17); a recurring-report paragraph added to "What it enforces".
+- **version** 3.12.0 -> 3.13.0 (`plugin.json` + `marketplace.json` + README).
+
+### Why
+Recurring team reports (the <product> bi-weekly business review) are graded against a manager's fixed section template with a per-section definition-of-done — a contract the global validators (`rubric_audit`, `self_check`) do not check, because they grade the report's universal shape, not each section against its own bespoke rubric. Without a per-section gate, recurring reports drift section content silently and get bounced at submission. `submit` is the gate that catches it and hands over a paste-ready payload, so a self-serve report finalizes to the team's standard on the first try. The pattern is ported offline (not a live dependency on the `<report-mcp>` worker, which the <organization> web-filter blocks at the system layer) so the plugin stays portable; <product> is just the first profile.
+
 ## [3.12.0] - 2026-06-07
 
 Merge of two parallel development lines that had each independently reused versions 3.10.0 and 3.11.0. Brings the **refine-protocol** feature onto `main` alongside the **A12 slide-deck / PPTX** channel. The refine line (worksheet MVP + Tier 3 inline annotation) was developed off-main and force-removed from `main` before the A12 release; it had self-numbered 3.10.0 / 3.11.0 on its own branch. Those parallel numbers are folded into this entry; the 3.11.0 (A12) and 3.10.0 (second-brain) entries below are the `main` line.

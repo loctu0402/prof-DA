@@ -30,6 +30,7 @@ Any `[GATE]` failure ⇒ not shippable. Fix, re-run, then declare done.
       `latest_portal_url.json` saved. — mode-report Step 9 (skip only if user explicitly says "no link").
 - [ ] **Output location** — under `output/` or `projects/<name>/output/`, never workspace root.
 - [ ] **No auto-send** — saved + link shown; wait for explicit "send".
+- [ ] **Section contract satisfied** (recurring/structured reports only, if `report-contract.json` exists) — every required section present, non-empty, no unrendered placeholder. — `section_contract_audit.py` (see `recurring-report-contract.md`)
 
 ## `[ADVISORY]` — scored, not auto-blocked (evaluation-rubric.md)
 

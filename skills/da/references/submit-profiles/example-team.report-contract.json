@@ -1,0 +1,88 @@
+{
+  "report": "the savings product  — bi-weekly business review",
+  "team": "<product>",
+  "cadence": "bi-weekly",
+  "version": 3,
+  "submit_target": "<report-mcp> MCP — submit_contribution (author + sections + quality_check); guidance v3",
+  "_note": "Acceptance contract = the <report-mcp> guidance v3 (the team manager's required sections + definition-of-done). Section keys MATCH the MCP guidance keys 1:1 so the audited report maps straight into submit_contribution. Copy this into your project as report-contract.json; bump version if the manager changes the guidance.",
+  "sections": [
+    {
+      "key": "business_overview",
+      "title": "Business Overview",
+      "required": true,
+      "dod": [
+        "AUM actual vs target",
+        "MFU actual vs target",
+        "projection to end of month"
+      ]
+    },
+    {
+      "key": "satisfaction",
+      "title": "CSAT Update",
+      "required": true,
+      "dod": [
+        "overall CSAT score with recent trend vs KPI target",
+        "CSAT breakdown by issue group with recent trends",
+        "key drivers behind high and low scores",
+        "actions done, in progress, and upcoming"
+      ]
+    },
+    {
+      "key": "cross_sell",
+      "title": "Cross Sale Business",
+      "required": true,
+      "dod": [
+        "current MFU overlap between profit account and other investment products (a savings product, investment product, stock)",
+        "overlap trend over recent cycles",
+        "comparison to target",
+        "actions done, in progress, and upcoming to reach target"
+      ]
+    },
+    {
+      "key": "segment_a_contribution",
+      "title": "AUM Contribution from MFU",
+      "required": true,
+      "dod": [
+        "current AUM from MFU",
+        "AUM trend over recent cycles",
+        "cash-in and cash-out behavior patterns",
+        "explanation of significant fluctuations",
+        "actions taken, in progress, and planned"
+      ]
+    },
+    {
+      "key": "segment_b_contribution",
+      "title": "AUM Contribution from Fund",
+      "required": true,
+      "dod": [
+        "current AUM from fund",
+        "AUM trend over recent cycles",
+        "cash-in and cash-out behavior patterns",
+        "explanation of significant fluctuations",
+        "actions taken, in progress, and planned"
+      ]
+    },
+    {
+      "key": "segment_c_contribution",
+      "title": "AUM Contribution from Merchant",
+      "required": true,
+      "dod": [
+        "current AUM from merchant",
+        "AUM trend over recent cycles",
+        "cash-in and cash-out behavior patterns",
+        "explanation of significant fluctuations",
+        "actions taken, in progress, and planned"
+      ]
+    },
+    {
+      "key": "new_initiatives",
+      "title": "New Initiatives",
+      "required": true,
+      "dod": [
+        "current progress status",
+        "list of problems that need to be solved"
+      ]
+    }
+  ],
+  "carry_forward": []
+}

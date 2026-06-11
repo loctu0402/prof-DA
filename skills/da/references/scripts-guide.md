@@ -211,6 +211,21 @@ Use this for sub-mode C (Rubric Audit) in `mode-review.md`. Step 2 of the audit 
 
 Why this script — analyst cannot reliably remember ~50 rules while shipping. Mechanical pass catches what intuition skips. Output is actionable (Fix + Why) so reviewer is not punted back to the rule doc.
 
+### section_contract_audit.py
+Per-section definition-of-done gate for **recurring / structured reports** (vs `rubric_audit.py`, which checks GLOBAL skill rules). Takes a section contract (JSON) + a populated report; checks every required section is present, non-empty, free of unrendered placeholders, with each DoD item heuristically evident; emits a per-section `quality_check` worksheet for the judgment half. See `recurring-report-contract.md`.
+
+```bash
+python scripts/validators/section_contract_audit.py output/report.md --contract report-contract.json
+python scripts/validators/section_contract_audit.py output/report.md --contract report-contract.json --worksheet
+python scripts/validators/section_contract_audit.py output/report.md --contract report-contract.json --payload --author "Name"
+```
+
+Exit 0 = all required sections present/non-empty/no-placeholder, 1 = a required-section gate failed, 2 = file/contract error. DoD keyword gaps are advisory (surfaced in the worksheet, not auto-blocked — the keyword heuristic is imperfect, human judgment fills it).
+
+`--payload` emits a `submit_contribution`-shaped JSON (author + sections{key: extracted body} + quality_check{key: justification template with auto-flags}) for the `/prof-DA:submit` mode: fill the `<FILL>` slots and paste straight into the submission MCP call. Missing sections become a `<MISSING>` marker (route to the builder, do not draft in the script). Used by `references/mode-submit.md`.
+
+Why this script — global validators grade the report's universal shape; they do NOT check each section against its own bespoke contract. Recurring reports drift section content silently without a per-section gate. Pairs with `self_check.py` (global layer) — run both.
+
 ## Common Workflow Recipes
 
 ### Before declaring a report done

@@ -55,6 +55,10 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
   chosen template is a README-only stub with no forkable HTML/CSS, STOP and do ONE of:
   (a) reuse the closest real template + its canonical theme (`shared/themes/<organization>_chart_theme.py`: pink
   `#d82d8b`, cream `#fdf6ee`, teal `#00b4a0`);
+  - Tokens come from your workspace's **design-system / token contract** if one exists
+    (e.g. `<your-workspace>/shared/templates/_contract/THEME-TOKEN-CONTRACT.html` — tokens, theme ramps,
+    verdict + sentiment scales); fork `var(--token)` from there, never re-derive hexes per report. If no
+    contract exists, the chart theme above is the minimum token source.
   (b) prepare a `DESIGN_HANDOFF_REQUEST.md` per `claude-design-handoff-not-freestyle` and wait for the spec;
   (c) flag that the template library needs this archetype built (Phase B), then implement 1:1 once locked.
   `[GATE]` — `report_consistency_audit.py` flags `freestyle_palette` when a build defines a bespoke palette

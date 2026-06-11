@@ -2,12 +2,12 @@
 
 **prof-DA turns Claude Code into a disciplined data analyst that anyone can drive, analyst or not.** Ask for a number, a chart, a root cause, or a stakeholder report, in Vietnamese or English, and it runs a fixed, governed analyst workflow instead of improvising, so the answer is consistent, checkable, and reads the same every time.
 
-- **What it is:** a Claude Code plugin that wraps Claude in 10 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `review` / `fix` / `workspace`) behind one natural-language entry point.
+- **What it is:** a Claude Code plugin that wraps Claude in 11 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `submit` / `review` / `fix` / `workspace`) behind one natural-language entry point.
 - **Who it's for:** not only data analysts and analytics engineers. It is built so **business stakeholders and non-technical users can self-serve data** and still get an analyst-grade result, and so the experts get rigor and consistency instead of improvisation. The aim is **consistent, high-quality, trustworthy self-serve output**, first and foremost for <organization> stakeholders.
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
-`v3.12.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.13.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## Why this matters now
 
@@ -33,7 +33,7 @@ Why it matters: this is the direct answer to the blog's three open problems. Gro
 
 ### 3. The enforcement layer: the silent-failure killer
 
-The hardest unsolved problem is the plausible wrong answer. prof-DA makes validation non-optional: **4 universal rules** (orientation, baseline-noise-impact, action brief, why-explanation), **16 audited statistics scripts** (significance, effect size, bootstrap CI, DiD, run in code and never eyeballed inline), a **Stop-hook** that blocks a `report` turn from ending until the deliverable passes the consistency gate, and a **learning loop** that turns each correction you give into a permanent rule. A wrong-but-pretty answer has to survive all of it. Detail in [What it enforces](#what-it-enforces).
+The hardest unsolved problem is the plausible wrong answer. prof-DA makes validation non-optional: **4 universal rules** (orientation, baseline-noise-impact, action brief, why-explanation), **17 audited statistics scripts** (significance, effect size, bootstrap CI, DiD, run in code and never eyeballed inline), a **Stop-hook** that blocks a `report` turn from ending until the deliverable passes the consistency gate, and a **learning loop** that turns each correction you give into a permanent rule. A wrong-but-pretty answer has to survive all of it. Detail in [What it enforces](#what-it-enforces).
 
 ## Why not just vanilla Claude Code?
 
@@ -59,7 +59,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.12.0 should appear
+/plugin list      # prof-DA 3.13.0 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
@@ -88,11 +88,11 @@ prof-DA detects the request, confirms intent and a detail level (Quick / Standar
 /prof-DA:da     # confirm intent + detail level, then route to a mode
 ```
 
-## The 10 modes
+## The 11 modes
 
-The standard lifecycle runs left to right; `review`, `fix`, and `workspace` are orthogonal and run any time.
+The standard lifecycle runs left to right; `submit`, `review`, `fix`, and `workspace` are orthogonal and run any time.
 
-`frame -> model -> query -> process -> insight -> automate -> report`  +  `review` / `fix` / `workspace`
+`frame -> model -> query -> process -> insight -> automate -> report`  +  `submit` / `review` / `fix` / `workspace`
 
 | Mode | What it does | Sample natural triggers |
 |------|--------------|------------------------|
@@ -103,6 +103,7 @@ The standard lifecycle runs left to right; `review`, `fix`, and `workspace` are 
 | **insight** | Hypothesis to diagnostic to recommendation: matches the right causal method and guards against bias. | "điều gì xảy ra", "tại sao X giảm", "root cause", "vì sao", "phân tích sâu" |
 | **automate** | Wire a scheduled pipeline with fail-alerts and cache discipline. | "automation", "schedule job", "chạy hàng ngày", "alert khi lỗi" |
 | **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. | "build báo cáo", "làm report", "build dashboard", "làm slide", "convert sang PPTX" |
+| **submit** | Final acceptance gate before a recurring report goes to a team's submission system: completeness audit vs the team's section contract, route gaps to the builder, per-section quality_check, emit a ready-to-paste payload. Ships a <product> bi-weekly profile. | "submit report", "finalize trước khi nộp", "đã đủ mục chưa", "fit yêu cầu quản lý chưa" |
 | **review** | Audit a deliverable or a whole project. 3 sub-modes: delivery refine, full project audit, stakeholder questioning. | "review report", "OK chưa", "audit project", "góp ý" |
 | **fix** | Surgically debug a pipeline or report, with a patch-ceiling escalation rule. | "fix pipeline", "report sai", "wrong number", "pipeline fail" |
 | **workspace** | Scaffold, organize, and index a whole workspace into the second brain above (taxonomy + memory layer + index). Guide-first for non-technical users; secrets-first, safe `git mv` on a branch, index last. | "dọn workspace", "sắp xếp lại thư mục", "file nằm khắp nơi", "organize my workspace", "rebuild index" |
@@ -122,6 +123,8 @@ The **Detail-Level Gate** sits in front of all four: every mode confirms Quick /
 
 On top of the rules sit a 5-criteria quality check and a 5-gate quality pipeline (scope -> data -> analysis -> visuals -> review). Stakeholder visuals follow Storytelling-with-Data discipline (action titles, grey plus one accent, no pie or 3D): see [storytelling-with-data](skills/da/references/storytelling-with-data.md).
 
+For recurring, structured reports (weekly / bi-weekly / monthly), an optional **section contract** pins the required sections and grades each against its own definition-of-done; the `submit` mode runs that gate and emits the submission payload before the report leaves for the team manager or system. The shipped <product> bi-weekly profile is the worked instantiation. See [recurring-report-contract](skills/da/references/recurring-report-contract.md).
+
 Two mechanisms make these non-optional rather than advisory. A **Stop-hook** blocks a `report`-mode turn from ending until the deliverable passes the consistency gate (the model cannot quietly skip validation). A **learning loop** captures your corrections at session end and updates the rule the agent reads next time, so a repeated mistake becomes a permanent fix instead of a recurring one.
 
 ## What is inside
@@ -132,13 +135,13 @@ prof-DA is one root skill plus thin per-mode stubs, a script stdlib, method spec
 skills/
   da/                      root skill: rules, protocols, references
     references/            deep docs (modes, methods, governance, SWD, schema)
-    scripts/               16 stdlib scripts (run, never inline, statistics)
-  frame, model, query ...  10 thin mode stubs that load the root skill
-commands/                  11 slash commands (1 entry + 10 modes)
+    scripts/               17 stdlib scripts (run, never inline, statistics)
+  frame, model, query ...  11 thin mode stubs that load the root skill
+commands/                  12 slash commands (1 entry + 11 modes)
 agents/                    3 support sub-agents
 ```
 
-- **16 stdlib scripts** (`skills/da/scripts/`): stats (effect size, significance, MDE, bootstrap CI, multiple testing), causal (DiD / event study, parallel-trends), formatting, and validators (orientation, action brief, AI-tell scan, rubric audit, method-maturity audit, report consistency, self-check). Script-over-agent-compute is a hard rule: statistics always run in a vetted script, never guessed inline. See [scripts-guide](skills/da/references/scripts-guide.md).
+- **17 stdlib scripts** (`skills/da/scripts/`): stats (effect size, significance, MDE, bootstrap CI, multiple testing), causal (DiD / event study, parallel-trends), formatting, and validators (orientation, action brief, AI-tell scan, rubric audit, method-maturity audit, report consistency, section-contract, self-check). Script-over-agent-compute is a hard rule: statistics always run in a vetted script, never guessed inline. See [scripts-guide](skills/da/references/scripts-guide.md).
 - **14 method specs** (`skills/da/references/methods/`): DiD, event study, RDD, synthetic control, PSM, IV, bootstrap CI, robustness, sensitivity, falsification, multiple testing, post-hoc power, cross-validation, pre-registration. Each cites a primary source. See [methods/_index](skills/da/references/methods/_index.md).
 - **3 support sub-agents** (`agents/`), spawned only when value beats cost: `da-orchestrator` (intent + plan + final-review gate), `da-context-tracer` (multi-file reads for big-project review), `da-method-auditor` (causal-method judgment).
 
@@ -165,7 +168,7 @@ The intent is bigger than one plugin. prof-DA is meant as a **reference blueprin
 
 ## Versioning
 
-Current version `3.12.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.13.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 
