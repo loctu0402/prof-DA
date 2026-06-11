@@ -15,6 +15,9 @@ New **`submit` mode** (the 11th mode): a final acceptance gate that checks a fin
 - **`scripts/validators/section_contract_audit.py`** — per-section DoD gate (vs `rubric_audit.py`'s GLOBAL rules): every required section present, non-empty, no unrendered placeholder, each DoD item heuristically evident. Three modes: audit (JSON, exit 0/1/2), `--worksheet` (per-section quality_check), `--payload --author` (a `submit_contribution`-shaped JSON). Pure stdlib, BOM-tolerant (`utf-8-sig`).
 - **`references/submit-profiles/example-team.report-contract.json`** — the concrete <product> bi-weekly acceptance contract (7 sections, guidance v3: business_overview / satisfaction / cross_sell / segment_a_contribution / segment_b_contribution / segment_c_contribution / new_initiatives), section keys 1:1 with the <report-mcp> `submit_contribution` guidance.
 
+### Added (docs)
+- **`docs/prof-da-architecture.svg`** — one-page architecture poster (6 nested loops by time scale: intent gate / grounding / mode run / gate stack / cycle contract / learning loop, plus the compound chain, real numbers, and a vs-vanilla panel), embedded at the top of the README. Poster idiom follows the Hermes Agent (NousResearch) architecture diagram.
+
 ### Changed
 - **Wiring (30 insertions):** `skills/da/SKILL.md` (submit registered in the mode table), `commands/da.md` (submit under orthogonal helpers), `planning-protocol.md` (Gate 2.4: lock a Section Contract beside the Metric Contract for recurring reports), `report-standard-checklist.md` (optional section-contract gate), `scripts-guide.md` (`section_contract_audit.py` usage), `skills/report/SKILL.md` (cross-reference to the recurring-report contract).
 - **`references/mode-report.md`** — fork-or-fail now points at the workspace design-token contract (`shared/templates/_contract/THEME-TOKEN-CONTRACT.html`) as the token source when present, instead of re-deriving hexes per report.
