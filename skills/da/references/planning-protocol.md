@@ -90,8 +90,15 @@ Per metric, fill the contract:
 - **Activity vs Value distinction**: distinguish "user did X" (activity) from "user generated Y value" (value). Don't conflate.
 - **Comparability test**: is there a baseline to compare against? (7d avg / DoD / vs cohort / vs control)
 
+### Phase 2.4 — Section Contract (recurring / structured reports only)
+
+If the deliverable is a **recurring report** (5W1H frequency = weekly / bi-weekly / monthly) with a fixed section skeleton filled every cycle, also lock a **Section Contract** beside the Metric Contract: the list of sections, each with an enumerated definition-of-done (the `(1)(2)(3)` parts a complete section must contain). The Metric Contract pins *what numbers mean*; the Section Contract pins *what the report must say, section by section*. Lock once, reuse every cycle, version on change. Skip entirely for one-off analyses.
+
+Full pattern + `report-contract.json` format + the per-section gate (`section_contract_audit.py`): `recurring-report-contract.md`.
+
 ### Gate 2 exit criteria
 - Metric contract(s) drafted
+- Section Contract drafted IF recurring/structured report (else N/A)
 - Single source confirmed (or escalated)
 - User signs off on definition (verbal "OK" enough at low stake; written sign-off at high stake)
 

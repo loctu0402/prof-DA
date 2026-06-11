@@ -54,6 +54,7 @@ Narrative template (SCQR + Key Terms + Impact Cards): `${CLAUDE_PLUGIN_ROOT}/ski
 - Binding pre-ship gate: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/report-standard-checklist.md`
 - Scoring rubric (C-level): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/evaluation-rubric.md`
 - Narrative template: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/narrative-template.md`
+- Recurring/structured report (section contract + per-section DoD gate): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/recurring-report-contract.md`
 - Style + AI-tells: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/style-rules.md`
 - Quality criteria: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/quality-criteria.md`
 - Self-check: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/self-check-protocol.md`
