@@ -4,6 +4,23 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.14.0] - 2026-06-11
+
+Auto-trigger overhaul: prof-DA now fires on natural prompts the way superpowers does, with three stacked layers instead of frontmatter descriptions alone. Driven by a real miss: "có sẵn template thực hiện các bài toán dự đoán dựa vào seasonal effect không" produced a generic workspace search instead of routing into the plugin.
+
+### Added
+- **`hooks/session_start_dispatch.py` (SessionStart):** injects a standing dispatch protocol into every session: the 1%-rule (any DA-shaped request -> invoke `prof-DA:da` BEFORE responding), an 11-mode map with natural VN + EN phrases, and a rationalization red-flag list ("just a quick question" / "I'll search the workspace first"). Same mechanism superpowers uses; keeps working even when a crowded skill list drops frontmatter descriptions.
+- **`hooks/da_intent_detector.py` (UserPromptSubmit):** deterministic keyword floor under the probabilistic description matching: folds the prompt to diacritic-free lowercase ("dự đoán" == "du doan"), scans ~150 mode-grouped signals with left-word-boundary matching, and injects a `[prof-DA dispatch]` nudge naming the matched keywords + likely mode. Silent on slash commands, prof-DA meta-talk, and non-DA prompts; fail-open, never blocks.
+
+### Changed
+- **Trigger vocabulary gap closed (the root cause of the miss):** no skill description contained the prediction family (forecast / dự đoán / dự báo / seasonal / time series / SARIMA / Prophet / churn prediction / scoring / segmentation / clustering / regression / A/B test); it lived only in references, invisible to the trigger surface. Added to `da` (master) + `process` (now the declared home of predictive modeling -> ml_/pred_ layers) + `insight` (seasonality diagnosis). `model`'s description + the mode-router table now disambiguate explicitly (schema design only; forecast / ML prediction asks route to process), so the router stops improvising "model mode includes forecasting templates".
+- **`da` description:** also catches capability questions ("có sẵn template/framework/notebook cho bài toán X không", "cách tiếp cận bài toán X") and says 11 modes (was stale at 10).
+- **Hook stdin decode hardened:** `da_intent_detector.py` + `correction_detector.py` read stdin as bytes + explicit UTF-8 decode; on Windows, Python otherwise decodes hook stdin per locale (cp1252) and Vietnamese prompts arrive as mojibake, silently missing every diacritic signal.
+- **version** 3.13.0 -> 3.14.0 (`plugin.json` + `marketplace.json` + README).
+
+### Why
+Keyword auto-fire was the weakest link: users who don't know `/prof-DA:da` exists got vanilla behavior on clearly DA-shaped Vietnamese prompts. Descriptions are necessary but not sufficient, because the host can drop them from a crowded skill list and the agent can rationalize past them. The superpowers lesson is that reliable triggering needs a standing per-session protocol plus a deterministic per-prompt catch; v3.14 ships both, with the trigger vocabulary fixed underneath.
+
 ## [3.13.0] - 2026-06-11
 
 New **`submit` mode** (the 11th mode): a final acceptance gate that checks a finished recurring report against a team's external acceptance contract (required sections + per-section definition-of-done), routes gaps to the builder, runs the per-section quality_check, and emits a ready-to-paste submission payload. Distilled from the <organization> <product> bi-weekly `<report-mcp>` MCP (versioned guidance + per-section quality_check + carry-forward follow-ups), ported offline so the plugin stays engine-agnostic and server-independent.
