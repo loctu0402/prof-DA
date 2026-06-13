@@ -87,9 +87,23 @@ Grep the codebase for moved filenames — a match inside the moved file is fine;
 - **A failed `git push`/`fetch` under a tool sandbox can lie.** It may report `Host key verification failed` even when SSH and the network are fine — the sandbox blocked it before git reached SSH. Distinguish from a real block (which fails earlier, at key exchange), retry outside the sandbox, and don't chase VPN / known_hosts / config first.
 - **Orphaned gitlink.** A `160000` tree entry that is NOT in `.gitmodules` is an embedded repo added without registering a submodule. If it carries its own uncommitted content, push/clean it inside that repo first; never `git rm --cached` it blindly — that strands unpushed work.
 
+## Self-operating loops (Hermes-derived) — keep the workspace alive, not just tidy-once
+
+Scaffold + organize + index is a one-time setup. A workspace that is governed but never maintained still rots. These four loops keep it healthy on a cadence; each maps to a primitive the host already has (a hook, a scheduled run, a standing rule). The standalone `workspace-brain` skill ships the live hooks + the curator script; this is the portable, engine-neutral statement of the loops.
+
+1. **Curator (periodic consolidation).** On a cadence (weekly) or on demand: merge near-duplicate notes into one class-level note, surface orphan atoms (in no index, cross-linked nowhere), flush the log → digest backlog, re-validate index pointers. Invariants, non-negotiable: **never auto-delete (archive only, recoverable); pinned items bypass; candidates need human approval; read-only scan, propose-then-apply.** A maintenance pass that finds nothing prints a silent no-op, not noise. (`workspace-brain` ships `scripts/curator_scan.py` + `references/curator-mode.md`.)
+
+2. **Hard memory budget (consolidate, don't append).** Index / memory files are read every session, so unbounded growth taxes every load. Enforce the contract AT WRITE TIME: a write that grows an over-cap index/memory file is rejected with a "consolidate" instruction (index ≤ 200 lines, atom ≤ 300, 1 line per entry), not a soft warning. Shrinking/flat rewrites and an explicit `allow-oversize: <reason>` escape are allowed, so it never traps an already-oversize file.
+
+3. **After any context compaction / summarization.** The summary is background reference, NOT active instructions; the latest user message WINS over it; reverse signals ("stop", "undo", "just verify", "never mind", a new topic) end in-flight summarized work immediately; persistent memory stays authoritative; re-read any open requirements/checklist after compaction (a summary can drop an open ask — the "70% done, reported done" failure).
+
+4. **Subagent hard walls.** A spawned subagent must NOT write shared memory, push git / send external messages / publish, or spawn further subagents. The parent centralizes stateful writes after QC and is accountable for what ships. Give the child READ + its one narrow task only.
+
+These are the loops that turn a static harness into a self-improving one: the index/memory stay lean, knowledge consolidates instead of sprawling, long sessions don't drift, and delegation can't corrupt the shared layer.
+
 ## Guide mode (non-technical user)
 
-One question at a time. Plain language ("folder" not "directory"; "back up first" not "git stash"). Explain WHY before each step. Offer a recommended default for every choice. Reassure: nothing deleted without asking, everything reversible (branch + archive). Narrate the same loop above, but each step is a simple question the user answers. End with 3 maintenance habits (new project → ask to scaffold it · finished one-off → goes to `output/` · periodically → "update the index").
+One question at a time. Plain language ("folder" not "directory"; "back up first" not "git stash"). Explain WHY before each step. Offer a recommended default for every choice. Reassure: nothing deleted without asking, everything reversible (branch + archive). Narrate the same loop above, but each step is a simple question the user answers. End with 3 maintenance habits (new project → ask to scaffold it · finished one-off → goes to `output/` · periodically → "update the index" + "run the curator").
 
 ## Cross-references
 - Index format + progressive disclosure + recursive per-folder rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`
