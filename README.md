@@ -15,6 +15,8 @@
 
 Read it like a clock: a request flows down the lanes (intent gate -> grounding -> mode run -> gate stack -> cycle contract), the learning loop writes what it learned back into the second brain, and the next request starts deeper than the last. The compound chain is the product.
 
+**New here?** [docs/GUIDE.md](docs/GUIDE.md) is the full written walkthrough — every mode, the enforcement spine, how it auto-fires, and the self-operating maintenance loops (curator / hard memory budget / anti-drift / subagent walls) derived from studying Hermes Agent.
+
 ## Why this matters now
 
 Anthropic's own write-up, [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude), shows Claude can already automate roughly 95% of business analytics queries, but **only once the foundation exists**: canonical data, a semantic source-of-truth, encoded skills, and validation. The same piece names the parts that stay hard: **concept-entity ambiguity** (a question maps to "hundreds of viable options"), **data staleness** ("definitions and schemas change constantly"), **retrieval failure**, and **silent failures**, the plausible answers that are simply wrong, which it flags as still unsolved.
