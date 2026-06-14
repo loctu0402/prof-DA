@@ -55,6 +55,28 @@ A non-technical user never learns these names: they ask in plain language and pr
 
 ---
 
+## 3b. Inside each mode — the intentional sub-flows
+
+A mode is not a single script. Each is a small designed workflow with **named sub-flows you can steer** — picked by depth, by data situation, or by output target. They are deliberate; this table surfaces them so the design is visible at a glance instead of buried in the reference files. Knowing them is how you use a mode to its full depth, not just its default path.
+
+| Mode | Sub-flows (the designed mini-workflows inside it) |
+|------|---------------------------------------------------|
+| **frame** | 4 confirm-gates: Business Understanding -> Metric Define -> Data Plan (**TH1** reuse existing data / **TH2** new model needed) -> Lock & Hand-off. Outputs `PLANNING.md`. |
+| **model** | Pick 1 of **4 warehouse patterns** via a decision flow — Kimball star/snowflake · dbt staging->marts · Medallion bronze/silver/gold · DuckDB layered — then write a Table Contract per table and a safe schema-evolution plan (rename / drop / grain-change). |
+| **query** | Semantic-first discovery -> **5-tier schema resolution** -> cost-safety check -> NL-to-SQL -> **self-correction loop** (run, read the error, fix) -> a logic card that explains the query back to you. |
+| **process** | Milestones **M1 -> M5**: raw -> staged -> cleaned -> mart -> `ml_`/`pred_`. Two standalone sub-flows you can call alone: **Data-Quality Audit** (7-check) and **Cleaning**. 6-step EDA per phase. **Predictive modeling lives here** (forecast / time-series / seasonality / scoring / segmentation / churn). |
+| **insight** | Hypothesis -> diagnostic -> recommendation, with the anti-bias protocol, **causal-method matching** (DiD / event-study / RDD / ...), market-correlation, and turning-point analysis. |
+| **automate** | Build the scheduled pipeline -> wire **fail-alert** (email / Gchat) -> cache discipline -> **backfill** flow. Engine-agnostic: Airflow / Dagster / Prefect / cron / GitHub Actions. |
+| **report** | **10 steps** (3 are hard `[GATE]`s): 0 scaffold `[GATE]` · 1 audience+format · 2 fork a locked template — fork-or-fail `[GATE]` · 3 wire data · 4 orientation block · 5 body (baseline-noise-impact + 7-element chart anatomy) · 6 recommendations · 7 self-check · 7.5 HTML-SPA structural inspect · 8 save + validation receipt · 9 portal publish `[GATE]`. **Output channels:** HTML SPA / PDF / email / Gchat card / slide deck / editable PPTX. |
+| **submit** | **Steps 0 -> 6:** identify team + load contract `[GATE]` · structure audit · gap punch-list + route to the builder · per-section quality_check · carry-forward check · build payload · readiness checklist `[GATE]` -> hand off (never auto-submits). |
+| **review** | **4 tiers, pick by depth:** A0 quick brief · A delivery polish · B full project audit (spawns the context-tracer + method-auditor sub-agents) · C stakeholder questioning. |
+| **fix** | Bug-triage decision tree -> cache verify -> numerical / silent-data-layer debug -> patch via **overlay** (never edit the generator) -> **patch-ceiling escalation** after 3 patches -> wire email-on-fail. |
+| **workspace** | **7 sub-modes:** GUIDE (orchestrates the rest) · SCAFFOLD (fresh) · ORGANIZE (existing mess) · INDEX (**build / update / rebuild** + reverse-existence check) · SETUP (install hooks) · DISCOVER (seed memory) · CURATOR (periodic consolidation). Plus the self-operating loops in §5. |
+
+**How to steer a sub-flow:** just name it — "rebuild the index" (not just update), "review tier B / full audit", "model with Medallion", "submit for <product>", "data-quality audit only". The router picks the variant; an explicit `/prof-DA:<mode>` drops you straight in.
+
+---
+
 ## 4. What it enforces (the rigor that makes it trustworthy)
 
 Every deliverable passes **4 universal rules** plus an entry gate:
