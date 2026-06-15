@@ -17,15 +17,6 @@
       "author": {
         "name": "Loc Tu"
       }
-    },
-    {
-      "name": "loctu-da-stack",
-      "source": "./loctu-da-stack",
-      "description": "Guided setup for the DA workflow MCP stack (<organization> Data Portal, exa, Google Drive/Gmail, Playwright/Chrome). Ships no credentials; walks the user through login + registration. Companion to prof-DA.",
-      "version": "0.1.0",
-      "author": {
-        "name": "Loc Tu"
-      }
     }
   ]
 }
