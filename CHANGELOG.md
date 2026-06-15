@@ -4,6 +4,14 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.16.0] - 2026-06-15
+
+### Added
+- **`skills/da/references/report-flow.md`** — Solve-by-cluster detail-body flow for deep-dive / solution-after-problem reports. The opener (Exec Summary + SCQA + Overview) is unchanged; the detail body becomes a sequence of self-contained insight clusters, each a "raise -> prove -> solve" unit: Insight -> Data (in %, common scale) -> noise-vs-signal gate -> multi-layer cross-filter drill-down (Layer 1 overall, Layer 2 filter the extreme group cut by a suspected factor, confirm the link; caution that SUM can hide Layer 1) -> hypothesis -> conclusion (name the subject if it is a paradox) -> suggestion (number + target group + that group's traits + why) -> expected result (lift X% to reach YYY). Two assembly directions (bottom-up cluster-first, top-down suggestion-first tracing each suggestion back to shared evidence). Lead with the ONE significant insight as headline. Composes existing refs (narrative-template, universal-workflow-rules, mode-insight, storytelling-with-data) without duplicating.
+
+### Changed
+- **`skills/report/SKILL.md`** + **`skills/insight/SKILL.md`**: cross-reference `report-flow.md`; report Step 5 notes that deep-dive / solution reports structure the body as solve-by-cluster.
+
 ## [3.15.0] - 2026-06-11
 
 ### Added
