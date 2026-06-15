@@ -1,12 +1,16 @@
-# MCP Stack Setup — wiring your DA workflow's connectors
+# mcp/ — wiring your DA workflow's connectors
 
-prof-DA does the analysis, but it can only use the data and tools your machine is connected to. This is a
-guided SETUP FLOW, not a server bundle: it ships NO credentials and tells you (and Claude) how to register
+prof-DA does the analysis, but it can only use the data and tools your machine is connected to as MCP
+servers. This folder is the connector-setup section:
+
+- **`README.md`** (this file) — the guided, credential-free setup flow.
+- **`example-org-mcp.json`** — a drop-in placeholder config for `~/.claude.json` (user scope): the org data
+  gateway + NL->SQL agent, with CLI install commands. Placeholders only; never commit a real SERVER_ID or key.
+
+This is a SETUP FLOW, not a server bundle: it ships NO credentials and tells you (and Claude) how to register
 and authenticate each MCP so they show up in `claude mcp list` / `/mcp` before you analyze. Every secret is a
-placeholder you fill locally; nothing sensitive is ever committed.
-
-This reference is engine-agnostic. The five connectors below are a TYPICAL DA workflow stack — substitute the
-ones your org actually uses.
+placeholder you fill locally. Engine-agnostic: the five connectors below are a TYPICAL DA workflow stack —
+substitute the ones your org actually uses.
 
 ## Orientation — what you are wiring
 
@@ -46,7 +50,7 @@ Then trigger the one-time login:
 claude        # on first connect, mcp-remote opens a browser for OAuth; approve, token caches in ~/.mcp-auth
 ```
 
-On mac/linux, drop `cmd /c` and call `npx` directly.
+On mac/linux, drop `cmd /c` and call `npx` directly. The JSON drop-in form is in `example-org-mcp.json`.
 
 ## 2. Web search (e.g. exa)
 
@@ -88,7 +92,7 @@ connectors automatically.
 If you ever want a server to install + prompt for its value AS PART OF a plugin (instead of `claude mcp add`),
 a plugin can ship a `.mcp.json` using `${user_config.*}` placeholders plus a `userConfig` block (prompted at
 enable time). Caveat: bundled servers auto-start with the plugin, cannot be disabled individually, and would
-DUPLICATE any server already registered at user scope.
+DUPLICATE any server already registered at user scope. That is why the robust default is the guide above.
 
 ## Why a guide, not a bundle
 
