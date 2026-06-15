@@ -42,5 +42,6 @@ Validation: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/validation-evaluation-me
 
 ## Cross-references
 - Full mode workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-insight.md`
+- Present the diagnostic as solve-by-cluster (insight, data%, noise gate, drill-down, hypo, conclusion, suggestion, expected lift): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/report-flow.md`
 - Quality criteria: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/quality-criteria.md`
 - Self-check: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/self-check-protocol.md`

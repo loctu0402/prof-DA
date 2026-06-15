@@ -23,7 +23,7 @@ Full: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/universal-workflow-rules.md`.
 2. Fork a locked template — fork-or-fail, NEVER freestyle a bespoke visual `[GATE]`
 3. Wire data (verify freshness)
 4. Apply Orientation Block (SCQR / 3-line / How to read)
-5. Populate body with Baseline-Noise-Impact ladder + per-chart takeaway + dual-comparison KPIs + chart anatomy 7-element
+5. Populate body with Baseline-Noise-Impact ladder + per-chart takeaway + dual-comparison KPIs + chart anatomy 7-element (deep-dive / solution reports: structure the body as solve-by-cluster, see `report-flow.md`)
 6. Recommendations section with 8-field Action Brief
 7. Self-check — run `self_check.py` (orientation + ai-tell + action-brief + consistency gate) + outline check
 7.5. HTML SPA structural inspection via preview_eval (catches what screenshot misses)
@@ -54,6 +54,7 @@ Narrative template (SCQR + Key Terms + Impact Cards): `${CLAUDE_PLUGIN_ROOT}/ski
 - Binding pre-ship gate: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/report-standard-checklist.md`
 - Scoring rubric (C-level): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/evaluation-rubric.md`
 - Narrative template: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/narrative-template.md`
+- Detail-body solve-by-cluster flow (deep-dive / solution reports: insight, data%, noise gate, drill-down, hypo, conclusion, suggestion, expected lift): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/report-flow.md`
 - Recurring/structured report (section contract + per-section DoD gate): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/recurring-report-contract.md`
 - Style + AI-tells: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/style-rules.md`
 - Quality criteria: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/quality-criteria.md`
