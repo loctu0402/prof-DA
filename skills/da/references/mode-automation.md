@@ -75,6 +75,35 @@ Rules (any channel):
 - Recipient: configured per environment, not hardcoded in the pipeline file
 - Re-raise the exception so the scheduler sees a non-zero exit code
 
+### The actual SEND mechanism: SMTP, not a draft-only connector
+
+Both the fail-alert above and any (confirmed) stakeholder send leave the same way: a few lines of `smtplib` reading a config file (SMTP host / port + app password or OAuth). That is the send path. Reuse one sender; do not reinvent it per pipeline.
+
+```python
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+msg = MIMEMultipart("mixed")
+msg["Subject"], msg["From"], msg["To"] = subject, cfg["sender_email"], ", ".join(recipients)
+msg.attach(MIMEText(html_body, "html", "utf-8"))
+part = MIMEBase("application", "octet-stream"); part.set_payload(open(path, "rb").read())
+encoders.encode_base64(part)
+part.add_header("Content-Disposition", f'attachment; filename="{name}"')
+msg.attach(part)                                    # attachments DO work
+with smtplib.SMTP(cfg["smtp_host"], cfg["smtp_port"]) as s:   # e.g. smtp.gmail.com / 587
+    s.starttls(); s.login(cfg["sender_email"], cfg["app_password"])
+    s.send_message(msg, to_addrs=recipients)
+```
+
+- Keep SMTP host / port / sender / app-password (or OAuth token) in a config file, never hardcoded; never print the secret.
+- Attachments: attach files as `MIMEBase`. Inline images: add a `Content-ID` and reference `cid:<id>` from the HTML (most webmail strips base64 `data:` image URIs).
+- Test before a real send: send only to yourself, OR a `--dry-run` that writes a preview and sends nothing, OR a `SUPPRESS_DELIVERY` env flag.
+
+**Anti-pattern (do NOT do this).** When asked to SEND, reaching for a draft-only mail connector (for example a "create_draft" Gmail MCP tool) and then concluding "cannot send / attachments unsupported." A draft connector only creates a draft; it is NOT a send path. Use the SMTP sender above to actually send, with attachments. Use a draft tool only when the user explicitly wants a draft to fire by hand. Never tell the user email cannot be sent or attached when an SMTP path is available.
+
 ### Market Data — Auto-Fetch + Staleness Gate
 
 Any field that changes daily (CPI, bank rates, gold, FX, oil prices):

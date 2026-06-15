@@ -28,6 +28,7 @@ Full workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-automation.md`.
 ## Hard rules
 - Pipeline FAIL alert wired to configured oncall recipient (auto-send by design)
 - Stakeholder reports NEVER auto-sent (default: save to output/, show preview link, wait for "send" command)
+- SEND uses SMTP (`smtplib` + a config file: host / port / sender / app-password); it sends for real and attaches files. A draft-only mail connector (e.g. a "create_draft" MCP) is NOT a send path; never conclude "cannot send / no attachment". Full mechanism: `mode-automation.md`
 - Reason in natural Vietnamese ("Pipeline daily lỗi khi đọc mart — chưa có data ngày YYYY-MM-DD"), NOT stacktrace
 - Backfill > 1 month on billed engine → dry-run + $ report to user first
 
