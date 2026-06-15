@@ -117,7 +117,7 @@
   <rect x="145" y="965" width="890" height="100" class="box" fill="#231c10" stroke="#caa15a"/>
   <text x="165" y="992" class="h3" fill="#f0d49a">CYCLE CONTRACT - submit acceptance gate</text>
   <text x="165" y="1014" class="t">recurring report graded section-by-section vs the team's DoD + per-section quality_check + paste-ready payload</text>
-  <text x="165" y="1036" class="t">carry-forward: open items survive into next cycle until resolved (<product> bi-weekly profile ships built-in)</text>
+  <text x="165" y="1036" class="t">carry-forward: open items survive into next cycle until resolved (example bi-weekly profile ships built-in)</text>
   <path class="flow" d="M560,880 L560,920" marker-end="url(#arr)"/>
   <path class="feed" stroke="#d82d8b" d="M1035,1000 L1075,1000 L1075,250 L1035,250" marker-end="url(#arrPink)"/>
   <text x="1086" y="630" class="ts" fill="#d82d8b" transform="rotate(90 1086 630)">gotchas + corrections feed the learning loop</text>
@@ -132,7 +132,7 @@
   <text x="1120" y="288" class="t">4 universal rules + Detail-Level gate</text>
   <text x="1120" y="310" class="t">5-tier schema discovery - 5 SQL engines</text>
   <text x="1120" y="332" class="t">3 support sub-agents, spawned on value</text>
-  <text x="1120" y="354" class="t">7-section <product> bi-weekly submit profile</text>
+  <text x="1120" y="354" class="t">7-section example bi-weekly submit profile</text>
   <text x="1120" y="382" class="ts">engine-agnostic: BigQuery / Postgres /</text>
   <text x="1120" y="400" class="ts">Snowflake / Redshift / DuckDB - no credentials</text>
 
