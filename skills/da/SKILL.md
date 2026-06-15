@@ -39,6 +39,9 @@ Division of labor: **workspace-brain builds and seeds the second brain; prof-DA 
 
 Reason (Operational): every mode is sharper when grounded in the user's actual context; re-learning the domain each session wastes the user's time and risks generic output.
 
+### Connector Setup (prereq)
+prof-DA's modes can only use the data + tools your machine has wired as MCP connectors. If `claude mcp list` shows a needed server missing (org data gateway, web search, Drive/Gmail, browser), follow `references/mcp-stack-setup.md` — a guided, credential-free setup flow (placeholders + local login) that registers and authenticates each connector before you analyze.
+
 ### Proactive Suggestion at Mode Exit (v3.2)
 At every mode exit, agent MUST run the 3-step Suggestion Loop: (1) detect context (mode + data + output + available MCPs + stakeholder hints), (2) map to 1-3 of the 8 extension categories (data source expansion / automation upgrade / quality validation stack / method upgrade / audience expansion / format expansion / downstream connection / MCP-tooling expansion), (3) propose with opt-in phrasing (specific + cite trigger + Why + effort estimate + explicit skip path).
 
