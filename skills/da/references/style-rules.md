@@ -14,6 +14,8 @@ Applies to any deliverable reaching team, manager, stakeholder, or external audi
 Rules:
 - Stakeholder-facing output MUST use the stakeholder's primary language with full orthographic correctness — never strip diacritics ("loc" instead of "lộc" looks unprofessional)
 - Technical terms (API, endpoint, deploy, pipeline, query, mart, dry-run) stay in English in ANY language
+- Structural text stays in English even inside a full-Vietnamese report: headings, section titles, nav labels, table column headers, chart titles, and KPI / card labels in English; only body prose, insights, and takeaways in the stakeholder's language. Translating structural labels reads robotic to a bilingual data team
+- Keep a per-project de-translation glossary (the word-by-word WRONG form into the natural RIGHT form) so word-choice stays consistent across deliverables instead of being re-decided per document. The mechanical subset (the em-dash, arrows, never-legit phrases) can be enforced at write time by a pre-write hook
 - For Vietnamese specifically: all diacritics required — `ệ`, `ỉ`, `ổ`, `à`, `ă`
 
 ## No Meta-Leak — your instructions never reach the audience (CRITICAL)
