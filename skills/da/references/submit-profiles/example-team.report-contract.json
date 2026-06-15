@@ -1,38 +1,38 @@
 {
-  "report": "the savings product  — bi-weekly business review",
-  "team": "<product>",
+  "report": "Example Team Bi-weekly Business Review",
+  "team": "example-team",
   "cadence": "bi-weekly",
-  "version": 3,
-  "submit_target": "<report-mcp> MCP — submit_contribution (author + sections + quality_check); guidance v3",
-  "_note": "Acceptance contract = the <report-mcp> guidance v3 (the team manager's required sections + definition-of-done). Section keys MATCH the MCP guidance keys 1:1 so the audited report maps straight into submit_contribution. Copy this into your project as report-contract.json; bump version if the manager changes the guidance.",
+  "version": 1,
+  "submit_target": "your submission system (e.g. a report MCP): author + sections + quality_check",
+  "_note": "Example acceptance contract demonstrating the submit-mode mechanism. Section keys MUST match your submission system's guidance keys 1:1 so the audited report maps straight into the submit payload. Copy this into your project as report-contract.json and adapt the sections to your team; bump version when the manager changes the guidance.",
   "sections": [
     {
       "key": "business_overview",
       "title": "Business Overview",
       "required": true,
       "dod": [
-        "AUM actual vs target",
-        "MFU actual vs target",
-        "projection to end of month"
+        "headline KPI actual vs target",
+        "secondary KPI actual vs target",
+        "projection to end of period"
       ]
     },
     {
       "key": "satisfaction",
-      "title": "CSAT Update",
+      "title": "Satisfaction Update",
       "required": true,
       "dod": [
-        "overall CSAT score with recent trend vs KPI target",
-        "CSAT breakdown by issue group with recent trends",
+        "overall satisfaction score with recent trend vs target",
+        "breakdown by issue group with recent trends",
         "key drivers behind high and low scores",
         "actions done, in progress, and upcoming"
       ]
     },
     {
       "key": "cross_sell",
-      "title": "Cross Sale Business",
+      "title": "Cross-Sell",
       "required": true,
       "dod": [
-        "current MFU overlap between profit account and other investment products (a savings product, investment product, stock)",
+        "current overlap with other product lines",
         "overlap trend over recent cycles",
         "comparison to target",
         "actions done, in progress, and upcoming to reach target"
@@ -40,36 +40,36 @@
     },
     {
       "key": "segment_a_contribution",
-      "title": "AUM Contribution from MFU",
+      "title": "Contribution from Segment A",
       "required": true,
       "dod": [
-        "current AUM from MFU",
-        "AUM trend over recent cycles",
-        "cash-in and cash-out behavior patterns",
+        "current value from segment A",
+        "trend over recent cycles",
+        "inflow and outflow behavior patterns",
         "explanation of significant fluctuations",
         "actions taken, in progress, and planned"
       ]
     },
     {
       "key": "segment_b_contribution",
-      "title": "AUM Contribution from Fund",
+      "title": "Contribution from Segment B",
       "required": true,
       "dod": [
-        "current AUM from fund",
-        "AUM trend over recent cycles",
-        "cash-in and cash-out behavior patterns",
+        "current value from segment B",
+        "trend over recent cycles",
+        "inflow and outflow behavior patterns",
         "explanation of significant fluctuations",
         "actions taken, in progress, and planned"
       ]
     },
     {
       "key": "segment_c_contribution",
-      "title": "AUM Contribution from Merchant",
+      "title": "Contribution from Segment C",
       "required": true,
       "dod": [
-        "current AUM from merchant",
-        "AUM trend over recent cycles",
-        "cash-in and cash-out behavior patterns",
+        "current value from segment C",
+        "trend over recent cycles",
+        "inflow and outflow behavior patterns",
         "explanation of significant fluctuations",
         "actions taken, in progress, and planned"
       ]
