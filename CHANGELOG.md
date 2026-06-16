@@ -4,6 +4,15 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.16.1] - 2026-06-16
+
+### Changed
+- **commands/workspace.md + skills/da/references/mode-workspace.md** - wired the workspace governance layer into the /workspace mode: per-task DoR/DoD/AC scaffold (plus Epic-Feature-Stories + RAID at Deep) scaled to the Quick/Standard/Deep detail level, self-chunk then delegate then coordinate under the depth-1 delegation walls, and the deliverable-language guards. Points to lt-memory/rules/governance-injection.md + task-chunking-orchestration.md.
+- **skills/da/references/universal-workflow-rules.md + skills/da/SKILL.md** - reconciled the universal-rule count (4 quality rules + Rule 5 Detail-Level Gate = 5) and noted that Quick/Standard/Deep depth now also drives the governance scaffold injection.
+- **commands/da.md** - fixed the routable-mode count (10 to 11) to match the actual mode list.
+- **docs/prof-da-architecture.svg** - fixed the stale version stamp (v3.13.0 to v3.16.1) and added a "Governance enforcement (hooks)" annotation.
+- **README + plugin.json + marketplace.json** - version + universal-rule-count consistency.
+
 ## [3.16.0] - 2026-06-15
 
 ### Added

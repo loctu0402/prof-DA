@@ -32,7 +32,7 @@
   <text x="72" y="64" class="h1">prof-DA: The Governed Analyst Loop, 6 Nested Loops</text>
   <text x="72" y="92" class="t">From per-request to cross-session. Every loop feeds the next. Any driver, any engine, same senior analyst.</text>
   <rect x="1320" y="38" width="200" height="34" rx="17" fill="#131a26" stroke="#d82d8b"/>
-  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.13.0 - MIT</text>
+  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.16.1 - MIT</text>
 
   <!-- ===================== main frame ===================== -->
   <rect x="40" y="120" width="1480" height="1030" rx="14" fill="#0f141f" stroke="#1d2940"/>
@@ -165,6 +165,16 @@
   <text x="1120" y="1075" class="tw">report on day 90 != report on day 1:</text>
   <text x="1120" y="1097" class="tw">same analyst voice, deeper domain memory</text>
 
+  <!-- governance enforcement annotation -->
+  <g>
+    <rect x="1100" y="1146" width="400" height="102" rx="10" fill="#1c1207" stroke="#caa15a" stroke-dasharray="7 5"/>
+    <text x="1120" y="1170" class="h3" fill="#f0d49a">Governance enforcement (hooks)</text>
+    <text x="1120" y="1190" class="ts">req-recon: DoR / DoD / AC + reconcile, Stop-block</text>
+    <text x="1120" y="1207" class="ts">governance scaffold inject, depth-scaled per task</text>
+    <text x="1120" y="1224" class="ts">VN AI-tell + English-headings guards</text>
+    <text x="1120" y="1241" class="ts">subagent depth-1 walls (no shared-memory / push)</text>
+  </g>
+
   <!-- ===================== loops by time scale ===================== -->
   <text x="48" y="1205" class="h2" style="letter-spacing:2px">LOOPS BY TIME SCALE</text>
   <circle cx="62" cy="1240" r="13" fill="#4ea3ff"/><text x="62" y="1245" text-anchor="middle" class="num">1</text>
@@ -225,5 +235,5 @@
   <text x="1074" y="1851" class="ts">a command is rarely needed</text>
 
   <!-- footer -->
-  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.13.0 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
+  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.16.1 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
 </svg>

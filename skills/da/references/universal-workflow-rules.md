@@ -1,6 +1,6 @@
 # Universal Workflow Rules
 
-These 4 rules are MANDATORY for every deliverable, regardless of mode. They sit ABOVE every mode-specific workflow. Rule 4 is a meta-rule that applies to Rules 1-3 themselves and to every choice within them.
+These 5 rules are MANDATORY for every deliverable, regardless of mode — 4 quality rules (1-4) PLUS Rule 5, the Detail-Level gate. They sit ABOVE every mode-specific workflow. Rule 4 is a meta-rule that applies to Rules 1-3 themselves and to every choice within them; Rule 5 sets the execution depth (Quick / Standard / Deep) at mode entry.
 
 ## Rule 1 — Orientation Block (FIRST in every deliverable)
 
@@ -255,6 +255,10 @@ v3.3 had one execution depth — full workflow every time. Two failure modes:
 2. **Under-engineered High-Stakes asks**: C-level escalation got Standard-tier output without falsification / robustness stack. Caught by review but should have been Deep from the start.
 
 The Detail Level Gate makes depth an explicit user choice instead of a hidden default. Surfacing the lever upfront prevents both failure modes. Time estimates removed because Claude routinely overshoots them — the depth lever is the honest control; time is the noisy output.
+
+### Depth also drives the governance scaffold
+
+The Quick / Standard / Deep level chosen here now also gates how much governance scaffold gets injected per task: Standard and Deep inject a DoR/DoD/AC contract (Deep adds Epic-Feature-Stories + a RAID log), Quick stays silent until a task earns it. See `lt-memory/rules/governance-injection.md` for the injection rule. Relatedly, the req-recon DONE CONTRACT now opens with a DoR (Definition of Ready) ready-gate ahead of DoD + AC + Expected-Output + Presence.
 
 ### Quick checklist (apply at mode entry)
 

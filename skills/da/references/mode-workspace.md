@@ -97,15 +97,39 @@ Scaffold + organize + index is a one-time setup. A workspace that is governed bu
 
 3. **After any context compaction / summarization.** The summary is background reference, NOT active instructions; the latest user message WINS over it; reverse signals ("stop", "undo", "just verify", "never mind", a new topic) end in-flight summarized work immediately; persistent memory stays authoritative; re-read any open requirements/checklist after compaction (a summary can drop an open ask — the "70% done, reported done" failure).
 
-4. **Subagent hard walls.** A spawned subagent must NOT write shared memory, push git / send external messages / publish, or spawn further subagents. The parent centralizes stateful writes after QC and is accountable for what ships. Give the child READ + its one narrow task only.
+4. **Subagent hard walls.** A spawned subagent must NOT write shared memory, push git / send external messages / publish, or spawn further subagents. The parent centralizes stateful writes after QC and is accountable for what ships. Give the child READ + its one narrow task only. For heavy multi-task work, the parent runs **self-chunk → delegate → coordinate** under these walls (split the work into independent chunks, fan out one chunk per child, integrate and ship from the parent). `subagent_walls_guard.py` (PreToolUse Task|Agent) hard-blocks a spawn whose prompt tells the child to cross a wall. Full pattern: `lt-memory/rules/task-chunking-orchestration.md`.
 
 These are the loops that turn a static harness into a self-improving one: the index/memory stay lean, knowledge consolidates instead of sprawling, long sessions don't drift, and delegation can't corrupt the shared layer.
+
+## Governance layer (per-task discipline, hook-enforced)
+
+Tidying the folders is structural governance; this is *task* governance — every unit of work carries a ready-gate, a definition of done, and acceptance criteria, scaled to how big the work is. The standalone `workspace-brain` skill ships the live hooks that enforce this; below is the engine-neutral statement of what they enforce.
+
+**Per-task scaffold, scaled by detail level.** The prof-DA Quick / Standard / Deep gate sets the depth:
+
+| Detail level | Injected scaffold |
+|------|------|
+| Quick | silent — no scaffold (a one-liner doesn't earn a ledger) |
+| Standard | DoR (Definition of Ready) + DoD (Definition of Done) + AC (Acceptance Criteria) per task |
+| Deep | the above **plus** Epic → Feature → Stories decomposition + a RAID log (Risks / Assumptions / Issues / Dependencies) |
+
+`governance_inject.py` (UserPromptSubmit) injects this as mandatory per-task context. It fires when the detail level is Standard or Deep, OR when a req-recon ledger exists and the user is past turn 3; Quick + early turns stay silent. The scaffold templates live at `lt-memory/templates/governance/{_index,done-contract,epic-feature-stories,raid}.md`.
+
+**The req-recon DONE CONTRACT now has FIVE parts:** DoR (ready-gate) + DoD + AC + Expected-Output + Presence (the artifact provably on disk / commit / MR). Asks are **APPENDED each feedback turn, never replaced**, so a follow-up can't silently drop an earlier ask; the user may hand-edit the ledger. `req_recon_*` (UserPromptSubmit intake + Stop check) enforces it.
+
+**Heavy multi-task work → self-chunk → delegate → coordinate.** Under the depth-1 walls (loop 4 above): the parent splits the request into independent chunks, fans out one narrow chunk per child (READ + one task), then integrates and ships — only the parent writes shared memory, pushes git, or sends external. `subagent_walls_guard.py` (PreToolUse Task|Agent) hard-blocks any spawn whose prompt tells a child to cross a wall. Full pattern: `lt-memory/rules/task-chunking-orchestration.md`.
+
+**Deliverable-language guards** (PreToolUse Write|Edit, same enforcement layer): `heading_lang_guard.py` blocks Vietnamese diacritics in *structural* text (headings, nav, table column headers, chart titles, KPI-card labels) of stakeholder deliverables (`.html` or `/output/*.md`) — structural text stays English even inside a full-Vietnamese deliverable. `vn_ai_tell_guard.py` blocks AI-tell punctuation on VN prose (em-dash, en-dash, unicode + ASCII arrows, approx sign, semicolon; equals + interpunct warn). `agent_doc_english_warn.py` warns (warn-only) on a Vietnamese agent-read `.md` doc.
+
+**Why (Operational):** an unsystematized workspace rots at the *file* level; an ungoverned task rots at the *delivery* level — "make it work" with no ready-gate or acceptance criteria is how a multi-task request lands 70% done but is reported done. The scaffold makes the contract explicit before work starts and the hooks make it non-skippable, while Quick keeps the tax off trivial asks. Rule: `lt-memory/rules/governance-injection.md`.
 
 ## Guide mode (non-technical user)
 
 One question at a time. Plain language ("folder" not "directory"; "back up first" not "git stash"). Explain WHY before each step. Offer a recommended default for every choice. Reassure: nothing deleted without asking, everything reversible (branch + archive). Narrate the same loop above, but each step is a simple question the user answers. End with 3 maintenance habits (new project → ask to scaffold it · finished one-off → goes to `output/` · periodically → "update the index" + "run the curator").
 
 ## Cross-references
+- Per-task governance scaffold (DoR/DoD/AC + Epic-Feature-Stories + RAID, scaled to Quick/Standard/Deep): `lt-memory/rules/governance-injection.md`; templates: `lt-memory/templates/governance/{_index,done-contract,epic-feature-stories,raid}.md`
+- Self-chunk → delegate → coordinate under the depth-1 walls: `lt-memory/rules/task-chunking-orchestration.md`
 - Index format + progressive disclosure + recursive per-folder rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`
 - Per-project internal layout (Step-0): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/project-scaffold.md`
 - Output location policy: `.claude/rules/output-policy.md` (or this mode creates one)
