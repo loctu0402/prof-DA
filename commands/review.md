@@ -1,5 +1,5 @@
 ---
-description: Professional Data Analyst — review/refine mode. 5 sub-modes: A0 Brief (snapshot verdict) / A Delivery Refine (lightweight) / B Full Project Refine (heavyweight) / C Stakeholder Questioning / D Staleness Trace (sync dependent assets after a change).
+description: Professional Data Analyst — review/refine mode. 5 sub-modes - A0 Brief (snapshot verdict) / A Delivery Refine (lightweight) / B Full Project Refine (heavyweight) / C Stakeholder Questioning / D Staleness Trace (sync dependent assets after a change).
 ---
 
 Invoke the `da` skill in **review/refine mode**. Read these references before acting:

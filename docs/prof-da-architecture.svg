@@ -32,7 +32,7 @@
   <text x="72" y="64" class="h1">prof-DA: The Governed Analyst Loop, 6 Nested Loops</text>
   <text x="72" y="92" class="t">From per-request to cross-session. Every loop feeds the next. Any driver, any engine, same senior analyst.</text>
   <rect x="1320" y="38" width="200" height="34" rx="17" fill="#131a26" stroke="#d82d8b"/>
-  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.16.1 - MIT</text>
+  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.18.1 - MIT</text>
 
   <!-- ===================== main frame ===================== -->
   <rect x="40" y="120" width="1480" height="1030" rx="14" fill="#0f141f" stroke="#1d2940"/>
@@ -86,13 +86,13 @@
   <text x="78" y="543" class="h3" fill="#00b4a0">PER TASK (minutes)</text>
   <circle cx="120" cy="585" r="15" fill="#00b4a0"/><text x="120" y="590" text-anchor="middle" class="num">3</text>
   <rect x="145" y="565" width="560" height="120" class="box" fill="#0e211f" stroke="#00b4a0"/>
-  <text x="165" y="592" class="h3" fill="#7fe0d4">MODE RUN - 11 routable modes</text>
+  <text x="165" y="592" class="h3" fill="#7fe0d4">MODE RUN - 12 routable modes</text>
   <text x="165" y="616" class="t">frame -> model -> query -> process -> insight -> automate -> report</text>
-  <text x="165" y="636" class="t">orthogonal: submit / review / fix / workspace</text>
+  <text x="165" y="636" class="t">orthogonal: deliver / submit / review / fix / workspace</text>
   <text x="165" y="660" class="ts">auto-fires on natural language, slash command rarely needed</text>
   <rect x="735" y="565" width="300" height="120" class="box" fill="#0e211f" stroke="#00b4a0"/>
   <text x="755" y="592" class="h3" fill="#7fe0d4">SCRIPT STDLIB</text>
-  <text x="755" y="616" class="t">17 audited scripts: stats, causal,</text>
+  <text x="755" y="616" class="t">19 audited scripts: stats, causal,</text>
   <text x="755" y="634" class="t">formatting, validators</text>
   <text x="755" y="658" class="ts">statistics run in code, never eyeballed</text>
   <path class="flow" d="M705,625 L735,625" marker-end="url(#arr)"/>
@@ -125,8 +125,8 @@
   <!-- ============ right rail ============ -->
   <rect x="1100" y="145" width="400" height="280" rx="10" fill="#131a26" stroke="#243047"/>
   <text x="1120" y="172" class="h2">By the numbers</text>
-  <text x="1120" y="200" class="t">11 modes - 12 slash commands</text>
-  <text x="1120" y="222" class="t">17 stdlib scripts (stats / causal / validators)</text>
+  <text x="1120" y="200" class="t">12 modes - 13 slash commands</text>
+  <text x="1120" y="222" class="t">19 stdlib scripts (stats / causal / validators)</text>
   <text x="1120" y="244" class="t">14 causal method specs, each cited</text>
   <text x="1120" y="266" class="t">12 locked report archetypes (A1-A12)</text>
   <text x="1120" y="288" class="t">4 universal rules + Detail-Level gate</text>
@@ -185,7 +185,7 @@
   <text x="90" y="1313" class="t">Reads the workspace second brain (memory hubs + index) on entry and discovers schema through a 5-tier hierarchy. Collapses concept-entity ambiguity before SQL exists.</text>
   <circle cx="62" cy="1350" r="13" fill="#00b4a0"/><text x="62" y="1355" text-anchor="middle" class="num">3</text>
   <text x="90" y="1348" class="h3" fill="#7fe0d4">Mode Run - per task</text>
-  <text x="90" y="1368" class="t">Routes to 1 of 11 analyst modes. Statistics (significance, effect size, bootstrap CI, DiD) always run inside 17 audited stdlib scripts, never inline guesswork.</text>
+  <text x="90" y="1368" class="t">Routes to 1 of 12 analyst modes. Statistics (significance, effect size, bootstrap CI, DiD) always run inside 19 audited stdlib scripts, never inline guesswork.</text>
   <circle cx="62" cy="1405" r="13" fill="#caa15a"/><text x="62" y="1410" text-anchor="middle" class="num">4</text>
   <text x="90" y="1403" class="h3" fill="#f0d49a">Gate Stack - per deliverable</text>
   <text x="90" y="1423" class="t">4 universal rules + validator scripts + fork-or-fail archetypes. A Stop-hook receipt blocks the turn from ending until the consistency gate passes.</text>
@@ -235,5 +235,5 @@
   <text x="1074" y="1851" class="ts">a command is rarely needed</text>
 
   <!-- footer -->
-  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.16.1 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
+  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.18.1 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
 </svg>

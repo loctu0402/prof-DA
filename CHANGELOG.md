@@ -4,6 +4,23 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.18.1] - 2026-06-16
+
+Count-consistency sweep. 3.17.0 (deliver mode) and 3.18.0 (review staleness sub-mode) added modes/scripts but left several docs at the old counts. No new functionality; documentation accuracy only (PATCH).
+
+### Changed
+- **docs/prof-da-architecture.svg** - 11 -> 12 modes (added `deliver` to the orthogonal list), 17 -> 19 stdlib scripts, "11 modes - 12 slash commands" -> "12 modes - 13 slash commands"; both version stamps v3.16.1 -> v3.18.1.
+- **docs/GUIDE.md** - added the `deliver` mode (modes table + the sub-flows table), review 4 -> 5 tiers (added D Staleness Trace), and count fixes (11 -> 12 modes, 17 -> 19 scripts, 12 -> 13 commands) the feature commits missed.
+- **skills/da/SKILL.md** - the frontmatter `description` said "11 modes" and OMITTED `deliver` from its trigger surface; fixed to 12 modes including deliver; the body "into 7 routable modes" -> 12.
+- **README.md** - rewrote the two stale capability sections to convey the full layer, not a report-only framing. "The workspace second brain" now describes the consolidate + freshness + reconcile maintenance loop (a current, de-duplicated, per-task knowledge layer), not just a static memory. "The enforcement layer" + "What it enforces" now describe the rule-governed, PM-grade per-task contract (DoR / DoD / AC injected by depth, layered specs, a work-done/WIP disk cache, verify-don't-assume + anti-rationalization, an independent reconcile pass, 1-task-1-commit chunked delivery, and continuous staleness-trace) and correct "4 universal rules" -> "5 universal rules (4 quality + Detail-Level gate)". This is the cutting-edge discipline a blank-context agent lacks, previously under-described.
+- **README.md** - reorganized "The 12 modes" into two labelled groups (Execution = the 6-phase analysis lifecycle ask/prepare/process/analyze/share/act mapped to frame/model/query/process/insight/report/automate; Steward = the cross-cutting deliver/submit/review/fix/workspace cluster for review, finalize, fix, and second-brain stewardship); previously a flat list. Added a "Where prof-DA fits the blueprint" section mapping prof-DA onto Anthropic's 4-tier self-serve stack: prof-DA = the Skills + Validation tiers (enabler / executioner); Data Foundations + Sources-of-Truth (semantic layer, ground truth, domain KB) are consumed-not-built today (a separate AE process), with a stated roadmap to close that loop end-to-end.
+
+### Fixed
+- **Invalid YAML frontmatter** (a `: ` colon-space inside an unquoted `description` makes strict YAML read it as a nested mapping and throw "mapping values are not allowed in this context"). Removed the offending colon-spaces from 6 files: `skills/review/SKILL.md` (audit: / asset:), `skills/deliver/SKILL.md` (automate:), `skills/query/SKILL.md` (SQL:), `skills/insight/SKILL.md` (workflow:), `commands/review.md` (sub-modes:), `commands/deliver.md` (discipline:). Verified by parsing all 26 skill + command frontmatter blocks with PyYAML (all valid). Some were pre-existing; the review/deliver ones were introduced this session.
+
+### Why
+The deliver mode + the review staleness sub-mode shipped, but the architecture SVG, the GUIDE walkthrough, and (most importantly) the da SKILL.md description trigger surface still advertised 11 modes / 17 scripts / 4 review tiers, and the description did not list `deliver` at all. A full count-consistency sweep across every file caught and fixed all of them. The same pass found GitHub-flagged YAML frontmatter errors (colon-space in descriptions) and fixed them, verified with a real YAML parser rather than a grep heuristic.
+
 ## [3.18.0] - 2026-06-16
 
 Adds a **staleness-trace** sub-mode to /review (change-propagation after an edit) and a **recurring-report product blueprint** that makes frame propose the full end-to-end flow instead of routing to one siloed mode. Plus a reference-staleness audit fix.

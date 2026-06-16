@@ -1,5 +1,5 @@
 ---
-description: Professional Data Analyst, deliver mode. The chunked autonomous build loop (build-auto) that wraps any build mode with execution discipline: require a spec/charter or STOP, clean baseline, single batch approval, then per-task RED -> GREEN -> build -> commit with a verify gate, stop-on-failure/risk/irreversible, and an evidence summary. Orthogonal to process/report/model/automate (it is the HOW, not the WHAT).
+description: Professional Data Analyst, deliver mode. The chunked autonomous build loop (build-auto) that wraps any build mode with execution discipline - require a spec/charter or STOP, clean baseline, single batch approval, then per-task RED -> GREEN -> build -> commit with a verify gate, stop-on-failure/risk/irreversible, and an evidence summary. Orthogonal to process/report/model/automate (it is the HOW, not the WHAT).
 ---
 
 Invoke the `da` skill in **deliver mode**. Read these references before acting:
