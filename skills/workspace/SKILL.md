@@ -43,6 +43,17 @@ Full workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-workspace.md`.
 - **Progressive disclosure** — index ≤200 lines (1 line/entry), atoms ≤300 lines, cross-link never re-paste; deep knowledge folders get their own local `_index.md`.
 - **Guide-first for non-technical users** — one plain-language step at a time, recommended defaults, reassure reversibility.
 
+## Self-operating maintenance (after the one-time setup)
+
+Scaffold + organize + index is the one-time setup; a governed workspace still rots without upkeep. This mode also carries the **self-operating loops** (Hermes-derived) that keep it alive on a cadence — full spec in `mode-workspace.md`:
+
+- **Curator** (weekly or on-demand): merge near-duplicate notes into class-level umbrellas, surface orphan atoms, flush the log-to-digest backlog, re-validate index pointers. Read-only scan, propose, approve; archive-never-delete; pinned-bypass.
+- **Hard memory budget**: a write that grows an over-cap index/memory file is rejected with a consolidate instruction (index 200 lines, atom 300 lines), not a soft warning.
+- **Post-compaction discipline** (latest user message wins over the summary) + **subagent hard walls** (depth-1 delegation; only the parent writes shared memory / pushes).
+- **Per-task governance** (DoR / DoD / AC scaled to Quick / Standard / Deep), hook-enforced.
+
+The standalone `workspace-brain` ships the live hooks + `scripts/curator_scan.py`; this mode is the portable, engine-neutral statement of the same loops. Full detail + invariants: `mode-workspace.md` sections "Self-operating loops" and "Governance layer".
+
 ## Cross-references
 - Full workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-workspace.md`
 - Index format + progressive disclosure + recursive per-folder rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`
