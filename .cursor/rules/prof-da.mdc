@@ -1,0 +1,11 @@
+---
+description: DESIGN PLACEHOLDER - prof-DA intent-to-mode routing for Cursor. Build deferred.
+globs:
+alwaysApply: false
+---
+
+[FILL when building] Cursor reads `.mdc` rules. Mirror the universal contract from `AGENTS.md`:
+- Intent -> mode: frame / model / query / process / insight / automate / report / deliver / submit / review / fix / workspace. Load the matching `skills/da/references/mode-*.md` before acting.
+- Engine (Layer 1) verbatim: use `skills/da/references/`; run `skills/da/scripts/` (statistics in a vetted script, never inline).
+- Tool names: `adapters/toolmaps/_toolmap.md` (Cursor column).
+- The done-gate is `.cursor/rules/gate.mdc` (alwaysApply).

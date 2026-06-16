@@ -1,0 +1,9 @@
+# DESIGN PLACEHOLDER - Gemini CLI invocation adapter (Layer 2) for the deliver mode. Build deferred.
+# One .toml per mode mirrors commands/*.md. [FILL] confirm the Gemini custom-command schema when building.
+name = "prof-da-deliver"
+description = "prof-DA deliver mode: the build-auto execution loop (1 task = 1 commit + verify gate + stop-on-error/risk)."
+prompt = """
+Load and follow skills/da/references/build-auto.md + evidence-based-done.md + execution-discipline.md.
+Run the 7-gate loop. Before declaring done, run the portable gate: python -m gate <project>/.prof-da/pending-validation.json
+[FILL] map tool names via adapters/toolmaps/_toolmap.md (Gemini column).
+"""

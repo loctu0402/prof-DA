@@ -1,8 +1,8 @@
 ---
-description: prof-DA — master entry. Confirms intent + Detail Level (Quick / Standard / Deep), then routes to 1 of 11 modes.
+description: prof-DA — master entry. Confirms intent + Detail Level (Quick / Standard / Deep), then routes to 1 of 12 modes.
 ---
 
-Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm intent + detail level, then route to one of the 11 modes:
+Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm intent + detail level, then route to one of the 12 modes:
 
 **Front-of-workflow:**
 - `/prof-DA:frame` — Business Understanding → Metric Define → Data Plan (PLANNING.md)
@@ -16,6 +16,7 @@ Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm i
 - `/prof-DA:report` — Build stakeholder report from template + chart anatomy + storyline
 
 **Orthogonal helpers:**
+- `/prof-DA:deliver` — Build-auto execution loop wrapping any build mode: spec-or-STOP, clean baseline, single batch approval, per-task RED → GREEN → build → commit + verify gate, stop-on-error/risk, evidence summary
 - `/prof-DA:submit` — Final acceptance gate before submitting a recurring report to a team system (e.g. <report-mcp> MCP): structure-completeness audit vs the team contract, route missing sections to the builder, per-section quality_check, emit submission payload. <product> profile shipped. Distinct from review.
 - `/prof-DA:review` — 3 sub-modes (A Delivery / B Full Project / C Stakeholder Q)
 - `/prof-DA:fix` — Surgical pipeline / report debug + patch-ceiling escalation

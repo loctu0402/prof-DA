@@ -1,0 +1,6 @@
+# DESIGN PLACEHOLDER - Layer 3 CI gate adapter (GitHub Actions / GitLab step). Build deferred.
+# [FILL] drop this step into the pipeline; nonzero exit = red build = the deliverable is not proven.
+- name: prof-DA evidence gate
+  run: |
+    RECEIPT=".prof-da/pending-validation.json"
+    if [ -f "$RECEIPT" ]; then python -m gate "$RECEIPT"; fi

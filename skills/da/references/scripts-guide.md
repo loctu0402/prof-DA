@@ -226,6 +226,27 @@ Exit 0 = all required sections present/non-empty/no-placeholder, 1 = a required-
 
 Why this script — global validators grade the report's universal shape; they do NOT check each section against its own bespoke contract. Recurring reports drift section content silently without a per-section gate. Pairs with `self_check.py` (global layer) — run both.
 
+### artifact_presence_check.py
+The evidence-based-done PROOF gate (presence layer): proves a claimed deliverable reached the "ran" rung, not just "written". A thin presence check (not a content check), used by the `deliver` mode Gate 7 and any done-claim on an artifact. Reads a receipt (`<project>/.prof-da/pending-validation.json`) or a quick `--deliverables` list; checks each artifact EXISTS, is NON-EMPTY, is not a bare stub, and (kind=code) carries a proof marker. See `evidence-based-done.md`.
+
+```bash
+python scripts/validators/artifact_presence_check.py output/.prof-da/pending-validation.json
+python scripts/validators/artifact_presence_check.py --deliverables output/report_latest.html,models/metrics.json
+python scripts/validators/artifact_presence_check.py <receipt.json> --json
+```
+
+Exit 0 = every deliverable present/non-empty/(code)proven, 1 = a missing/empty/stub/unproven, 2 = receipt error. Complements `self_check.py` (content) — this is the presence layer.
+
+### anti_rationalization_check.py
+A plan / task-list gate for the `deliver` mode: heuristically flags the shortcuts that skip a hard step (see `execution-discipline.md`). Checks a task with no verify/test/acceptance line, an irreversible action (push/send/publish/delete/backfill/cutover/migrate) with no STOP/confirm marker, and red-flag rationalization phrases in the prose.
+
+```bash
+python scripts/validators/anti_rationalization_check.py tasks/plan.md
+python scripts/validators/anti_rationalization_check.py tasks/plan.md --json
+```
+
+Exit 0 = no findings, 1 = at least one finding, 2 = file error. Heuristic + conservative (errs toward flagging), so resolve or justify each finding before running the build.
+
 ## Common Workflow Recipes
 
 ### Before declaring a report done
