@@ -35,6 +35,7 @@ living document).
 - IF "is it good / audit it": REVIEW -> `/review`. IF "is it complete + submit-ready": VALIDATE -> `/submit`.
 - IF "it is broken / wrong number": VALIDATE -> `/fix`.
 - DO NOT treat the whole engagement as one mode; route each phase.
+- IF the ask is to build a WHOLE recurring automated report product (data + report + send + schedule, e.g. "build a daily report product"): DISCOVER via frame, which PROPOSES the full chain from `recurring-report-blueprint.md` (the concrete end-to-end recipe), then executes phases 3-8 under `/deliver`.
 
 ## The SPECIFY ladder
 BR (why) -> UC (who does what) -> Entity / Data Model (with which concepts) -> AC (how we know it is

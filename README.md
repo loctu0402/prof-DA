@@ -7,7 +7,7 @@
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
-`v3.17.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.18.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## The whole system on one page
 
@@ -67,7 +67,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.17.0 should appear
+/plugin list      # prof-DA 3.18.0 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
@@ -113,7 +113,7 @@ The standard lifecycle runs left to right; `deliver`, `submit`, `review`, `fix`,
 | **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. | "build báo cáo", "làm report", "build dashboard", "làm slide", "convert sang PPTX" |
 | **deliver** | Build-auto execution loop wrapping any build mode: spec-or-STOP, clean baseline, single batch approval, per-task RED to GREEN to build to commit + verify gate, stop-on-error/risk, evidence summary. | "build it autonomously", "chunk and commit per task", "deliver end to end", "/build auto" |
 | **submit** | Final acceptance gate before a recurring report goes to a team's submission system: completeness audit vs the team's section contract, route gaps to the builder, per-section quality_check, emit a ready-to-paste payload. Ships a <product> bi-weekly profile. | "submit report", "finalize trước khi nộp", "đã đủ mục chưa", "fit yêu cầu quản lý chưa" |
-| **review** | Audit a deliverable or a whole project. 3 sub-modes: delivery refine, full project audit, stakeholder questioning. | "review report", "OK chưa", "audit project", "góp ý" |
+| **review** | Audit a deliverable or a whole project. 5 sub-modes: A0 brief snapshot, A delivery refine, B full project audit, C stakeholder questioning, D staleness trace (after a change, sync every dependent asset). | "review report", "OK chưa", "audit project", "góp ý", "sửa xong sync giúp" |
 | **fix** | Surgically debug a pipeline or report, with a patch-ceiling escalation rule. | "fix pipeline", "report sai", "wrong number", "pipeline fail" |
 | **workspace** | Scaffold, organize, and index a whole workspace into the second brain above (taxonomy + memory layer + index). Guide-first for non-technical users; secrets-first, safe `git mv` on a branch, index last. | "dọn workspace", "sắp xếp lại thư mục", "file nằm khắp nơi", "organize my workspace", "rebuild index" |
 
@@ -177,7 +177,7 @@ The intent is bigger than one plugin. prof-DA is meant as a **reference blueprin
 
 ## Versioning
 
-Current version `3.17.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.18.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 

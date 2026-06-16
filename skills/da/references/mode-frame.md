@@ -74,6 +74,16 @@ Based on `Next Mode` field in `PLANNING.md`:
 
 Orchestrator gate (if invoked via `/prof-DA:frame` after `/da`): confirm Next Mode before hand-off.
 
+## End-to-end recurring-report product (propose the full chain, do not route to one mode)
+
+If the request is to build a WHOLE recurring automated report product (ideation to data to report to send to
+schedule, e.g. "build a daily/weekly recurring report product", "reproduce an existing daily automated report", "tu dong
+hoa bao cao dinh ky"), do NOT pick a single Next Mode. Instead load `recurring-report-blueprint.md` and PROPOSE
+the full 9-phase chain (DISCOVER, METRIC, MODEL, DESIGN, PREDICT, DELIVERABLES+CHANNELS, SCHEDULE, VALIDATE,
+LEARN) filled with this product's specifics (the metric, sources, archetype, channels, cadence), as ONE action
+plan with a DoR/DoD/AC per phase. Get one batch approval, then execute phases 3-8 under `/deliver` (the build-auto
+gated loop). This is how frame connects the otherwise-siloed modes into a single proposed flow.
+
 ## Frame mode anti-patterns
 
 | Anti-pattern | Symptom | Fix |
@@ -89,6 +99,8 @@ Orchestrator gate (if invoked via `/prof-DA:frame` after `/da`): confirm Next Mo
 - Project scaffold (create before Gate 4 output): `project-scaffold.md`
 - Workflow detail: `planning-protocol.md`
 - Metric design deep dive: `metric-framework.md`
+- End-to-end recurring-report product chain: `recurring-report-blueprint.md`
+- The 7-phase lifecycle spine (phase to mode map): `delivery-lifecycle.md`
 - Data modeling patterns: `mode-model.md`
 - Schema discovery cost ceilings: `domain-discovery-protocol.md`
 - Why a separate mode: universal-workflow-rules.md Rule 3 (5W1H Action Brief)

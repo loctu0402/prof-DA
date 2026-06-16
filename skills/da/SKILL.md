@@ -59,7 +59,7 @@ Modes follow the standard DA flow: **Frame → Model → Query → Process → I
 
 | Mode | Trigger phrases | Reference file |
 |------|-----------------|----------------|
-| **frame** | "frame project", "kickoff", "metric define", "scope project", "không biết bắt đầu", "/prof-DA:frame" | `references/mode-frame.md` |
+| **frame** | "frame project", "kickoff", "metric define", "scope project", "không biết bắt đầu", "build a recurring/automated report product end-to-end", "reproduce an existing daily report product from scratch", "tự động hóa báo cáo định kỳ", "/prof-DA:frame" | `references/mode-frame.md` (+ `references/recurring-report-blueprint.md` for full-product builds) |
 | **model** | "data modeling", "build pipeline mới", "design DWH", "setup mart", "dbt project", "/prof-DA:model" (schema design only — forecast / ML prediction asks → process) | `references/mode-model.md` |
 | **query** | "viết SQL", "query data", "lấy data", "NL→SQL", "/prof-DA:query" | `references/mode-query.md` |
 | **process** | "process data", "ML case study", "dự đoán / dự báo / forecast / predict", "time series + seasonal effect", "train/build model dự đoán", "churn prediction / scoring / segmentation", "M1 / M2 / M3", "feature engineering", "EDA notebook", "DWH", "data audit", "data quality", "quality check", "kiểm tra data", "clean data", "data cleaning", "/prof-DA:process" | `references/mode-process.md` (Phase 2 — Quality Audit + Phase 3 — Cleaning are the standalone-discoverable parts) |
@@ -68,7 +68,7 @@ Modes follow the standard DA flow: **Frame → Model → Query → Process → I
 | **report** | "build báo cáo", "làm report", "stakeholder report", "/prof-DA:report" | `references/mode-report.md` |
 | **deliver** | "build it autonomously", "chunk and commit per task", "deliver this end to end", "/build auto", "/prof-DA:deliver" (the build-auto execution loop that wraps any build mode: 1 task = 1 commit + verify gate + stop-on-error/risk) | `references/build-auto.md` |
 | **submit** | "submit report", "finalize trước khi nộp", "đã đủ mục chưa", "fit yêu cầu quản lý chưa", "duyệt lần cuối trước khi submit vào hệ thống", "/prof-DA:submit" (final acceptance gate vs team contract; distinct from review) | `references/mode-submit.md` |
-| **review** | "review code", "audit project", "OK chưa", "snapshot review", "/prof-DA:review" (4 tiers: A0 Brief / A Polish / B Full / C Stakeholder Q) | `references/mode-review.md` |
+| **review** | "review code", "audit project", "OK chưa", "snapshot review", "/prof-DA:review" (5 tiers: A0 Brief / A Polish / B Full / C Stakeholder Q / D Staleness Trace) | `references/mode-review.md` |
 | **fix-pipeline** | "fix pipeline", "debug pipeline", "sửa pipeline", "/prof-DA:fix" | `references/mode-fix-pipeline.md` |
 | **workspace** | "dọn workspace", "sắp xếp lại thư mục", "hệ thống lại workspace", "file nằm khắp nơi", "organize my workspace", "rebuild index", "/prof-DA:workspace" | `references/mode-workspace.md` |
 
@@ -245,6 +245,7 @@ Once mode is selected:
 - Execution discipline (anti-rationalization table + verify-don't-assume + scope discipline) → `references/execution-discipline.md`
 - Evidence-based done (the proof gate: evidence ladder + Presence-proof + built-but-unrun trap) → `references/evidence-based-done.md`
 - Build-auto (the deliver-mode 7-gate execution loop) → `references/build-auto.md`
+- Recurring-report product blueprint (end-to-end: ideation → data → report → send → schedule, proposed by frame) → `references/recurring-report-blueprint.md`
 
 **Quality framework (whole-artifact checks):**
 - 5 Quality Criteria (Interconnect / Compact / Insightful / Sufficient / Logical Reason) → `references/quality-criteria.md`

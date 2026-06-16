@@ -2,7 +2,7 @@
 
 Invoke when user asks: "review report", "refine deliverable", "audit project", "kiểm tra bài", "check against skill rules", "stakeholder questions", "brainstorm stakeholder", "/prof-DA:review".
 
-## Four Sub-Modes (tier-based; user picks detail level)
+## Five Sub-Modes (tier-based; user picks detail level)
 
 User picks ONE at invocation. The flow is different for each. Tier choice solves the "overbloat" concern: many reviews just need a snapshot, not a full audit.
 
@@ -12,31 +12,35 @@ User picks ONE at invocation. The flow is different for each. Tier choice solves
 | **A — Delivery Refine** | Single deliverable: presentation, wording, format, charts, layout, checklist | Report đã có đủ thông tin / approach OK; cần polish + verify checklist | Lightweight (~15-30 min, 1 file) |
 | **B — Full Project Refine** | Whole project: workflow + cache + logic + approach + method + advanced/academic + fact-check + code-check | Cần audit tổng thể; muốn biết approach có đủ rigor, method có advance được không, miss gì không | Heavyweight (~1-3 hours, multi-file context tracing) |
 | **C — Stakeholder Questioning** | Question set for an upcoming meeting / requirements gathering | Chuẩn bị họp stakeholder; cần formulate đúng câu hỏi BEFORE analyse | Lightweight (~10-15 min) |
+| **D — Staleness Trace** | After a change to one asset, trace + sync every dependent asset (doc, plan, AC/DoD, output, sibling diagram) so the project stays consistent | User just edited/changed something (a direction, an input, a result, a diagram flow) and wants all related assets brought in sync | Lightweight-to-medium (scales with dependent count) |
 
-### Why four sub-modes (not one "review")
+### Why five sub-modes (not one "review")
 
 - **A0 vs A vs B is a detail-level continuum:** A0 = "is this shippable, yes/no?" / A = "polish this before ship" / B = "audit the rigor of the whole project". User picks based on stake + time available.
 - **A0 solves overbloat:** previously every review defaulted to A or B; A B over-engineered the simple "is this OK" question. A0 gives a 5-min verdict for non-academic / low-stakes cases.
 - **C is a different artifact entirely** (a question set, not a deliverable review) but lives in the same mode because it shares the stakeholder-empathy lens.
+- **D is change-propagation, not quality** (A0/A/B judge ONE artifact's quality; D checks CONSISTENCY across many after a change). It lives here because it is still a "is the project in good shape" review, just along the sync axis instead of the quality axis.
 
 ### Command invocation
 
 When user runs `/prof-DA:review` without arguments, agent MUST ask which sub-mode + which target:
 
 ```
-Bạn muốn review theo tier nào?
-  A0 — Brief (Snapshot): 5-min verdict — rubric + outline + 1-paragraph Ship/Fix/Rebuild
-  A  — Delivery Refine: polish 1 deliverable (presentation, wording, format, checklist)
-  B  — Full Project Refine: audit toàn bộ project (workflow, method, fact-check, code-check)
-  C  — Stakeholder Questioning: chuẩn bị câu hỏi cho stakeholder meeting
+Bạn muốn review theo tier nào? (A0 / A / B / C / D)
+  A0 : Brief (Snapshot), 5-min Ship/Fix/Rebuild verdict (rubric + outline)
+  A  : Delivery Refine, polish 1 deliverable (presentation, wording, format, checklist)
+  B  : Full Project Refine, audit toàn bộ project (workflow, method, fact-check, code-check)
+  C  : Stakeholder Questioning, chuẩn bị câu hỏi cho stakeholder meeting
+  D  : Staleness Trace, vừa sửa xong 1 thứ thì sync mọi asset liên quan (doc, plan, AC/DoD, output)
 
-Target nào? (file path / project folder / mô tả ngắn — tôi sẽ tìm)
+Target nào? (file path / project folder / mô tả ngắn, tôi sẽ tìm)
 ```
 
-If user gives only sub-mode → ask for target. If user gives only target → infer sub-mode from target type + stake:
-- Single file + user says "quick check" / "OK chưa" → A0
-- Single file + user wants polish → A
-- Folder + multiple files → B
+If user gives only sub-mode, ask for target. If user gives only target, infer sub-mode from target type + stake:
+- Single file + "quick check" / "OK chưa": A0
+- Single file + wants polish: A
+- Folder / multiple files: B
+- User vừa thay đổi 1 thứ / cho path mới sửa / "sửa xong sync giúp": D
 Confirm before proceeding.
 
 If target not locatable from description → glob/grep candidates, list 3 closest matches, ask which one.
@@ -424,6 +428,49 @@ Top 3 questions you should ask before starting:
 Suggested form: <chat / chart / mini-report / deep dive>
 Suggested timeline: <T+1 / T+3 / T+7>
 ```
+
+## Sub-mode D — Staleness Trace
+
+### Goal
+After a change to ONE asset, find and sync every DEPENDENT asset so the project stays consistent. A0/A/B
+judge one artifact's quality; D checks consistency ACROSS many after a change. This is change-propagation
+(BA: requirements traceability), not a quality critique.
+
+### When
+The user just changed a direction, an input, a result, or a diagram flow, and wants all related assets
+(doc, plan, AC/DoD, output, sibling diagrams, README) brought in line with the new state.
+
+### Two entry paths (the gate offers both)
+1. User names the changed asset (a path) plus a one-line description of what changed. Preferred (precise).
+2. No path given: agent AUTO-DETECTS the change from the action log: `git -C <project> status` + `git log -5`
+   + recent file mtimes, lists the candidate changed source(s), and confirms with the user before tracing.
+
+### Workflow
+0. Identify the SOURCE asset + the specific change (the concept/flow/number/input that moved). `[GATE]`
+1. Build the dependent set:
+   - If the project has a trace manifest (`.trace.json` mapping source to dependents + concept tags), read it.
+   - Else grep the project for the source filename AND the change's concept terms (node names, the metric,
+     the flow label) across doc / plan / spec / AC-DoD / output / sibling diagrams. Glob the project tree so
+     nothing is missed. State that grep-by-concept is heuristic (it can miss paraphrases).
+2. Diff each dependent against the NEW source state: is it still consistent, or does it still assert the OLD
+   value? Classify each IN-SYNC or STALE, with the specific stale line.
+3. Present the trace table (dependent | what it still asserts | new source value | IN-SYNC / STALE) and the
+   sync plan. `[GATE]` user approves before edits.
+4. Update each STALE dependent to match the new source. One dependent = one commit (chunked-delivery). For a
+   dependent that needs the user's domain input to resolve, FLAG it as an open item rather than guessing.
+5. Independent audit: confirm each updated dependent is now consistent (read it back, or spawn one read-only
+   checker for a large set, mirroring the req-recon check). Do not claim synced without re-reading.
+6. Drop a done-receipt (`evidence-based-done.md`) naming every updated dependent, so the Stop gate verifies
+   the sync actually landed.
+
+### Output
+A sync report: the source change, the dependent set, per-dependent IN-SYNC/STALE/updated, and any open items
+needing user input. Plus the synced files (each its own commit).
+
+### What NOT to do
+Do not silently re-scope the change. Do not skip a dependent because it "probably still fits" (diff it). Do
+not mark synced on "looks right" (re-read, evidence-based-done). Heuristic grep is a floor, not a proof, so a
+trace manifest is the reliable path for a recurring project.
 
 ## Brainstorming Sub-Mode (when user is exploring)
 

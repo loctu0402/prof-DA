@@ -4,6 +4,24 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.18.0] - 2026-06-16
+
+Adds a **staleness-trace** sub-mode to /review (change-propagation after an edit) and a **recurring-report product blueprint** that makes frame propose the full end-to-end flow instead of routing to one siloed mode. Plus a reference-staleness audit fix.
+
+### Added
+- **`skills/da/references/mode-review.md` Sub-mode D (Staleness Trace)** + the entry-gate option + the "why five sub-modes" note. After a change to one asset, trace + sync every dependent (doc/plan/AC-DoD/output/sibling diagram): two entry paths (user names the changed path, or agent auto-detects from the action log via git status/log + mtimes), then build the dependent set (trace manifest if present, else grep by filename + concept), diff each (IN-SYNC/STALE), update (one dependent = one commit), independent re-read audit, drop a done-receipt.
+- **`skills/da/references/recurring-report-blueprint.md`** - the cross-mode end-to-end recipe for a recurring automated report product (ideation -> metric -> model -> design -> predict -> deliverables+channels -> schedule -> validate -> learn), mapped to modes + concrete outputs, with a worked savings-product daily-report example + how-to-prompt. frame PROPOSES this whole chain (one batch approval) then executes phases under /deliver, so the modes stop feeling siloed.
+
+### Changed
+- **/review is now 5 sub-modes** (was inconsistently documented as 3): reconciled the count across `skills/review/SKILL.md` (+ added the missing A0 + new D entries), `commands/review.md`, `commands/da.md`, `skills/da/SKILL.md` (4 tiers -> 5 tiers). mode-review.md heading + table + gate updated.
+- **`skills/da/references/mode-frame.md`** - new "End-to-end recurring-report product" section: on a full-product request, load the blueprint and propose the chain rather than picking one Next Mode; cross-refs added.
+- **`skills/da/references/delivery-lifecycle.md`** + **`skills/da/SKILL.md` (frame router + Where-to-Read)** - wire the blueprint trigger.
+- **`skills/da/references/mode-fix-pipeline.md`** - removed a dangling `See <memory-atom>.md` pointer in the bug catalog (the named atom has no standalone file; the bug+fix is self-described inline). From a reference-staleness audit: prof-DA was found essentially IN-SYNC with the current reference-project state (anonymized pattern-level distillation, no baked versions), this dead pointer was the one real prof-DA defect.
+- **version** 3.17.0 -> 3.18.0 (`plugin.json` + `marketplace.json` + README).
+
+### Why
+Two gaps surfaced in use: (1) after editing one asset, dependent assets (doc/plan/AC-DoD/output) drift silently with no built-in way to re-sync them, and (2) the modes felt siloed for a "build the whole recurring report product" request, with no single place that proposes the end-to-end flow. Sub-mode D gives /review a change-propagation axis; the blueprint gives frame an end-to-end product chain to propose. Both reuse the existing engine (evidence-based-done receipt, the /deliver gated loop, the lifecycle map).
+
 ## [3.17.0] - 2026-06-16
 
 New **`deliver` mode** (the 12th mode) plus the Lean Spec Delivery lifecycle map and a senior-engineer execution-discipline layer, distilled from the Lean Spec Delivery post + addyosmani/agent-skills. Additive: the build half (process/report/model/automate) is unchanged; `deliver` wraps any of them with execution gates, and the new references give the plugin its own self-contained copy of the honesty/verification discipline.
