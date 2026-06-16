@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# DESIGN PLACEHOLDER - Layer 3 git gate adapter. Build deferred.
+# Install: copy to .git/hooks/pre-commit (or wire via pre-commit framework).
+# [FILL] point RECEIPT at the project's done-receipt, then enforce the portable gate:
+RECEIPT="$(git rev-parse --show-toplevel)/.prof-da/pending-validation.json"
+if [ -f "$RECEIPT" ]; then
+  python -m gate "$RECEIPT" || { echo "[prof-DA gate] deliverables not proven - commit aborted"; exit 1; }
+fi
+exit 0

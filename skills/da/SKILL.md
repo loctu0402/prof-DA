@@ -55,7 +55,7 @@ MAX 3 suggestions per exit. Each suggestion: specific + cited trigger + 1-line W
 
 Pick the mode matching the current task, then read the matching reference file. If task spans multiple modes, read all relevant references before starting. If unsure, default to **insight** (covers reasoning + analysis).
 
-Modes follow the standard DA flow: **Frame → Model → Query → Process → Insight → Automation → Report**, plus orthogonal helpers (review + fix-pipeline + workspace). Frame + Model are the new front-of-workflow planning modes (v3.1).
+Modes follow the standard DA flow: **Frame → Model → Query → Process → Insight → Automation → Report**, plus orthogonal helpers (deliver + submit + review + fix-pipeline + workspace). Frame + Model are the new front-of-workflow planning modes (v3.1); deliver is the build-auto execution loop that wraps any build mode (v3.17).
 
 | Mode | Trigger phrases | Reference file |
 |------|-----------------|----------------|
@@ -66,6 +66,7 @@ Modes follow the standard DA flow: **Frame → Model → Query → Process → I
 | **insight** | "phân tích insight", "hypothesis validation", "diagnostic", "why X", "/prof-DA:insight" | `references/mode-insight.md` |
 | **automation** | "automation", "pipeline tự động", "schedule job", "/prof-DA:automate" | `references/mode-automation.md` |
 | **report** | "build báo cáo", "làm report", "stakeholder report", "/prof-DA:report" | `references/mode-report.md` |
+| **deliver** | "build it autonomously", "chunk and commit per task", "deliver this end to end", "/build auto", "/prof-DA:deliver" (the build-auto execution loop that wraps any build mode: 1 task = 1 commit + verify gate + stop-on-error/risk) | `references/build-auto.md` |
 | **submit** | "submit report", "finalize trước khi nộp", "đã đủ mục chưa", "fit yêu cầu quản lý chưa", "duyệt lần cuối trước khi submit vào hệ thống", "/prof-DA:submit" (final acceptance gate vs team contract; distinct from review) | `references/mode-submit.md` |
 | **review** | "review code", "audit project", "OK chưa", "snapshot review", "/prof-DA:review" (4 tiers: A0 Brief / A Polish / B Full / C Stakeholder Q) | `references/mode-review.md` |
 | **fix-pipeline** | "fix pipeline", "debug pipeline", "sửa pipeline", "/prof-DA:fix" | `references/mode-fix-pipeline.md` |
@@ -238,6 +239,12 @@ Once mode is selected:
 - Evaluation rubric (C-level scorecard) → `references/evaluation-rubric.md`
 - Self-check protocol (pre-ship) → `references/self-check-protocol.md`
 - Refine protocol (3-tier feedback loop, worksheet, handoff) → `references/refine-worksheet.md`
+
+**Delivery lifecycle + execution discipline (v3.17 — new):**
+- Lean Spec Delivery lifecycle (7-phase DISCOVER → MODEL → SPECIFY → REVIEW → DELIVER → VALIDATE → LEARN mapped to modes) → `references/delivery-lifecycle.md`
+- Execution discipline (anti-rationalization table + verify-don't-assume + scope discipline) → `references/execution-discipline.md`
+- Evidence-based done (the proof gate: evidence ladder + Presence-proof + built-but-unrun trap) → `references/evidence-based-done.md`
+- Build-auto (the deliver-mode 7-gate execution loop) → `references/build-auto.md`
 
 **Quality framework (whole-artifact checks):**
 - 5 Quality Criteria (Interconnect / Compact / Insightful / Sufficient / Logical Reason) → `references/quality-criteria.md`

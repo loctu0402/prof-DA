@@ -1,0 +1,14 @@
+---
+description: DESIGN PLACEHOLDER - prof-DA evidence-based-done gate for Cursor (always on). Build deferred.
+globs:
+alwaysApply: true
+---
+
+[FILL when building] Cursor has no turn-level Stop hook, so this rule carries the gate:
+Before claiming ANY deliverable done (done / fixed / passing / shipped), run the portable gate and show
+the exit code:
+
+    python -m gate <project>/.prof-da/pending-validation.json
+
+exit 0 = every named deliverable exists + non-empty + (code) proven; nonzero = NOT done (build/run it
+first). A task is not done until this passes - see `skills/da/references/evidence-based-done.md`.

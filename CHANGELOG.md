@@ -4,6 +4,27 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.17.0] - 2026-06-16
+
+New **`deliver` mode** (the 12th mode) plus the Lean Spec Delivery lifecycle map and a senior-engineer execution-discipline layer, distilled from the Lean Spec Delivery post + addyosmani/agent-skills. Additive: the build half (process/report/model/automate) is unchanged; `deliver` wraps any of them with execution gates, and the new references give the plugin its own self-contained copy of the honesty/verification discipline.
+
+### Added
+- **`skills/deliver/SKILL.md` + `commands/deliver.md`** - the `deliver` mode + `/prof-DA:deliver`. The build-auto execution loop: require a spec/charter or STOP, clean baseline, single batch approval, then per-task RED -> GREEN -> build -> commit with a verify gate, stop-on-failure/risk/irreversible, and an honest evidence summary. Orthogonal to the build modes (it is the HOW, not the WHAT). Drops `<project>/.prof-da/pending-validation.json` so the existing Stop hook validates it with zero hook changes.
+- **`references/build-auto.md`** - the 7-gate loop + the DA irreversibility stop-list (prod write, billed backfill > 1 month, auto-send, schema cutover, force-push).
+- **`references/execution-discipline.md`** - the anti-rationalization table (the excuses that skip a hard step + the disciplined move), core operating behaviors, verify-don't-assume, scope discipline. Self-contained (no external pointers).
+- **`references/evidence-based-done.md`** - the proof gate: the evidence ladder (seems-right banned -> validator-exit-0 -> corrected-real-number), Presence-proof, the built-but-unrun trap, DA evidence types.
+- **`references/delivery-lifecycle.md`** - the 7-phase Lean Spec Delivery lifecycle (DISCOVER -> MODEL -> SPECIFY -> REVIEW -> DELIVER -> VALIDATE -> LEARN) mapped to the prof-DA modes + the gate each produces.
+- **`scripts/validators/artifact_presence_check.py`** - the evidence-based-done presence gate (exists + non-empty + non-stub + code proof marker); reads a receipt or `--deliverables`; exit 0/1/2; pure stdlib.
+- **`scripts/validators/anti_rationalization_check.py`** - a plan/task-list gate: flags a task with no verify line, an irreversible action without a STOP marker, or a red-flag phrase; exit 0/1/2; pure stdlib.
+
+### Changed
+- **Wiring:** `skills/da/SKILL.md` (deliver registered in the mode router + a new "Delivery lifecycle + execution discipline" block in Where-to-Read-Next), `commands/da.md` (deliver under orthogonal helpers; 11 -> 12 modes), `skills/da/references/scripts-guide.md` (the 2 new validator usage blocks).
+- **README** - 11 -> 12 modes everywhere (headline, modes table + deliver row, "What is inside" tree, script count 17 -> 19, command count 12 -> 13).
+- **version** 3.16.1 -> 3.17.0 (`plugin.json` + `marketplace.json` + README).
+
+### Why
+prof-DA had the build modes and the per-section / report gates, but not a single execution-control loop that makes an autonomous multi-step build safe (commit-per-task + verify-per-task + stop-on-risk) nor a first-class anti-rationalization + evidence-ladder layer to stop a hard step being skipped. `deliver` + the four references add exactly that, distilled from the Lean Spec Delivery 7-phase spine and addyosmani/agent-skills. Ported in-plugin (self-contained) so the plugin does not depend on the author's private workspace.
+
 ## [3.16.1] - 2026-06-16
 
 ### Changed
