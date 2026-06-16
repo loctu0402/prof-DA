@@ -1,6 +1,6 @@
 ---
 name: deliver
-description: Chunked autonomous build loop (build-auto) that wraps any build mode with execution discipline. Require a spec/charter or STOP, clean baseline, single batch approval, then per-task RED -> GREEN -> build -> commit with a verify gate, stop-on-failure/risk/irreversible, and an honest evidence summary. Orthogonal to process/report/model/automate: it is the HOW (execution control), not the WHAT. Distilled from addyosmani agent-skills /build auto. Use when executing a heavy approved DA build as a sequence of tasks, or on "build it autonomously", "chunk and commit per task", "deliver this end to end", "/build auto", or explicit /prof-DA:deliver.
+description: Chunked autonomous build loop (build-auto) that wraps any build mode with execution discipline. Require a spec/charter or STOP, clean baseline, single batch approval, then per-task RED -> GREEN -> build -> commit with a verify gate, stop-on-failure/risk/irreversible, and an honest evidence summary. Orthogonal to process/report/model/automate (the HOW execution-control layer, not the WHAT). Distilled from addyosmani agent-skills /build auto. Use when executing a heavy approved DA build as a sequence of tasks, or on "build it autonomously", "chunk and commit per task", "deliver this end to end", "/build auto", or explicit /prof-DA:deliver.
 ---
 
 # Deliver Mode, Chunked Autonomous Build Loop
