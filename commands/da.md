@@ -1,8 +1,8 @@
 ---
-description: prof-DA — master entry. Confirms intent + Detail Level (Quick / Standard / Deep), then routes to 1 of 10 modes.
+description: prof-DA — master entry. Confirms intent + Detail Level (Quick / Standard / Deep), then routes to 1 of 11 modes.
 ---
 
-Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm intent + detail level, then route to one of the 10 modes:
+Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm intent + detail level, then route to one of the 11 modes:
 
 **Front-of-workflow:**
 - `/prof-DA:frame` — Business Understanding → Metric Define → Data Plan (PLANNING.md)
