@@ -1,9 +1,9 @@
 ---
-description: Professional Data Analyst — review/refine mode. 3 sub-modes: Delivery Refine (lightweight) / Full Project Refine (heavyweight) / Stakeholder Questioning.
+description: Professional Data Analyst — review/refine mode. 5 sub-modes: A0 Brief (snapshot verdict) / A Delivery Refine (lightweight) / B Full Project Refine (heavyweight) / C Stakeholder Questioning / D Staleness Trace (sync dependent assets after a change).
 ---
 
 Invoke the `da` skill in **review/refine mode**. Read these references before acting:
-1. `references/mode-review.md` — 3 sub-modes (A Delivery / B Full Project / C Stakeholder)
+1. `references/mode-review.md` — 5 sub-modes (A0 Brief / A Delivery / B Full Project / C Stakeholder / D Staleness Trace)
 2. `references/universal-workflow-rules.md` — Rules 1-4 as critique lens
 3. `references/style-rules.md` — AI-tell ban, polish standards
 4. `references/self-check-protocol.md` — what to check for

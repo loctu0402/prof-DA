@@ -118,8 +118,7 @@ These appear as "model is biased" but root is data-layer mismatch.
 
 ### W_7d corner solution
 - Bug: per-metric coefficient `w_7d = 0` (corner of optimization)
-- Fix: floor at 0.05; empirical N=180 elbow
-- See `knowledge_kvbd_w7d_floor_fix.md`
+- Fix: floor at 0.05; empirical N=180 elbow (a stuck-at-corner weight needs a floor)
 
 ## Wire Email-on-Fail (when pipeline failed silently)
 

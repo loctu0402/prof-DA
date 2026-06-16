@@ -18,7 +18,7 @@ Invoke the `da` skill. The user typed `/prof-DA:da` without a mode — confirm i
 **Orthogonal helpers:**
 - `/prof-DA:deliver` — Build-auto execution loop wrapping any build mode: spec-or-STOP, clean baseline, single batch approval, per-task RED → GREEN → build → commit + verify gate, stop-on-error/risk, evidence summary
 - `/prof-DA:submit` — Final acceptance gate before submitting a recurring report to a team system (e.g. <report-mcp> MCP): structure-completeness audit vs the team contract, route missing sections to the builder, per-section quality_check, emit submission payload. <product> profile shipped. Distinct from review.
-- `/prof-DA:review` — 3 sub-modes (A Delivery / B Full Project / C Stakeholder Q)
+- `/prof-DA:review` — 5 sub-modes (A0 Brief / A Delivery / B Full Project / C Stakeholder Q / D Staleness Trace)
 - `/prof-DA:fix` — Surgical pipeline / report debug + patch-ceiling escalation
 - `/prof-DA:workspace` — Scaffold / organize / index a whole workspace (guide-first, secrets-first, git-mv-on-branch, index-last)
 
