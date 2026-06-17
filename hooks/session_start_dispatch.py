@@ -30,6 +30,7 @@ Mode map (what fires where):
 - insight   -- tai sao X tang/giam / root cause / hypothesis / deep dive / correlation
 - automate  -- schedule job / cron / Airflow / backfill / fail-alert
 - report    -- bao cao / dashboard / slide / executive summary
+- deliver   -- build it autonomously / chunk + commit per task / "/build auto" (the build-auto execution loop wrapping any build mode)
 - submit    -- finalize + nop recurring report vs team acceptance contract
 - review    -- audit / "OK chua" / gop y / method maturity
 - fix       -- pipeline loi / so sai / missing data / patch report

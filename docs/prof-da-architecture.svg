@@ -32,7 +32,7 @@
   <text x="72" y="64" class="h1">prof-DA: The Governed Analyst Loop, 6 Nested Loops</text>
   <text x="72" y="92" class="t">From per-request to cross-session. Every loop feeds the next. Any driver, any engine, same senior analyst.</text>
   <rect x="1320" y="38" width="200" height="34" rx="17" fill="#131a26" stroke="#d82d8b"/>
-  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.19.0 - MIT</text>
+  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.19.1 - MIT</text>
 
   <!-- ===================== main frame ===================== -->
   <rect x="40" y="120" width="1480" height="1030" rx="14" fill="#0f141f" stroke="#1d2940"/>
@@ -106,7 +106,7 @@
   <text x="165" y="797" class="h3" fill="#f0d49a">GATE STACK - the silent-failure killer</text>
   <text x="165" y="821" class="t">5 universal rules: 4 quality (orientation / baseline-noise-impact / action brief / why-explanation) + a detail-level gate. No bare numbers.</text>
   <text x="165" y="841" class="t">Fork 1 of 12 locked archetypes 1:1, never freestyle. Stop-hook receipt blocks the turn until the gate passes.</text>
-  <text x="165" y="865" class="ts">fail -> punch-list -> back to the mode run -> re-audit (loop)</text>
+  <text x="165" y="865" class="ts">doubt pass (adversarial, bias-to-disprove) -> fail -> punch-list -> re-audit (loop)</text>
   <path class="flow" d="M560,705 L560,725" marker-end="url(#arr)"/>
   <path class="feed" stroke="#caa15a" d="M145,845 L100,845 L100,640 L120,640" marker-end="url(#arr)"/>
 
@@ -146,16 +146,18 @@
 
   <rect x="1100" y="635" width="400" height="290" rx="10" fill="#131a26" stroke="#243047"/>
   <text x="1120" y="662" class="h2">vs vanilla Claude Code</text>
-  <text x="1120" y="690" class="t">guesses which metric you meant</text>
-  <text x="1140" y="708" class="tw">-> confirms intent, grounds in YOUR entities</text>
-  <text x="1120" y="736" class="t">no freshness notion</text>
-  <text x="1140" y="754" class="tw">-> stale sources flagged, never trusted</text>
-  <text x="1120" y="782" class="t">plausible-but-wrong ships on faith</text>
-  <text x="1140" y="800" class="tw">-> audited scripts + a blocking stop-gate</text>
-  <text x="1120" y="828" class="t">every report formatted differently</text>
-  <text x="1140" y="846" class="tw">-> forks 1 of 12 locked archetypes, 1:1</text>
-  <text x="1120" y="874" class="t">forgets your corrections</text>
-  <text x="1140" y="892" class="tw">-> learning loop writes permanent rules</text>
+  <text x="1120" y="688" class="t">guesses which metric you meant</text>
+  <text x="1140" y="706" class="tw">-> confirms intent, grounds in YOUR entities</text>
+  <text x="1120" y="726" class="t">no freshness notion</text>
+  <text x="1140" y="744" class="tw">-> stale sources flagged, never trusted</text>
+  <text x="1120" y="764" class="t">plausible-but-wrong ships on faith</text>
+  <text x="1140" y="782" class="tw">-> audited scripts + a doubt pass + stop-gate</text>
+  <text x="1120" y="802" class="t">blank context, then calls it done</text>
+  <text x="1140" y="820" class="tw">-> DoR/DoD/AC contract, reconcile + evidence gate</text>
+  <text x="1120" y="840" class="t">every report formatted differently</text>
+  <text x="1140" y="858" class="tw">-> forks 1 of 12 locked archetypes, 1:1</text>
+  <text x="1120" y="878" class="t">forgets your corrections</text>
+  <text x="1140" y="896" class="tw">-> learning loop writes permanent rules</text>
 
   <rect x="1100" y="945" width="400" height="185" rx="10" fill="#1c1207" stroke="#caa15a" stroke-dasharray="7 5"/>
   <text x="1130" y="975" class="h2" fill="#f0d49a">COMPOUND EFFECT</text>
@@ -167,12 +169,17 @@
 
   <!-- governance enforcement annotation -->
   <g>
-    <rect x="1100" y="1146" width="400" height="102" rx="10" fill="#1c1207" stroke="#caa15a" stroke-dasharray="7 5"/>
+    <rect x="1100" y="1146" width="400" height="208" rx="10" fill="#1c1207" stroke="#caa15a" stroke-dasharray="7 5"/>
     <text x="1120" y="1170" class="h3" fill="#f0d49a">Governance enforcement (hooks)</text>
-    <text x="1120" y="1190" class="ts">req-recon: DoR / DoD / AC + reconcile, Stop-block</text>
-    <text x="1120" y="1207" class="ts">governance scaffold inject, depth-scaled per task</text>
-    <text x="1120" y="1224" class="ts">VN AI-tell + English-headings guards</text>
-    <text x="1120" y="1241" class="ts">subagent depth-1 walls (no shared-memory / push)</text>
+    <text x="1120" y="1190" class="ts">prof-DA ships: intent dispatch + keyword auto-fire,</text>
+    <text x="1120" y="1207" class="ts">report-consistency Stop-gate, learning-loop capture</text>
+    <text x="1120" y="1230" class="ts">consumes the workspace-brain governance layer:</text>
+    <text x="1120" y="1247" class="ts">req-recon DoR/DoD/AC + reconcile Stop-block</text>
+    <text x="1120" y="1264" class="ts">governance scaffold inject, depth-scaled per task</text>
+    <text x="1120" y="1281" class="ts">evidence-done gate + scaffold pre-check</text>
+    <text x="1120" y="1298" class="ts">index-first read + llm-wiki atom-size budget</text>
+    <text x="1120" y="1315" class="ts">curator consolidation + memory-store nudge</text>
+    <text x="1120" y="1332" class="ts">subagent depth-1 walls; VN + heading guards</text>
   </g>
 
   <!-- ===================== loops by time scale ===================== -->
@@ -235,5 +242,5 @@
   <text x="1074" y="1851" class="ts">a command is rarely needed</text>
 
   <!-- footer -->
-  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.19.0 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
+  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.19.1 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
 </svg>
