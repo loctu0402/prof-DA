@@ -4,6 +4,20 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.19.0] - 2026-06-17
+
+Adopts the **doubt pass** (the adversarial-review device from addyosmani/agent-skills' doubt-driven-development) and reconciles the universal-rule vocabulary.
+
+### Added
+- **Doubt pass** in `skills/da/references/execution-discipline.md` (section 6): a bounded adversarial self-review run before a high-stakes claim - CLAIM -> EXTRACT -> DOUBT -> RECONCILE -> STOP, bias-to-disprove, <=3 cycles, with an anti "doubt theater" rule (a pass that rubber-stamps is itself a failure). The negative/adversarial complement to `evidence-based-done.md`'s positive proof ladder. Bound into `deliver` Gate 7 (`build-auto.md` + `skills/deliver/SKILL.md`) and `review` Sub-mode B (`mode-review.md`, which IS a doubt pass at project scale). Mirrored in the workspace rule SoT.
+
+### Changed
+- **Universal-rule vocabulary reconciled.** The 17 "4 Universal Rules" references (mode stubs + references + GUIDE + da-orchestrator) renamed to "4 Quality Rules" - the 4 quality rules that gate every deliverable, distinct from the 5th universal rule (the Detail-Level entry gate). "5 universal rules (4 quality + Detail-Level gate)" is now the only total-count phrasing across README / plugin.json / SVG / the master skill.
+- **docs/prof-da-architecture.svg** version stamps -> v3.19.0.
+
+### Why
+prof-DA already had the positive half of verification (an evidence ladder + an anti-rationalization checklist + a Stop-hook done-gate, stronger than addyosmani's markdown-only enforcement). The one device it lacked was the standalone adversarial doubt pass - bias-to-disprove, not bias-to-confirm. Adding it closes that gap. The 4-vs-5 rule wording was the last count inconsistency a reader could trip on (the SVG surfaced it twice).
+
 ## [3.18.3] - 2026-06-17
 
 ### Fixed

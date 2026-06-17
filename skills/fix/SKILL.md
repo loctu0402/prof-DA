@@ -7,7 +7,7 @@ description: Surgical pipeline / report debug workflow. Bug triage decision tree
 
 Surgical debug for pipeline / report bugs. Triage by symptom; touch only what's broken.
 
-## 4 Universal Rules
+## 4 Quality Rules
 1. Orientation Block on patch summary (what broke, what fixed, how verified)
 2. Baseline → Noise → Impact for any metric used to verify the fix
 3. 8-field Action Brief if recommending follow-up changes

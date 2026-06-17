@@ -11,7 +11,7 @@
 
 **Why (Operational):** an unsystematized workspace gets slower and riskier over time — files become unfindable, the assistant re-learns context every session, and there is no index so every lookup is a brute-force read. This mode pays that debt down once and keeps it down.
 
-## 4 Universal Rules application
+## 4 Quality Rules application
 
 1. **Orientation Block** — every plan/inventory you present opens with a 1-line statement of current state + target + reading order.
 2. **Baseline → Noise → Impact** — when reporting the mess, quantify it (N stray files, M unindexed folders) against the standard, not vaguely.

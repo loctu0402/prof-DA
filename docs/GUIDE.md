@@ -22,7 +22,7 @@ You ask (plain VN/EN)
    -> grounding (read the workspace second brain; discover schema 5-tier)
    -> route to 1 of 12 modes
    -> the mode runs (statistics in audited scripts, never eyeballed)
-   -> gate stack (4 universal rules + fork-or-fail templates + a Stop-hook gate)
+   -> gate stack (4 quality rules + fork-or-fail templates + a Stop-hook gate)
    -> deliver
    -> the learning loop turns your correction into a permanent rule
 ```
@@ -81,7 +81,7 @@ A mode is not a single script. Each is a small designed workflow with **named su
 
 ## 4. What it enforces (the rigor that makes it trustworthy)
 
-Every deliverable passes **4 universal rules** plus an entry gate:
+Every deliverable passes **4 quality rules** plus an entry gate:
 
 1. **Orientation block** — every deliverable opens with a short framing (SCQR / 3-line intro / docstring) so the reader gets the point before the detail.
 2. **Baseline -> Noise -> Impact** — every number is stated against a baseline, checked for real-or-noise, then given an impact verdict. No bare figures.

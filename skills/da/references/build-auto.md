@@ -23,7 +23,7 @@ query (-> query mode), schema design (-> model mode), a one-shot chart.
 4. Per-task RED -> GREEN -> build -> commit. RED = write the failing check (a validator / acceptance test / a baseline-noise-impact threshold / a parallel-trends test that currently fails). GREEN = make it pass. build = render the artifact / run the pipeline step. commit = 1 task = 1 commit; stage only that task's files; never `git add -A`.
 5. Per-task verify gate. Run the task's check (`evidence-based-done.md`). A red gate STOPS the loop; do not advance.
 6. Stop-on-failure / risk / irreversible. Halt and surface (do not push through) on a check that will not pass without an obvious fix, an ambiguous spec, a materialized RAID risk, or an irreversible step ahead (the DA stop-list below). After the user resolves, resume from the next pending task.
-7. Summarize. Tasks completed, checks added, commits made, anything skipped / flagged. An honest evidence ledger, not a green-washed summary.
+7. Doubt pass + Summarize. Before the ledger, run a doubt pass on the headline claims (`execution-discipline.md` section 6: CLAIM -> EXTRACT -> DOUBT -> RECONCILE -> STOP, bias-to-disprove, no doubt-theater) - the adversarial complement to the per-task evidence gate. Then write an honest evidence ledger (tasks completed, checks added, commits made, anything downgraded by the doubt pass or flagged), not a green-washed summary.
 
 ## The DA irreversibility stop-list
 Any of these requires an explicit confirm + the proof gate BEFORE acting:

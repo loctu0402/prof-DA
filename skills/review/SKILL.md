@@ -7,7 +7,7 @@ description: 5 sub-modes for review work. Sub-mode A0 Brief (5-min snapshot Ship
 
 5 sub-modes for review work. User picks ONE at invocation.
 
-## 4 Universal Rules (applied to critique itself)
+## 4 Quality Rules (applied to critique itself)
 1. Orientation Block at top (verdict + summary)
 2. Baseline → Noise → Impact when citing metrics in the critique
 3. 8-field Action Brief for any "should fix" recommendation

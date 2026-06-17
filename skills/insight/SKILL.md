@@ -7,7 +7,7 @@ description: Diagnostic analysis — why did X happen, what's the mechanism, wha
 
 For any "why did this happen?" / "what's the mechanism?" / "what should we do?" question.
 
-## 4 Universal Rules
+## 4 Quality Rules
 1. Orientation Block (SCQR for written, 3-line for dashboard)
 2. Baseline → Noise → Impact ladder for every numeric finding
 3. 8-field Action Brief for every recommendation

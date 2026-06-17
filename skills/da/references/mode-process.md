@@ -336,7 +336,7 @@ Why — separate "code I am editing" from "artefacts I produced". Pre-commit hoo
 
 ## Universal Rules Reminder
 
-Process notebook applies all 4 universal rules:
+Process notebook applies all 4 quality rules:
 - **Rule 1** — Orientation Block at top (purpose + inputs + outputs + owner + dataset version + data freshness)
 - **Rule 2** — Baseline-Noise-Impact ladder for every numeric statement in cells
 - **Rule 3** — 5W1H action brief on any recommendation surfaced from EDA

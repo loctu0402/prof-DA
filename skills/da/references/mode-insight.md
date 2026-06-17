@@ -219,7 +219,7 @@ Why stack these — no single test confirms a finding. Each method addresses one
 
 ## Universal Rules Reminder
 
-Insight deliverable applies all 4 universal rules:
+Insight deliverable applies all 4 quality rules:
 - **Rule 1** — Orientation Block (SCQR for written, 3-line intro for dashboard)
 - **Rule 2** — Baseline-Noise-Impact ladder for every numeric finding
 - **Rule 3** — 8-field Action Brief for any recommendation

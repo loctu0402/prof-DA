@@ -24,7 +24,7 @@ step without an explicit confirm.
 4. **Per-task RED -> GREEN -> build -> commit**: RED = the failing validator/acceptance check; 1 task = 1 commit; stage only that task's files; never `git add -A`.
 5. **Per-task verify gate** `[GATE]`: run the check; a red gate STOPS the loop.
 6. **Stop-on-failure / risk / irreversible** `[GATE]`: the DA stop-list (prod write, billed backfill > 1 month, auto-send, schema cutover, force-push); surface, wait, resume.
-7. **Summarize** `[GATE]`: drop `<project>/.prof-da/pending-validation.json`, run `artifact_presence_check.py`, give an honest evidence ledger.
+7. **Doubt pass + Summarize** `[GATE]`: run a doubt pass on the headline claims (`references/execution-discipline.md` section 6: CLAIM -> EXTRACT -> DOUBT -> RECONCILE -> STOP, bias-to-disprove); drop `<project>/.prof-da/pending-validation.json`, run `artifact_presence_check.py`, give an honest evidence ledger (note anything the doubt pass downgraded).
 
 ## Hard rules
 - NEVER auto-send / publish a stakeholder deliverable; emit + hand to the user.

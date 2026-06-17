@@ -205,6 +205,8 @@ If the same deliverable comes back through Sub-mode A for a 4th review cycle, ST
 ### Goal
 Deep audit of a whole project: workflow integrity + cache discipline + business logic + approach maturity + method appropriateness + advanced-method opportunities + academic/scientific rigor + domain accuracy + fact-check + code-check. Multi-pass review. Returns a structured rework plan, awaits user approval, executes.
 
+> The audit IS a doubt pass at project scale (`execution-discipline.md` section 6): run it bias-to-disprove, not bias-to-confirm. For each headline claim and method choice, actively try to BREAK it (confound, stale source, miscount, cherry-picked window, wrong grain); a pass that finds nothing on a complex project is itself a red flag (no doubt theater). The context-tracer + method-auditor sub-agents are the fresh-context skeptics that make the doubt real.
+
 ### When to pick this (not A)
 - User unsure if approach itself is right, or if method choice is appropriate to the question
 - User wants to know "can this be more advanced / more rigorous?"
@@ -509,7 +511,7 @@ Sub-mode B explicitly orchestrates this hand-off as part of Phase 5.
 
 ## Universal Rules Reminder
 
-Critique itself is a deliverable. Apply all 4 universal rules:
+Critique itself is a deliverable. Apply all 4 quality rules:
 - **Rule 1** — Orientation Block at top (verdict + summary)
 - **Rule 2** — Baseline-Noise-Impact when citing metrics in the critique
 - **Rule 3** — 5W1H Action Brief for any "should fix" recommendation

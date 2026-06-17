@@ -7,7 +7,7 @@ description: Data modeling pipeline mode — pick from 4 patterns (Kimball Star/
 
 Design the data modeling layer of a pipeline. 4 industry-standard patterns; pick based on infrastructure + scale.
 
-## 4 Universal Rules (apply to all output)
+## 4 Quality Rules (apply to all output)
 
 1. **Orientation Block** — schema doc (Table Contract) opens with business definition.
 2. **Baseline → Noise → Impact Ladder** — applies when validating mart output (test row counts vs baseline).

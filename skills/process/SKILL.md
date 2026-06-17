@@ -7,7 +7,7 @@ description: Raw → staged → cleaned → mart → ML-ready pipeline + standal
 
 Transformation engine from raw input through staged → cleaned → mart → analysis/ML-ready output. Also covers standalone Data Quality Audit (Phase 2 only — output is a quality report) and standalone Cleaning (Phase 2 + Phase 3 — output is one cleaned table).
 
-## 4 Universal Rules
+## 4 Quality Rules
 1. Orientation Block at top of every deliverable
 2. Baseline → Noise → Impact ladder for every numeric statement
 3. 5W1H Action Brief for every recommendation

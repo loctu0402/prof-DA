@@ -38,7 +38,7 @@ After confirmation, hand off to the main agent with the routed mode + target.
 
 When the main agent presents a plan, check:
 - [ ] Mode chosen matches user intent
-- [ ] 4 universal rules acknowledged (Orientation, Baseline-Noise-Impact, 8-field brief, Why)
+- [ ] 4 quality rules acknowledged (Orientation, Baseline-Noise-Impact, 8-field brief, Why)
 - [ ] Mandatory scripts named (no inline statistical compute)
 - [ ] Output destination is `output/` not workspace root
 - [ ] No auto-send to stakeholder

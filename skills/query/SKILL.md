@@ -19,7 +19,7 @@ Before writing any SQL, run the 5-substep intake (full detail in `references/mod
 
 Skip Step 0 only if: user pasted explicit SQL, query is repeat of one earlier in session, request is pipeline-internal, or fully-atomic ask with zero implicit choices.
 
-## 4 Universal Rules (apply to output)
+## 4 Quality Rules (apply to output)
 
 1. Orientation Block at top
 2. Baseline → Noise → Impact ladder per numeric statement
