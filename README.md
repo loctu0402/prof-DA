@@ -7,7 +7,7 @@
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
-`v3.18.1` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.18.2` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## The whole system on one page
 
@@ -88,7 +88,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.18.1 should appear
+/plugin list      # prof-DA 3.18.2 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
@@ -119,7 +119,7 @@ prof-DA detects the request, confirms intent and a detail level (Quick / Standar
 
 ## The 12 modes, in two groups
 
-The modes split into two layers. **Execution modes** run the analysis itself, left to right along the six-phase lifecycle (ask, prepare, process, analyze, share, act). **Steward modes** are cross-cutting: invoke them any time to enforce delivery discipline, review and fix the work, finalize it to a contract, and keep the workspace and its second brain healthy. A non-technical user never learns these names: they ask in plain language and prof-DA routes, confirms intent, and runs the right one.
+The modes split into two layers. **Execution modes** run the analysis itself, left to right along the six-phase lifecycle (ask, prepare, process, analyze, share, act). **Governance modes** are cross-cutting: invoke them any time to enforce the binding rules and review-discipline checks, fix the work, finalize it to a contract, and systematize the whole workspace and work process into a second brain. A non-technical user never learns these names: they ask in plain language and prof-DA routes, confirms intent, and runs the right one.
 
 ### Execution modes, the 6-phase analysis lifecycle
 
@@ -135,9 +135,9 @@ Phase to mode: **Ask** = frame | **Prepare** = model + query | **Process** = pro
 | **Share** | **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. | "build báo cáo", "làm dashboard", "làm slide", "convert sang PPTX" |
 | **Act** | **automate** | Operationalize it: a scheduled pipeline with fail-alerts, cache discipline, and backfill. | "automation", "schedule job", "chạy hàng ngày", "alert khi lỗi" |
 
-### Steward modes, review and finalize and the second brain
+### Governance modes, review and finalize and systematize
 
-Cross-cutting; run any time, on any work (the quality, delivery-discipline, and stewardship layer).
+Cross-cutting; run any time, on any work (the binding-rules, review-discipline, and workspace-systematization layer).
 
 | Mode | What it does | Sample natural triggers |
 |------|--------------|-------------------------|
@@ -147,7 +147,7 @@ Cross-cutting; run any time, on any work (the quality, delivery-discipline, and 
 | **fix** | Surgically debug a pipeline or report, with a patch-ceiling escalation rule. | "fix pipeline", "report sai", "wrong number", "pipeline fail" |
 | **workspace** | Scaffold, organize, and index a whole workspace into the second brain, then keep it consolidated and current. Guide-first for non-technical users; secrets-first, safe `git mv` on a branch. | "dọn workspace", "organize my workspace", "rebuild index" |
 
-Each mode auto-fires on phrases like these, so a command is rarely needed; the full trigger lists live in each mode's `SKILL.md`. (Naming note: the steward group reads equally well as the "curator" or "governance" layer, same five modes.) For deeper structure, `frame` runs 4 planning gates and `model` offers 4 warehouse patterns: see [mode-frame](skills/da/references/mode-frame.md) and [mode-model](skills/da/references/mode-model.md).
+Each mode auto-fires on phrases like these, so a command is rarely needed; the full trigger lists live in each mode's `SKILL.md`. For deeper structure, `frame` runs 4 planning gates and `model` offers 4 warehouse patterns: see [mode-frame](skills/da/references/mode-frame.md) and [mode-model](skills/da/references/mode-model.md).
 
 ## What it enforces
 
@@ -209,7 +209,7 @@ The intent is bigger than one plugin. prof-DA is meant as a **reference blueprin
 
 ## Versioning
 
-Current version `3.18.1`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.18.2`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 
