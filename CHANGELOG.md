@@ -4,6 +4,14 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.18.3] - 2026-06-17
+
+### Fixed
+- **docs/prof-da-architecture.svg** - the poster still said "4 universal rules" (3 places) and carried a stale v3.16.1->v3.18.1 version stamp after the deliver-mode + review-staleness releases. Reconciled to "5 universal rules (4 quality + Detail-Level gate)" to match README + plugin.json + the master skill; bumped both version stamps to v3.18.3; relabeled the mode-run "orthogonal:" line to "governance modes:" to match the README's two-group framing (execution + governance). Verified by reading every `<text>` node, not a grep heuristic.
+
+### Note
+- The 12 mode-stub `SKILL.md` headers still read "## 4 Universal Rules (apply to output)". This is the 4 QUALITY rules that gate every deliverable; the 5th universal rule (the Detail-Level entry gate) fires at mode entry, not on the deliverable. The public count ("5 universal rules") and the per-deliverable count ("4 quality rules") are both correct in their context; a future pass may relabel the stub headers "4 quality rules" for one uniform vocabulary.
+
 ## [3.18.2] - 2026-06-17
 
 ### Changed

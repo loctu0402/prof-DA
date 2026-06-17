@@ -32,7 +32,7 @@
   <text x="72" y="64" class="h1">prof-DA: The Governed Analyst Loop, 6 Nested Loops</text>
   <text x="72" y="92" class="t">From per-request to cross-session. Every loop feeds the next. Any driver, any engine, same senior analyst.</text>
   <rect x="1320" y="38" width="200" height="34" rx="17" fill="#131a26" stroke="#d82d8b"/>
-  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.18.1 - MIT</text>
+  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.18.3 - MIT</text>
 
   <!-- ===================== main frame ===================== -->
   <rect x="40" y="120" width="1480" height="1030" rx="14" fill="#0f141f" stroke="#1d2940"/>
@@ -88,7 +88,7 @@
   <rect x="145" y="565" width="560" height="120" class="box" fill="#0e211f" stroke="#00b4a0"/>
   <text x="165" y="592" class="h3" fill="#7fe0d4">MODE RUN - 12 routable modes</text>
   <text x="165" y="616" class="t">frame -> model -> query -> process -> insight -> automate -> report</text>
-  <text x="165" y="636" class="t">orthogonal: deliver / submit / review / fix / workspace</text>
+  <text x="165" y="636" class="t">governance modes: deliver / submit / review / fix / workspace</text>
   <text x="165" y="660" class="ts">auto-fires on natural language, slash command rarely needed</text>
   <rect x="735" y="565" width="300" height="120" class="box" fill="#0e211f" stroke="#00b4a0"/>
   <text x="755" y="592" class="h3" fill="#7fe0d4">SCRIPT STDLIB</text>
@@ -104,7 +104,7 @@
   <circle cx="120" cy="790" r="15" fill="#caa15a"/><text x="120" y="795" text-anchor="middle" class="num">4</text>
   <rect x="145" y="770" width="890" height="110" class="box" fill="#231c10" stroke="#caa15a"/>
   <text x="165" y="797" class="h3" fill="#f0d49a">GATE STACK - the silent-failure killer</text>
-  <text x="165" y="821" class="t">4 universal rules: orientation / baseline-noise-impact / action brief / why-explanation. No bare numbers.</text>
+  <text x="165" y="821" class="t">5 universal rules: 4 quality (orientation / baseline-noise-impact / action brief / why-explanation) + a detail-level gate. No bare numbers.</text>
   <text x="165" y="841" class="t">Fork 1 of 12 locked archetypes 1:1, never freestyle. Stop-hook receipt blocks the turn until the gate passes.</text>
   <text x="165" y="865" class="ts">fail -> punch-list -> back to the mode run -> re-audit (loop)</text>
   <path class="flow" d="M560,705 L560,725" marker-end="url(#arr)"/>
@@ -129,7 +129,7 @@
   <text x="1120" y="222" class="t">19 stdlib scripts (stats / causal / validators)</text>
   <text x="1120" y="244" class="t">14 causal method specs, each cited</text>
   <text x="1120" y="266" class="t">12 locked report archetypes (A1-A12)</text>
-  <text x="1120" y="288" class="t">4 universal rules + Detail-Level gate</text>
+  <text x="1120" y="288" class="t">5 universal rules (4 quality + Detail-Level gate)</text>
   <text x="1120" y="310" class="t">5-tier schema discovery - 5 SQL engines</text>
   <text x="1120" y="332" class="t">3 support sub-agents, spawned on value</text>
   <text x="1120" y="354" class="t">7-section example bi-weekly submit profile</text>
@@ -188,7 +188,7 @@
   <text x="90" y="1368" class="t">Routes to 1 of 12 analyst modes. Statistics (significance, effect size, bootstrap CI, DiD) always run inside 19 audited stdlib scripts, never inline guesswork.</text>
   <circle cx="62" cy="1405" r="13" fill="#caa15a"/><text x="62" y="1410" text-anchor="middle" class="num">4</text>
   <text x="90" y="1403" class="h3" fill="#f0d49a">Gate Stack - per deliverable</text>
-  <text x="90" y="1423" class="t">4 universal rules + validator scripts + fork-or-fail archetypes. A Stop-hook receipt blocks the turn from ending until the consistency gate passes.</text>
+  <text x="90" y="1423" class="t">5 universal rules (4 quality + detail-level gate) + validator scripts + fork-or-fail archetypes. A Stop-hook receipt blocks the turn from ending until the consistency gate passes.</text>
   <circle cx="62" cy="1460" r="13" fill="#caa15a"/><text x="62" y="1465" text-anchor="middle" class="num">5</text>
   <text x="90" y="1458" class="h3" fill="#f0d49a">Cycle Contract - per recurring cycle</text>
   <text x="90" y="1478" class="t">submit mode grades the finished report section-by-section against the team's definition-of-done, emits the submission payload, and carries open items forward.</text>
@@ -235,5 +235,5 @@
   <text x="1074" y="1851" class="ts">a command is rarely needed</text>
 
   <!-- footer -->
-  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.18.1 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
+  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.18.3 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
 </svg>
