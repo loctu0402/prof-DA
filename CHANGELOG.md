@@ -4,6 +4,11 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.18.2] - 2026-06-17
+
+### Changed
+- **README.md** - renamed the second mode group from "Steward modes" to **"Governance modes"** (the binding-rules + review-discipline + workspace-systematization layer; it reads better and aligns with the workspace governance terminology). Label-only: the five modes (deliver / submit / review / fix / workspace) are unchanged.
+
 ## [3.18.1] - 2026-06-16
 
 Count-consistency sweep. 3.17.0 (deliver mode) and 3.18.0 (review staleness sub-mode) added modes/scripts but left several docs at the old counts. No new functionality; documentation accuracy only (PATCH).

@@ -1,6 +1,6 @@
 {
   "name": "prof-DA",
-  "version": "3.18.1",
+  "version": "3.18.2",
   "description": "Professional Data Analyst + Analytics Engineer harness as a Claude Code plugin. 12 routable modes (frame / model / query / process / insight / automate / report / deliver / submit / review / fix / workspace). Engine-agnostic SQL (BQ / Postgres / Snowflake / Redshift / DuckDB). 5 universal rules (4 quality + Detail-Level Gate) + Proactive Suggestion at Mode Exit. deliver = build-auto execution loop (1 task = 1 commit + verify gate + stop-on-error/risk) + the Lean Spec Delivery lifecycle + execution discipline (anti-rationalization + verify-don't-assume). 19 stdlib scripts (stats / causal / format / validators). submit mode = final acceptance gate for recurring reports vs a team's section contract + per-section quality_check + submission payload (<product> bi-weekly profile shipped). 14 method specs (causal + validation families). 5-tier schema-source hierarchy. Portable semantic-layer recipe. Visualization discipline (SWD). Auto-fires on natural Vietnamese + English DA requests (cho mình số liệu / điều gì xảy ra / tìm phương pháp tính / phân tích / dự đoán / forecast / báo cáo / build dashboard / etc) via a 3-layer trigger: trigger-rich skill descriptions + SessionStart dispatch protocol + deterministic UserPromptSubmit DA-intent keyword detector (diacritic-insensitive VN + EN). Consumes a workspace-brain second brain when present: reads memory/ + .index/ on entry to ground every mode in the user's real context.",
   "author": {
     "name": "Loc Tu",
