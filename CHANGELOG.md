@@ -4,6 +4,17 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.19.2] - 2026-06-17
+
+Workspace mode now surfaces a SETUP scope choice. Installing the governance + maintenance hooks writes registrations into a Claude Code `settings.json` - so the workspace mode owns a hook-install step, and it must ask the user WHERE to install rather than silently picking a scope.
+
+### Added
+- **`skills/da/references/mode-workspace.md`** - a new **Step 6 (Setup the enforcement layer)** between Index and Verify: install the maintenance loops + per-task governance gates as hooks, and ASK the scope first - **global** (`~/.claude/settings.json`, every workspace on the machine) vs **project** (`<workspace>/.claude/settings.json`, this repo only, git-committable + shareable). States plainly that this step edits `settings.json` by design (back up, merge not overwrite, BOTH safe since Claude Code merges across scopes + dedupes by command string). Verify renumbered to Step 7; the loop summary line updated. The standalone `workspace-brain` skill remains the owner of the canonical hook bundle + registration block (`references/setup-hooks.md`).
+
+### Changed
+- **`commands/workspace.md`** - the workflow list gains the Step 6 Setup (scope-first) entry, Verify renumbered to Step 7, a new hard rule ("SETUP installs hooks into a `settings.json` - ALWAYS ask the scope first, back up, merge"), and the "Prefer workspace-brain" note reworded: workspace-brain *ships the hook bundle* this embedded mode *describes but does not bundle*.
+- Version stamps -> v3.19.2 (plugin.json, marketplace.json, README x3, SVG x2).
+
 ## [3.19.1] - 2026-06-17
 
 Documentation completeness + a dispatch fix. A full audit (every SVG text node + README + GUIDE vs the real hook set) found the governance layer under-represented and the SVG governance box over-claiming.
