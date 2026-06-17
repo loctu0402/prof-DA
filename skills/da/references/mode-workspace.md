@@ -32,7 +32,7 @@ Plus `shared/` (reusable templates/themes/utilities), `notes/` (documents), `ref
 
 ## The loop
 
-Survey → Propose → (approve) → Safe-migrate → Memory → Index → Verify. For a non-technical user, run it in **guide mode** (one plain-language step at a time; see the bottom section).
+Survey → Propose → (approve) → Safe-migrate → Memory → Index → Setup (install governance hooks at a chosen scope) → Verify. For a non-technical user, run it in **guide mode** (one plain-language step at a time; see the bottom section).
 
 ### Step 0 — Secrets first (ALWAYS, before anything)
 Scan for credential/secret files: names matching `credential*`, `*secret*`, `token*`, `*.pem`, `*.key`, `*-service-account*.json`, `*.env`. For each: if git-tracked, check `git ls-files` and warn loudly (advise rotation); add to `.gitignore`; never print contents.
@@ -69,7 +69,13 @@ Only after moves settle, build/update the root `.index/` (`_root _tree _graph _e
 Then run the **reverse-existence check**: every pointer already in the index still resolves on disk (moves create dead pointers forward-only scans miss).
 Full format + the recursive rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`.
 
-### Step 6 — Verify
+### Step 6 — Setup the enforcement layer (ASK the scope first)
+Scaffold + memory + index build the STRUCTURE; this step installs the BEHAVIOR that keeps it healthy — the maintenance loops (above) + the per-task governance gates (below) as Claude Code hooks. Installing them writes hook registrations into a `settings.json`, so this step edits `settings.json` by design (back it up first). It is idempotent — safe to re-run to repair/update an install. **Ask the user the scope before writing**, then merge the registration into the chosen file:
+- **Global** (`~/.claude/settings.json`) — fires in EVERY workspace on this machine; best for a solo / personal machine you want governed everywhere.
+- **Project** (`<workspace>/.claude/settings.json`) — fires only in this workspace, git-committable + travels with the repo; best for a shared / team repo or when only some workspaces should be governed.
+Recommend global for a personal machine, project for a shared repo; BOTH is safe — Claude Code merges hooks across global + project + local and dedupes by command string, so a hook registered in both fires once. Merge, never overwrite (preserve the user's existing hooks); show the diff and get a yes before writing. The standalone `workspace-brain` skill owns the canonical hook table + the idempotent registration block + the verify-it-fired step: `references/setup-hooks.md`.
+
+### Step 7 — Verify
 Grep the codebase for moved filenames — a match inside the moved file is fine; a match in a pipeline script is a break to fix. Dry-run any scheduled job's paths. Report exactly what moved / was deleted vs archived, and the verification result.
 
 ## Hard rules (the golden rules)
