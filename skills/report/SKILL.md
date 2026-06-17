@@ -7,7 +7,7 @@ description: Build stakeholder deliverable from template (HTML SPA / PDF / email
 
 Stakeholder-facing deliverable build, polish, and verify.
 
-## 4 Universal Rules
+## 4 Quality Rules
 1. Orientation Block at top (SCQR for written, 3-line intro for dashboard, "How to read" for multi-tab HTML)
 2. Baseline → Noise → Impact ladder for every numeric statement
 3. 8-field Action Brief for every recommendation

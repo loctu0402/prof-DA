@@ -7,7 +7,7 @@
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
-`v3.18.3` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.19.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## The whole system on one page
 
@@ -58,7 +58,7 @@ The hardest unsolved problem is the plausible wrong answer, and an ordinary agen
 - **A per-task contract, injected, not optional.** Before work starts, each ask carries a **Definition of Ready** (inputs and access available, scope explicit, ambiguity surfaced), a **Definition of Done**, and **Acceptance Criteria**, scaled to the Quick / Standard / Deep depth you pick (and at Deep an Epic -> Feature -> Story + RAID breakdown). A heavy request is self-chunked, delegated under depth-1 walls, then re-integrated by one accountable writer.
 - **Layered specs + a work cache.** Intent is pinned as a just-enough spec (a frame charter, a metric contract, a section contract) the build is verified against, and work-done / work-in-progress is cached to disk (durable receipts + an append-only requirements ledger) so a long, compacted session never silently drops an ask.
 - **5 universal rules** on the deliverable (orientation, baseline-noise-impact, action brief, why-explanation, all behind a Detail-Level gate) + **19 audited statistics scripts**, so numbers are computed, never eyeballed.
-- **Verify, don't assume, then reconcile.** A task is not done until proven: an evidence ladder (a run output, a rendered artifact on disk, a corrected real number, never "seems right") plus an anti-rationalization checklist that blocks the excuses an agent uses to skip a hard step. An independent pass then diffs the delivered work against the captured asks (MET / PARTIAL / MISSED) before "done" is allowed.
+- **Verify, don't assume, then doubt, then reconcile.** A task is not done until proven: an evidence ladder (a run output, a rendered artifact on disk, a corrected real number, never "seems right") plus an anti-rationalization checklist that blocks the excuses an agent uses to skip a hard step, plus a **doubt pass** before any high-stakes claim ships, an adversarial self-review that actively tries to DISPROVE the result (CLAIM -> EXTRACT -> DOUBT -> RECONCILE, bias-to-disprove, no rubber-stamp) rather than confirm it. An independent pass then diffs the delivered work against the captured asks (MET / PARTIAL / MISSED) before "done" is allowed.
 - **Chunked, reversible delivery.** A multi-step build runs as 1 task = 1 commit + a per-task verify gate, stopping on the first failure or any irreversible step (a push, a send, a schema cutover).
 - **Continuous staleness control.** When one asset changes, a staleness-trace re-syncs every dependent (doc, plan, AC/DoD, output); freshness governance flags stale data before it is trusted.
 
@@ -88,7 +88,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.18.3 should appear
+/plugin list      # prof-DA 3.19.0 should appear
 ```
 
 Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
@@ -209,7 +209,7 @@ The intent is bigger than one plugin. prof-DA is meant as a **reference blueprin
 
 ## Versioning
 
-Current version `3.18.3`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.19.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 

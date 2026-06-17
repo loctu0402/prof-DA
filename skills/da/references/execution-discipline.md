@@ -58,6 +58,27 @@ Each row: the excuse used to skip a hard step, why it is wrong, the disciplined 
 "the sparse clone looks complete" / "I will update the template later" / "run the build again to be sure"
 (after a clean run with no code change, repeating adds nothing).
 
+## 6. Doubt pass (adversarial self-review before a high-stakes claim)
+
+The anti-rationalization table catches the excuse; the doubt pass catches the wrong-but-confident result.
+It is the adversarial COMPLEMENT to `evidence-based-done.md`: evidence asks "do I have proof at the rung I
+claim" (positive); the doubt pass asks "did I actively try to DISPROVE this" (negative). Adopted from the
+addyosmani/agent-skills doubt-driven-development device.
+
+Run it before a decision-driving number, a causal conclusion, a stakeholder deliverable, or the deliver-mode
+Gate 7 (before the evidence summary). Five steps:
+
+1. **CLAIM** - state the exact thing you are about to ship as true/done ("AUM dropped 12% because the scheme ended").
+2. **EXTRACT** - break it into the specific checkable sub-claims (the number, the grain, the freshness, the causal link, the completeness).
+3. **DOUBT** - for EACH sub-claim, switch to a fresh-context skeptic and try to BREAK it: what would make this wrong? what did I assume? a confound, a stale source, a miscount, a cherry-picked window, a missing cohort? Default to "doubted" when you cannot refute the doubt.
+4. **RECONCILE** - keep what survives; FIX or DOWNGRADE what does not (e.g. "X caused Y" -> "X correlates with Y; causation unverified"); flag the open items.
+5. **STOP** - bounded to <=3 doubt cycles; converge or escalate. Do not loop forever.
+
+**Anti "doubt theater":** a pass that rubber-stamps every claim is itself a failure. Each sub-claim needs a
+concrete refutation ATTEMPT, not a nod. If a complex claim survives with nothing found, that is suspicious -
+doubt harder or get a second pass. In review mode this is Sub-mode B's adversarial core; in deliver mode it
+runs at Gate 7; for a single number it is one quick CLAIM->DOUBT->RECONCILE.
+
 ## Validator
 `python scripts/validators/anti_rationalization_check.py <plan-or-task-list.md>` flags a task missing a
 verify check, an irreversible action without a STOP marker, or a red-flag phrase in agent-authored prose.

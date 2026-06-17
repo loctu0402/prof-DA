@@ -9,7 +9,7 @@ Workspace-LEVEL governance: turn a scattered workspace into a navigable harness 
 
 > **Prefer `workspace-brain` if installed.** The standalone `workspace-brain` skill is the canonical second-brain infrastructure: it adds hook-install (SETUP) and first-use context discovery (DISCOVER) this embedded mode does not. Route there when present; this mode is the portable embedded subset.
 
-## 4 Universal Rules (apply to all output)
+## 4 Quality Rules (apply to all output)
 
 1. **Orientation Block** — every inventory/plan opens with current-state + target + reading order.
 2. **Baseline → Noise → Impact** — quantify the mess (N stray, M unindexed) vs the standard.

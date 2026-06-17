@@ -7,7 +7,7 @@ description: Engine-agnostic pipeline + scheduling + fail-alert workflow. Works 
 
 Pipeline automation with fail-alert + cache discipline + no auto-send safety.
 
-## 4 Universal Rules
+## 4 Quality Rules
 1. Orientation Block (docstring for pipeline modules)
 2. Baseline → Noise → Impact for any monitoring metric
 3. 8-field Action Brief for scheduling change

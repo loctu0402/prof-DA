@@ -7,7 +7,7 @@ description: Front-of-workflow planning mode — turn a vague stakeholder ask in
 
 The front of the DA workflow. Translate a vague stakeholder ask into a locked plan with metrics + data strategy + next-mode routing.
 
-## 4 Universal Rules (apply to all output)
+## 4 Quality Rules (apply to all output)
 
 1. **Orientation Block** — PLANNING.md opens with SCQR.
 2. **Baseline → Noise → Impact Ladder** — metric contract MUST specify comparability baseline.

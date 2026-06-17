@@ -242,7 +242,7 @@ Once mode is selected:
 
 **Delivery lifecycle + execution discipline (v3.17 — new):**
 - Lean Spec Delivery lifecycle (7-phase DISCOVER → MODEL → SPECIFY → REVIEW → DELIVER → VALIDATE → LEARN mapped to modes) → `references/delivery-lifecycle.md`
-- Execution discipline (anti-rationalization table + verify-don't-assume + scope discipline) → `references/execution-discipline.md`
+- Execution discipline (anti-rationalization table + verify-don't-assume + scope + doubt pass) → `references/execution-discipline.md`
 - Evidence-based done (the proof gate: evidence ladder + Presence-proof + built-but-unrun trap) → `references/evidence-based-done.md`
 - Build-auto (the deliver-mode 7-gate execution loop) → `references/build-auto.md`
 - Recurring-report product blueprint (end-to-end: ideation → data → report → send → schedule, proposed by frame) → `references/recurring-report-blueprint.md`
