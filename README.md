@@ -7,7 +7,7 @@
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
-`v3.19.0` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.19.1` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## The whole system on one page
 
@@ -53,16 +53,7 @@ Why it matters: this is the direct answer to the blog's three open problems. Gro
 
 ### 3. The enforcement layer: a rule-governed, PM-grade work environment
 
-The hardest unsolved problem is the plausible wrong answer, and an ordinary agent has no defense: it answers from a blank context, calls it done, and moves on. prof-DA replaces that with a **rule-governed environment that runs every task the way a project manager would** - with a spec, a definition of ready and of done, acceptance criteria, durable work-in-progress state, and a reconcile pass before anything is called finished. This per-task discipline, not just the report rules, is the layer a vanilla LLM does not have. What binds **every** task:
-
-- **A per-task contract, injected, not optional.** Before work starts, each ask carries a **Definition of Ready** (inputs and access available, scope explicit, ambiguity surfaced), a **Definition of Done**, and **Acceptance Criteria**, scaled to the Quick / Standard / Deep depth you pick (and at Deep an Epic -> Feature -> Story + RAID breakdown). A heavy request is self-chunked, delegated under depth-1 walls, then re-integrated by one accountable writer.
-- **Layered specs + a work cache.** Intent is pinned as a just-enough spec (a frame charter, a metric contract, a section contract) the build is verified against, and work-done / work-in-progress is cached to disk (durable receipts + an append-only requirements ledger) so a long, compacted session never silently drops an ask.
-- **5 universal rules** on the deliverable (orientation, baseline-noise-impact, action brief, why-explanation, all behind a Detail-Level gate) + **19 audited statistics scripts**, so numbers are computed, never eyeballed.
-- **Verify, don't assume, then doubt, then reconcile.** A task is not done until proven: an evidence ladder (a run output, a rendered artifact on disk, a corrected real number, never "seems right") plus an anti-rationalization checklist that blocks the excuses an agent uses to skip a hard step, plus a **doubt pass** before any high-stakes claim ships, an adversarial self-review that actively tries to DISPROVE the result (CLAIM -> EXTRACT -> DOUBT -> RECONCILE, bias-to-disprove, no rubber-stamp) rather than confirm it. An independent pass then diffs the delivered work against the captured asks (MET / PARTIAL / MISSED) before "done" is allowed.
-- **Chunked, reversible delivery.** A multi-step build runs as 1 task = 1 commit + a per-task verify gate, stopping on the first failure or any irreversible step (a push, a send, a schema cutover).
-- **Continuous staleness control.** When one asset changes, a staleness-trace re-syncs every dependent (doc, plan, AC/DoD, output); freshness governance flags stale data before it is trusted.
-
-Hooks make all of this non-skippable: a per-prompt pass injects the contract, a Stop-hook blocks a turn from ending until the deliverable passes its gate and the asks are reconciled, and a learning loop turns each correction you give into a permanent rule. A wrong-but-pretty answer has to survive every one of them. Detail in [What it enforces](#what-it-enforces).
+The plausible-but-wrong answer is the hardest problem, and an ordinary agent has no defense: it answers from a blank context, calls it done, and moves on. prof-DA runs **every task the way a project manager would** - a per-task DoR / DoD / AC contract (injected, not optional, depth-scaled), a just-enough spec with a durable work cache so a compacted session never drops an ask, the 5 universal rules + 19 audited scripts on the deliverable, and a verify -> doubt -> reconcile gate before "done" (an evidence ladder + an anti-rationalization checklist + an adversarial doubt pass + an independent MET / PARTIAL / MISSED reconcile). Multi-step builds run 1 task = 1 commit, stopping on the first failure or irreversible step. Hooks make it non-skippable; prof-DA ships its own gates and consumes the `workspace-brain` governance layer for the rest. Full detail: **[What it enforces](#what-it-enforces)**.
 
 ## Why not just vanilla Claude Code?
 
@@ -88,18 +79,10 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.19.0 should appear
+/plugin list      # prof-DA 3.19.1 should appear
 ```
 
-Both steps are required. If Step 2 returns `Marketplace "loctu-marketplace" not found`, Step 1 was skipped.
-
-```bash
-/plugin update prof-DA@loctu-marketplace        # update
-/plugin uninstall prof-DA                        # remove the plugin
-/plugin marketplace remove loctu-marketplace     # optional: drop the registry too
-```
-
-Upgrading from the old `prof-data-analyst` package (v3.3 or earlier)? Uninstall it first, then install `prof-DA`; the namespace and repo were both renamed. Details in [CHANGELOG.md](CHANGELOG.md).
+Both steps are required (if Step 2 says `Marketplace ... not found`, Step 1 was skipped). Update with `/plugin update prof-DA@loctu-marketplace`, uninstall with `/plugin uninstall prof-DA`. Upgrading from the old `prof-data-analyst` package (v3.3 or earlier)? Uninstall it first - the namespace and repo were renamed ([CHANGELOG.md](CHANGELOG.md)).
 
 ## First run
 
@@ -119,54 +102,22 @@ prof-DA detects the request, confirms intent and a detail level (Quick / Standar
 
 ## The 12 modes, in two groups
 
-The modes split into two layers. **Execution modes** run the analysis itself, left to right along the six-phase lifecycle (ask, prepare, process, analyze, share, act). **Governance modes** are cross-cutting: invoke them any time to enforce the binding rules and review-discipline checks, fix the work, finalize it to a contract, and systematize the whole workspace and work process into a second brain. A non-technical user never learns these names: they ask in plain language and prof-DA routes, confirms intent, and runs the right one.
+Two layers. **Execution modes** run the analysis along the six-phase lifecycle; **Governance modes** are cross-cutting (enforce the rules + review-discipline, fix, finalize to a contract, systematize the workspace into a second brain). A non-technical user never learns the names: they ask in plain language and prof-DA routes.
 
-### Execution modes, the 6-phase analysis lifecycle
+- **Execution (the 6-phase pipeline):** `frame` (ask: scope + metric contract) -> `model` + `query` (prepare: schema design + NL-to-SQL) -> `process` (process: clean / EDA / predictive modeling) -> `insight` (analyze: diagnostic + causal method) -> `report` (share: stakeholder deliverable from a locked template) -> `automate` (act: scheduled pipeline + fail-alerts).
+- **Governance (run any time):** `deliver` (gated build-auto loop), `submit` (recurring-report acceptance gate), `review` (5-tier audit + staleness re-sync), `fix` (surgical debug), `workspace` (scaffold + index + consolidate the second brain).
 
-Phase to mode: **Ask** = frame | **Prepare** = model + query | **Process** = process | **Analyze** = insight | **Share** = report | **Act** = automate.
-
-| Phase | Mode | What it does | Sample natural triggers |
-|-------|------|--------------|-------------------------|
-| **Ask** | **frame** | Scope a vague ask into a locked plan: business understanding, metric contract, data plan. Outputs `PLANNING.md`. | "không biết bắt đầu", "stakeholder muốn", "metric nào phù hợp" |
-| **Prepare** | **model** | Design the warehouse: Kimball star, dbt staging-to-marts, Medallion, or DuckDB layered, with table contracts. | "design DWH", "build mart", "dbt project" |
-| **Prepare** | **query** | Natural language to SQL with schema discovery, a cost-safety check, and a logic card. | "cho mình số liệu", "lấy data", "breakdown theo Y", "compare X vs Y" |
-| **Process** | **process** | Raw to staged to cleaned to mart, with 6-step EDA and a summary per phase; the home of predictive modeling. | "EDA", "data quality", "feature engineering", "forecast" |
-| **Analyze** | **insight** | Hypothesis to diagnostic to recommendation: matches the right causal method and guards against bias. | "tại sao X giảm", "root cause", "vì sao", "phân tích sâu" |
-| **Share** | **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. | "build báo cáo", "làm dashboard", "làm slide", "convert sang PPTX" |
-| **Act** | **automate** | Operationalize it: a scheduled pipeline with fail-alerts, cache discipline, and backfill. | "automation", "schedule job", "chạy hàng ngày", "alert khi lỗi" |
-
-### Governance modes, review and finalize and systematize
-
-Cross-cutting; run any time, on any work (the binding-rules, review-discipline, and workspace-systematization layer).
-
-| Mode | What it does | Sample natural triggers |
-|------|--------------|-------------------------|
-| **deliver** | Run an approved build as a gated autonomous loop (build-auto): spec-or-STOP, clean baseline, single batch approval, per-task RED to GREEN to build to commit + verify gate, stop-on-error/risk, evidence summary. | "build it autonomously", "chunk and commit per task", "/build auto" |
-| **submit** | Final acceptance gate before a recurring report goes to a team's submission system: completeness audit vs the section contract, route gaps to the builder, per-section quality_check, emit a ready-to-paste payload. | "submit report", "finalize trước khi nộp", "đã đủ mục chưa" |
-| **review** | Audit or re-sync. 5 sub-modes: A0 brief snapshot, A delivery refine, B full project audit, C stakeholder questioning, D staleness trace (after a change, sync every dependent asset). | "review report", "OK chưa", "audit project", "sửa xong sync giúp" |
-| **fix** | Surgically debug a pipeline or report, with a patch-ceiling escalation rule. | "fix pipeline", "report sai", "wrong number", "pipeline fail" |
-| **workspace** | Scaffold, organize, and index a whole workspace into the second brain, then keep it consolidated and current. Guide-first for non-technical users; secrets-first, safe `git mv` on a branch. | "dọn workspace", "organize my workspace", "rebuild index" |
-
-Each mode auto-fires on phrases like these, so a command is rarely needed; the full trigger lists live in each mode's `SKILL.md`. For deeper structure, `frame` runs 4 planning gates and `model` offers 4 warehouse patterns: see [mode-frame](skills/da/references/mode-frame.md) and [mode-model](skills/da/references/mode-model.md).
+The full per-mode table, the auto-fire trigger phrases, and each mode's sub-flows (`frame`'s 4 planning gates, `model`'s 4 warehouse patterns, the 5 `review` tiers) are in **[GUIDE section 3](docs/GUIDE.md)**.
 
 ## What it enforces
 
-Every deliverable passes 5 universal rules (4 quality rules plus a Detail-Level entry gate), and every task is run under a per-task governance contract. This is what keeps output consistent and rigorous across sessions and across whoever is driving, the way a project manager keeps a team to standard.
+Every deliverable passes **5 universal rules** (4 quality - orientation block, baseline-noise-impact, 5W1H action brief, why-explanation - behind a Detail-Level Quick/Standard/Deep gate), and every task runs under a **per-task governance contract** (DoR / DoD / AC, scaled by depth; Epic -> Feature -> Story + RAID at Deep) - the PM-grade discipline a blank-context agent lacks. Intent is pinned in a just-enough spec; work-in-progress is cached to disk so nothing drops across a compaction.
 
-1. **Orientation block:** every deliverable opens with a short framing (SCQR, a 3-line intro, or a module docstring) so the reader gets the point before the detail.
-2. **Baseline, noise, impact:** every number is stated against a baseline, checked for whether it is real or noise, then given an impact verdict. No bare figures.
-3. **5W1H action brief:** every recommendation fills 8 fields (question, goal, what, why, who, when, where, how) so it is actionable, not vague.
-4. **Why-explanation:** every action, method, threshold, and tool choice carries an inline reason (causal, empirical, comparative, theoretical, or operational). A circular "X because X" is rejected.
+A task is "done" only on **evidence** (a run, a rendered artifact on disk, a corrected number, never "seems right"), defended by an anti-rationalization checklist and a **doubt pass** (an adversarial self-review that tries to DISPROVE the result, not confirm it); then an **independent reconcile** diffs delivered work against the captured asks (MET / PARTIAL / MISSED). Multi-step builds run 1 task = 1 commit with a per-task verify gate, stopping on the first failure or irreversible step; when one asset changes, a staleness-trace re-syncs its dependents.
 
-The **Detail-Level Gate** sits in front of all four: every mode confirms Quick / Standard / Deep before running. Depth is the lever you control. The plugin deliberately does not surface time estimates, because LLMs routinely mis-estimate duration.
+**Hooks make all of this non-optional, not advisory:** a per-prompt pass injects the contract; Stop-hooks block a turn until the deliverable passes its consistency gate, the asks reconcile, and a claimed artifact is proven present; index-first retrieval + an llm-wiki size budget + a curator consolidation pass + subagent depth-1 walls keep the workspace healthy; a learning loop turns each correction into a permanent rule. prof-DA **ships** its own gates (report-consistency Stop-gate, intent dispatch + auto-fire, learning capture) and **consumes** the standalone `workspace-brain` governance layer for the rest, with in-plugin copies of the discipline so the behavior holds even when run alone.
 
-**The per-task governance contract.** Beyond the deliverable's shape, prof-DA runs each task with project-manager discipline, the cutting-edge layer a blank-context agent lacks. Every ask is captured with a **Definition of Ready** (can we start: inputs, access, scope, surfaced ambiguity), a **Definition of Done**, and **Acceptance Criteria**, scaled to the chosen depth (Epic -> Feature -> Story + RAID at Deep). Intent is pinned in a just-enough spec; work-done and work-in-progress are cached to disk (durable receipts + an append-only requirements ledger) so nothing is dropped across a compaction. A task is "done" only on evidence (a run, a rendered artifact on disk, a corrected number, never "seems right"), and an independent reconcile pass diffs the delivered work against the captured asks (MET / PARTIAL / MISSED) first. Multi-step builds run 1 task = 1 commit with a per-task verify gate and stop on the first failure or irreversible step; when one asset changes, a staleness-trace re-syncs its dependents. See `execution-discipline`, `evidence-based-done`, `build-auto`, and `delivery-lifecycle` in the references.
-
-On top of the rules sit a 5-criteria quality check and a 5-gate quality pipeline (scope -> data -> analysis -> visuals -> review). Stakeholder visuals follow Storytelling-with-Data discipline (action titles, grey plus one accent, no pie or 3D): see [storytelling-with-data](skills/da/references/storytelling-with-data.md).
-
-For recurring, structured reports (weekly / bi-weekly / monthly), an optional **section contract** pins the required sections and grades each against its own definition-of-done; the `submit` mode runs that gate and emits the submission payload before the report leaves for the team manager or system. The shipped <product> bi-weekly profile is the worked instantiation. See [recurring-report-contract](skills/da/references/recurring-report-contract.md).
-
-Hooks make these non-optional rather than advisory. A per-prompt pass **injects the per-task contract** (DoR / DoD / AC, scaled by depth) so it behaves like a system prompt the agent cannot skip. A **Stop-hook** blocks a turn from ending until the deliverable passes its consistency gate and the captured asks are reconciled (the model cannot quietly skip validation or leave an ask half-done). A **learning loop** captures your corrections at session end and updates the rule the agent reads next time, so a repeated mistake becomes a permanent fix instead of a recurring one. Some of these forcing-functions live in the host workspace's hook layer; prof-DA wires into them and ships its own in-plugin copies of the discipline so the behavior holds even standalone.
+Full detail (the 5 rules, the contract, the loops, the hooks): **[GUIDE sections 4-5](docs/GUIDE.md)** + the `execution-discipline` / `evidence-based-done` / `build-auto` references. For recurring reports, an optional **section contract** grades each section against its definition-of-done (`submit` mode); stakeholder visuals follow Storytelling-with-Data discipline.
 
 ## What is inside
 
@@ -209,7 +160,7 @@ The intent is bigger than one plugin. prof-DA is meant as a **reference blueprin
 
 ## Versioning
 
-Current version `3.19.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.19.1`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 

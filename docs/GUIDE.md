@@ -90,9 +90,10 @@ Every deliverable passes **4 quality rules** plus an entry gate:
 
 In front of all four sits the **Detail-Level Gate** (Quick / Standard / Deep) — depth is the lever you control.
 
-Two mechanisms make these non-optional rather than advisory:
+Three mechanisms make these non-optional rather than advisory:
 
-- **Stop-hook gate** — a `report`-mode turn cannot end until the deliverable passes the consistency audit. The model cannot quietly skip validation.
+- **Stop-hook gate** — a `report`-mode turn cannot end until the deliverable passes the consistency audit; and the workspace-brain `evidence_done_gate` blocks a turn until a claimed artifact is proven present. The model cannot quietly skip validation.
+- **Doubt pass** — before a high-stakes claim ships, an adversarial self-review (CLAIM -> EXTRACT -> DOUBT -> RECONCILE, bias-to-disprove, no rubber-stamp) actively tries to break the result. It is the negative complement to the positive evidence ladder + the anti-rationalization checklist (`references/execution-discipline.md`). Runs at deliver Gate 7 and is review Sub-mode B at project scale.
 - **Learning loop** — your corrections are captured at session end and become the rule the agent reads next time, so a repeated mistake becomes a permanent fix.
 
 Plus: **19 audited stdlib scripts** (statistics always run in code, never guessed inline), **14 cited causal-method specs** (DiD, event study, RDD, synthetic control, PSM, IV, bootstrap CI, robustness, sensitivity, falsification, multiple testing, post-hoc power, cross-validation, pre-registration), the **12 locked report archetypes (A1-A12)** every deliverable forks 1:1 (never freestyles), and Storytelling-with-Data visual discipline.
@@ -111,6 +112,8 @@ Scaffold + organize + index is a one-time setup. A workspace that is governed bu
 
 4. **Subagent hard walls.** A spawned subagent must NOT write shared memory, push git / send external messages / publish, or spawn further subagents. The parent centralizes stateful writes after QC and is accountable for what ships. Give the child READ + its one narrow task only.
 
+5. **Index-first retrieval.** Navigation is by map, not by scan: a session-start hook loads `.index/_root.md` first, a guard nudges checking the BookRAG index before any brute-force grep/glob (progressive disclosure), a write-time hook flags the index stale after structural changes, and a Stop-time check blocks on a stale index. Plus the scaffold pre-check guard that nudges classify-type + grep-duplicate before a new project folder is created.
+
 There is also an **opt-in post-session self-review** (Hermes loop 3, adapted): after a session, a restricted background pass can extract durable preferences/techniques into memory. It is **default-off** because it spends tokens every session; the user turns it on explicitly. (Lives in `workspace-brain`, not this plugin.)
 
 > Why this framing matters: studying Hermes clarified that **Claude Code already has the primitives** (subagents, compaction, scheduled tasks, skill files). What it lacked was the **wiring** — triggers that fire those primitives automatically to feed each other. These loops are that wiring, applied with safety invariants (never-delete, budget-gated writes, blocked-tools walls, fail-open).
@@ -121,7 +124,7 @@ There is also an **opt-in post-session self-review** (Hermes loop 3, adapted): a
 
 Three stacked layers make prof-DA fire on natural prompts (added v3.14):
 
-1. **SessionStart dispatch** — a standing protocol injected each session: any DA-shaped request invokes `prof-DA:da` before responding, with an 11-mode map and a rationalization red-flag list.
+1. **SessionStart dispatch** — a standing protocol injected each session: any DA-shaped request invokes `prof-DA:da` before responding, with a 12-mode map and a rationalization red-flag list.
 2. **Per-prompt intent detector** — a deterministic keyword floor under the probabilistic matching: it folds the prompt to diacritic-free lowercase ("dự đoán" == "du doan"), scans mode-grouped signals, and nudges with the matched keywords + likely mode. Silent on slash commands and non-DA prompts; fail-open.
 3. **Mode descriptions** — natural VN + EN trigger phrases per mode.
 

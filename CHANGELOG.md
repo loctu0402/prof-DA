@@ -4,6 +4,21 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.19.1] - 2026-06-17
+
+Documentation completeness + a dispatch fix. A full audit (every SVG text node + README + GUIDE vs the real hook set) found the governance layer under-represented and the SVG governance box over-claiming.
+
+### Fixed
+- **`hooks/session_start_dispatch.py`** mode map listed 11 modes (omitted `deliver`); added it so the dispatch protocol routes all 12.
+
+### Changed
+- **docs/prof-da-architecture.svg** - the "Governance enforcement (hooks)" box now splits **prof-DA ships** (intent dispatch + auto-fire, report-consistency Stop-gate, learning capture) from **consumes the workspace-brain governance layer**, and adds the previously-undrawn mechanisms: evidence-done gate, scaffold pre-check, index-first read + llm-wiki atom-size budget, curator consolidation + memory-store nudge. The "vs vanilla" box gains the governance-contract contrast + the doubt pass; loop-4 names the doubt pass. Version stamps -> v3.19.1.
+- **README.md** - shortened ~55 lines: "What it enforces", the 12-modes section, the enforcement subsection of "What makes different", and Install now summarize + link to GUIDE instead of duplicating it; the enforcement summary now names the full hook set (index-first, atom-size budget, curator, evidence gate, doubt pass) and is honest that prof-DA ships some gates and consumes the workspace-brain layer.
+- **docs/GUIDE.md** - section 4 adds the doubt pass + evidence-done gate; section 5 adds the index-first retrieval loop (session-start load + progressive-disclosure guard + write-time stale-flag + Stop stale-block + scaffold pre-check); section 6 "11-mode map" -> 12.
+
+### Why
+The SVG/README were drawn before the governance hooks (governance inject, evidence gate, scaffold pre-check, curator, index-first, atom-size budget) and the doubt pass landed, so they advertised ~4 of ~12 enforcement mechanisms and credited workspace-brain hooks as prof-DA's own. This release makes the docs match the real system, honest about the prof-DA-vs-workspace-brain split, and trims the README to a map that links the GUIDE for detail.
+
 ## [3.19.0] - 2026-06-17
 
 Adopts the **doubt pass** (the adversarial-review device from addyosmani/agent-skills' doubt-driven-development) and reconciles the universal-rule vocabulary.
