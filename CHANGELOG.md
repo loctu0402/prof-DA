@@ -4,6 +4,15 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.19.3] - 2026-06-19
+
+Reconcile the `report` mode's template references to the locked **A1-A12 archetype library**. The decision tree + catalog pointers used stale example names (`daily-email/`, `app-dashboard/`, `gchat-webhook/`, `_catalog.md`, `_index.md`) that did not match the canonical A1-A12 folders + `README.md` catalog the report design system actually uses - the README already framed it correctly, only `mode-report.md` had drifted.
+
+### Changed
+- **`skills/da/references/mode-report.md`** - decision tree now points at the A1-A12 archetypes (`A1-deep-dive` / `A2-ops-dashboard` / `A3-editorial-paper` / `A4-daily-email` / `A5-gchat-card` / `A7-exec-onepager` / `A8-idea-verification` / `A9-training` / `A10-data-quality` / `A11-projection` / `A12-slide-deck-pptx`); catalog reference `_catalog.md` -> `README.md` (+ names the `_contract/` design-DNA home); per-archetype index `_index.md` -> `DESIGN-SPEC.md`; stabilize-to-template writes `README.md` + `DESIGN-SPEC.md` and adds a catalog row. `<your-workspace>/` placeholders kept (org-neutral). No brand leak (A1-A12 + archetype type-names are generic).
+- **`skills/da/references/recurring-report-blueprint.md`** - de-branded the volatile / net-difference-metric hard rule: removed an internal product codename + a private workspace memory path from the worked example and a locale-specific currency unit. The rule itself (verdict net-difference metrics on z-score, not %gap; model the components) is unchanged and now fully org-neutral.
+- Version stamps -> v3.19.3 (plugin.json, marketplace.json, README x3, SVG x2).
+
 ## [3.19.2] - 2026-06-17
 
 Workspace mode now surfaces a SETUP scope choice. Installing the governance + maintenance hooks writes registrations into a Claude Code `settings.json` - so the workspace mode owns a hook-install step, and it must ask the user WHERE to install rather than silently picking a scope.

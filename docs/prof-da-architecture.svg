@@ -32,7 +32,7 @@
   <text x="72" y="64" class="h1">prof-DA: The Governed Analyst Loop, 6 Nested Loops</text>
   <text x="72" y="92" class="t">From per-request to cross-session. Every loop feeds the next. Any driver, any engine, same senior analyst.</text>
   <rect x="1320" y="38" width="200" height="34" rx="17" fill="#131a26" stroke="#d82d8b"/>
-  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.19.2 - MIT</text>
+  <text x="1420" y="60" text-anchor="middle" class="h3" fill="#d82d8b">v3.19.3 - MIT</text>
 
   <!-- ===================== main frame ===================== -->
   <rect x="40" y="120" width="1480" height="1030" rx="14" fill="#0f141f" stroke="#1d2940"/>
@@ -242,5 +242,5 @@
   <text x="1074" y="1851" class="ts">a command is rarely needed</text>
 
   <!-- footer -->
-  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.19.2 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
+  <text x="780" y="1975" text-anchor="middle" class="ts">prof-DA v3.19.3 - method by Loc Tu, 2026 - MIT - engine-agnostic - poster idiom follows the Hermes Agent (NousResearch) architecture diagram</text>
 </svg>
