@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>[ Dataset Name ] — Data-Quality Profile</title>
+<!--
+  ============================================================================
+  A10 · DATA-QUALITY / EDA PROFILE — org-neutral forkable skeleton.
+  Forked from the shared theme-token contract. Palette = var(--token) only.
+  No inline brand hex anywhere in this file.
+  Signature components:
+    - Dataset overview strip (§01)
+    - Missingness heatmap — CSS-grid, columns x time-buckets (§02)
+    - Per-column profile table with inline SVG sparklines (§03)
+    - Severity-sorted issues table (§04)
+    - Rule-based flags (§05)
+    - Fit-for-analysis verdict (§06)
+  No JS required. Inline SVG sparklines. Prints clean.
+  ============================================================================
+-->
+<style>
+/* ===================== THEME TOKEN BLOCK (swap surface — replace values only) ===================== */
+:root,
+html[data-theme="slate"] {
+  --bg:#f4f5f7; --surface:#ffffff; --surface-alt:#f7f8fa; --surface-sunk:#eceef1;
+  --ink:#1d2126; --ink-2:#434a52; --ink-3:#79818b; --ink-4:#a6adb6;
+  --border:#e2e5e9; --border-strong:#cdd2d8; --grid:#edeff2;
+  --primary:#3a5a78; --primary-deep:#28425a; --primary-soft:#e2e9f0;
+  --accent:#2f6f8f; --accent-soft:#dceaf0;
+  --success:#2e6442; --success-soft:#dbe5dc;
+  --warn:#9a6a1a;    --warn-soft:#efe6cb;
+  --danger:#a8362c;  --danger-soft:#f0dad5;
+  --neutral:#74706a; --neutral-soft:#e7e3db;
+  --shadow-sm:0 1px 3px rgba(20,24,30,0.05),0 1px 2px rgba(20,24,30,0.03);
+}
+
+/* ===================== BASE ===================== */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);
+  font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;
+}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+.serif{font-family:Georgia,"Times New Roman",serif}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 52px 80px}
+
+/* placeholder */
+.ph{font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;
+  background:var(--accent-soft);border-bottom:1px dotted var(--accent);
+  padding:0 2px;border-radius:1px;color:var(--ink)}
+.ph.txt{font-family:inherit;color:var(--ink-2)}
+
+/* masthead */
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:12px;border-bottom:1.5px solid var(--ink);margin-bottom:18px}
+.masthead .brand{display:flex;align-items:baseline;gap:10px}
+.masthead .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translateY(-2px)}
+.masthead .nm{font-weight:600;font-size:19px;letter-spacing:-0.01em}
+.masthead .nm .em{font-style:italic;color:var(--ink-3);font-weight:400}
+.masthead .badge{font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-2);background:var(--surface);border:1px solid var(--border);padding:3px 8px;border-radius:3px;font-weight:600}
+.masthead .meta{text-align:right;font-size:11px;color:var(--ink-3);line-height:1.7}
+.masthead .meta .date{font-size:14px;color:var(--ink);font-weight:500}
+
+.title{font-size:22px;font-weight:600;letter-spacing:-0.015em;line-height:1.25;margin:0 0 20px;color:var(--ink)}
+.subhead{font-size:13px;color:var(--ink-2);max-width:74ch;margin:0 0 28px;line-height:1.6}
+.subhead b{color:var(--ink);font-weight:600}
+
+/* section heads */
+.sechead{margin:38px 0 14px;display:flex;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sechead .ix{font-family:ui-monospace,monospace;font-size:10px;color:var(--accent);letter-spacing:.14em;font-weight:600}
+.sechead h2{font-weight:600;font-size:20px;letter-spacing:-0.015em;margin:0;color:var(--primary)}
+.sechead h2 .em{font-style:italic;color:var(--ink-3);font-weight:400}
+.note{font-size:12px;color:var(--ink-3);line-height:1.6;margin:0 0 14px;max-width:78ch}
+.note b{color:var(--ink-2);font-weight:600}
+
+/* ===================== §01 OVERVIEW STRIP ===================== */
+.ov-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.ov{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:13px 15px;box-shadow:var(--shadow-sm)}
+.ov .k{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:5px}
+.ov .v{font-family:ui-monospace,monospace;font-size:18px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.ov .v.sm{font-size:13px}
+
+/* ===================== §02 MISSINGNESS HEATMAP ===================== */
+.missmap{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;box-shadow:var(--shadow-sm);overflow-x:auto}
+.missmap .legend{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--ink-3);margin-bottom:12px;flex-wrap:wrap}
+.missmap .legend .sc{display:flex;gap:2px;align-items:center}
+.missmap .legend .sc span{width:16px;height:11px;border-radius:1px}
+.mm-grid{display:grid;grid-template-columns:130px 1fr;gap:6px 10px;align-items:center;min-width:600px}
+.mm-grid .lbl{font-family:ui-monospace,monospace;font-size:11px;color:var(--ink-2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mm-cells{display:grid;grid-template-columns:repeat(20,1fr);gap:2px}
+.mm-cells span{height:14px;border-radius:1px;display:block}
+/* missingness tint levels — driven by var(--token) opacity steps */
+.mm-0{background:var(--success-soft)}
+.mm-1{background:color-mix(in srgb,var(--warn-soft) 50%,var(--success-soft))}
+.mm-2{background:var(--warn-soft)}
+.mm-3{background:color-mix(in srgb,var(--danger-soft) 60%,var(--warn-soft))}
+.mm-4{background:var(--danger-soft)}
+.mm-5{background:var(--danger)}
+
+/* ===================== §03 PER-COLUMN PROFILE TABLE ===================== */
+.prof{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.prof .head,.prof .prow{
+  display:grid;
+  grid-template-columns:22px 1.5fr 90px 90px 110px 110px 90px 1fr;
+  gap:12px;align-items:center
+}
+.prof .head{padding:9px 18px;background:var(--surface-alt);border-bottom:1px solid var(--border);
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.prof .head .r{text-align:right}
+.prof .prow{padding:11px 18px;border-bottom:1px solid var(--border);position:relative}
+.prof .prow:last-child{border-bottom:none}
+/* severity left stripe */
+.prof .prow .stripe{position:absolute;left:0;top:0;bottom:0;width:3px}
+.prof .prow .stripe.red{background:var(--danger)}
+.prof .prow .stripe.amber{background:var(--warn)}
+.prof .prow .stripe.green{background:var(--success)}
+.prof .prow .stripe.neutral{background:var(--border-strong)}
+/* cell styles */
+.prof .prow .col{font-family:Georgia,"Times New Roman",serif;font-size:14px;font-weight:500;color:var(--ink)}
+.prof .prow .type{font-family:ui-monospace,monospace;font-size:10.5px;color:var(--ink-3)}
+.prof .prow .num{font-family:ui-monospace,monospace;font-size:12px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.prof .prow .num.warn{color:var(--warn)}
+.prof .prow .num.red{color:var(--danger)}
+.prof .prow .num.ok{color:var(--success)}
+.prof .prow .spark svg{width:100%;height:26px;display:block}
+.prof .prow .flags{display:flex;gap:4px;flex-wrap:wrap}
+.fchip{font-size:9px;font-weight:600;letter-spacing:.04em;padding:2px 6px;border-radius:3px;white-space:nowrap}
+.fchip.red{background:var(--danger-soft);color:var(--danger)}
+.fchip.amber{background:var(--warn-soft);color:var(--warn)}
+.fchip.green{background:var(--success-soft);color:var(--success)}
+.fchip.neutral{background:var(--neutral-soft);color:var(--neutral)}
+
+/* ===================== §04 ISSUES TABLE (severity-sorted) ===================== */
+.issues{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.issues .head,.issues .irow{display:grid;grid-template-columns:120px 1.4fr 160px 1.4fr;gap:14px;align-items:start}
+.issues .head{padding:9px 18px;background:var(--surface-alt);border-bottom:1px solid var(--border);
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.issues .irow{padding:12px 18px;border-bottom:1px solid var(--border)}
+.issues .irow:last-child{border-bottom:none}
+.issues .sev{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;
+  letter-spacing:.04em;padding:3px 8px;border-radius:3px;text-transform:uppercase}
+.issues .sev.critical{background:var(--danger-soft);color:var(--danger)}
+.issues .sev.warn{background:var(--warn-soft);color:var(--warn)}
+.issues .sev.info{background:var(--neutral-soft);color:var(--neutral)}
+.issues .iss{font-size:13px;color:var(--ink);font-weight:500;line-height:1.4}
+.issues .cols{font-family:ui-monospace,monospace;font-size:11px;color:var(--ink-2);line-height:1.5}
+.issues .fix{font-size:12px;color:var(--ink-2);font-style:italic;line-height:1.5}
+
+/* ===================== §05 RULE FLAGS ===================== */
+.flags-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rule{display:flex;gap:10px;align-items:flex-start;background:var(--surface);
+  border:1px solid var(--border);border-radius:6px;padding:12px 15px;box-shadow:var(--shadow-sm)}
+.rule .ic{flex-shrink:0;font-size:14px;line-height:1.6}
+.rule .b .rn{font-size:12.5px;font-weight:600;color:var(--ink)}
+.rule .b .rw{font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.45}
+
+/* ===================== §06 VERDICT ===================== */
+.vblock{display:flex;align-items:flex-start;gap:20px;background:var(--surface);
+  border:1px solid var(--border);border-radius:6px;padding:20px 24px;box-shadow:var(--shadow-sm)}
+.vblock .vchip{font-size:18px;font-weight:600;padding:10px 20px;border-radius:5px;white-space:nowrap;flex-shrink:0}
+.vblock .vchip.ready{background:var(--success-soft);color:var(--success)}
+.vblock .vchip.caveat{background:var(--warn-soft);color:var(--warn)}
+.vblock .vchip.blocked{background:var(--danger-soft);color:var(--danger)}
+.vblock .blockers .bl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;margin-bottom:6px}
+.vblock .blockers ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.vblock .blockers li{display:flex;gap:8px;font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.vblock .blockers li::before{content:"\25B8";color:var(--accent);font-weight:700;flex-shrink:0}
+
+/* ===================== FOOTER ===================== */
+.foot{margin-top:40px;padding-top:14px;border-top:2px solid var(--ink);
+  font-family:ui-monospace,monospace;font-size:11px;color:var(--ink-3)}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:900px){
+  .wrap{padding:22px}
+  .ov-grid{grid-template-columns:1fr 1fr}
+  .prof .head,.prof .prow{grid-template-columns:18px 1.4fr 80px 90px;gap:8px}
+  .prof .head .h-card,.prof .head .h-mm,.prof .head .h-spark,
+  .prof .prow .num.card,.prof .prow .spark,.prof .prow .mmcol{display:none}
+  .issues .head,.issues .irow{grid-template-columns:1fr}
+  .flags-list{grid-template-columns:1fr}
+  .vblock{flex-direction:column;align-items:flex-start;gap:14px}
+}
+@media print{
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .wrap{padding:22px}
+  .ov,.missmap,.prof,.issues,.rule,.vblock{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="brand">
+      <span class="dot"></span>
+      <div class="nm"><span class="ph txt" data-bind="ds.name">[ dataset name ]</span> <span class="em">/ data-quality profile</span></div>
+      <span class="badge">EDA · pre-analysis</span>
+    </div>
+    <div class="meta">
+      <div class="date ph" data-bind="run.date">[ run date ]</div>
+      <div>profiled by process mode · prof-DA</div>
+    </div>
+  </div>
+
+  <p class="title">Dataset is <span class="ph txt" data-bind="verdict.label">[ ready / ready-with-caveats / blocked ]</span> for analysis — <span class="ph" data-bind="ds.issue_count">[ N ]</span> issues found.</p>
+  <p class="subhead">This profile covers <b><span class="ph" data-bind="ds.cols">[ N ]</span> columns</b> across <b><span class="ph" data-bind="ds.rows">[ N rows ]</span></b>. Issues are severity-sorted: resolve <b>Critical</b> items before analysis begins; review <b>Warn</b> items for potential bias.</p>
+
+  <!-- §01 OVERVIEW -->
+  <div class="sechead"><span class="ix">§ 01</span><h2>Dataset overview <span class="em">/ grain · scope · source</span></h2></div>
+  <div class="ov-grid">
+    <div class="ov"><div class="k">Row count</div><div class="v"><span class="ph" data-bind="ds.rows">[ N ]</span></div></div>
+    <div class="ov"><div class="k">Column count</div><div class="v"><span class="ph" data-bind="ds.cols">[ N ]</span></div></div>
+    <div class="ov"><div class="k">Grain</div><div class="v sm"><span class="ph txt" data-bind="ds.grain">[ 1 row / entity / period ]</span></div></div>
+    <div class="ov"><div class="k">Date range</div><div class="v sm"><span class="ph" data-bind="ds.date_range">[ start ] — [ end ]</span></div></div>
+    <div class="ov"><div class="k">Source</div><div class="v sm"><span class="ph txt" data-bind="ds.source">[ table or system ]</span></div></div>
+  </div>
+
+  <!-- §02 MISSINGNESS HEATMAP -->
+  <div class="sechead"><span class="ix">§ 02</span><h2>Missingness heatmap <span class="em">/ columns x time-buckets</span></h2></div>
+  <p class="note">Each row = one column. Each cell = one time-bucket (e.g. a week or month). Cell tint = missing % in that bucket. <b>Darker = more missing.</b> Scroll horizontally if the table is wide.</p>
+  <div class="missmap">
+    <div class="legend">
+      Missing %:
+      <span class="sc">
+        <span class="mm-0"></span>
+        <span class="mm-1"></span>
+        <span class="mm-2"></span>
+        <span class="mm-3"></span>
+        <span class="mm-4"></span>
+        <span class="mm-5"></span>
+      </span>
+      0% — 100%
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      Buckets: <span class="ph" data-bind="heatmap.bucket_label">[ weekly / monthly / partition ]</span> &nbsp;
+      Columns: <span class="ph" data-bind="heatmap.n_cols">[ N ]</span>
+    </div>
+    <!-- Heatmap rows: one per column. Cells: one per time-bucket. Tint class = mm-0 ... mm-5 -->
+    <div class="mm-grid">
+
+      <div class="lbl"><span class="ph txt" data-bind="col[0].name">col_1</span></div>
+      <div class="mm-cells">
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-1"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-1"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-1"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span>
+      </div>
+
+      <div class="lbl"><span class="ph txt" data-bind="col[1].name">col_2</span></div>
+      <div class="mm-cells">
+        <span class="mm-1"></span><span class="mm-2"></span><span class="mm-3"></span>
+        <span class="mm-4"></span><span class="mm-5"></span><span class="mm-4"></span>
+        <span class="mm-3"></span><span class="mm-2"></span><span class="mm-2"></span>
+        <span class="mm-1"></span><span class="mm-1"></span><span class="mm-2"></span>
+        <span class="mm-3"></span><span class="mm-4"></span><span class="mm-4"></span>
+        <span class="mm-3"></span><span class="mm-2"></span><span class="mm-1"></span>
+        <span class="mm-1"></span><span class="mm-2"></span>
+      </div>
+
+      <div class="lbl"><span class="ph txt" data-bind="col[2].name">col_3</span></div>
+      <div class="mm-cells">
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-1"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span>
+      </div>
+
+      <div class="lbl"><span class="ph txt" data-bind="col[3].name">col_4</span></div>
+      <div class="mm-cells">
+        <span class="mm-0"></span><span class="mm-1"></span><span class="mm-1"></span>
+        <span class="mm-2"></span><span class="mm-2"></span><span class="mm-1"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-0"></span>
+        <span class="mm-1"></span><span class="mm-2"></span><span class="mm-3"></span>
+        <span class="mm-2"></span><span class="mm-1"></span><span class="mm-0"></span>
+        <span class="mm-0"></span><span class="mm-0"></span><span class="mm-1"></span>
+        <span class="mm-1"></span><span class="mm-0"></span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- §03 PER-COLUMN PROFILE TABLE -->
+  <div class="sechead"><span class="ix">§ 03</span><h2>Per-column profile <span class="em">/ type · null % · cardinality · range · distribution</span></h2></div>
+  <p class="note">Left stripe = worst flag severity for that column. <b>Critical</b> (red) → <b>Warn</b> (amber) → <b>OK</b> (green) → no issue (grey). Sparkline bars are grey; a single accent bar marks the anomaly bucket.</p>
+  <div class="prof">
+    <div class="head">
+      <div></div>
+      <div>Column</div>
+      <div class="r h-mm">Null %</div>
+      <div class="r h-card">Distinct</div>
+      <div class="r">Min / Max</div>
+      <div class="h-spark">Distribution</div>
+      <div>Type</div>
+      <div>Flags</div>
+    </div>
+
+    <!-- Row: critical severity example -->
+    <div class="prow">
+      <span class="stripe red"></span>
+      <div class="col"><span class="ph txt" data-bind="col[1].name">col_2</span></div>
+      <div class="num warn"><span class="ph" data-bind="col[1].null_pct">[ 18.4% ]</span></div>
+      <div class="num card"><span class="ph" data-bind="col[1].distinct">[ 1.2 M ]</span></div>
+      <div class="num"><span class="ph" data-bind="col[1].minmax">[ min / max ]</span></div>
+      <div class="spark">
+        <svg viewBox="0 0 90 26" preserveAspectRatio="none">
+          <rect x="2"  y="14" width="6" height="12" fill="var(--ink-4)"/>
+          <rect x="11" y="8"  width="6" height="18" fill="var(--ink-4)"/>
+          <rect x="20" y="4"  width="6" height="22" fill="var(--ink-4)"/>
+          <rect x="29" y="10" width="6" height="16" fill="var(--ink-4)"/>
+          <rect x="38" y="16" width="6" height="10" fill="var(--ink-4)"/>
+          <rect x="47" y="18" width="6" height="8"  fill="var(--ink-4)"/>
+          <rect x="56" y="20" width="6" height="6"  fill="var(--ink-4)"/>
+          <rect x="65" y="2"  width="6" height="24" fill="var(--accent)"/>
+          <rect x="74" y="22" width="6" height="4"  fill="var(--ink-4)"/>
+        </svg>
+      </div>
+      <div class="type"><span class="ph txt" data-bind="col[1].type">float64</span></div>
+      <div class="flags">
+        <span class="fchip red">sentinel -1</span>
+        <span class="fchip amber">18% null</span>
+      </div>
+    </div>
+
+    <!-- Row: warn severity example -->
+    <div class="prow">
+      <span class="stripe amber"></span>
+      <div class="col"><span class="ph txt" data-bind="col[3].name">col_4</span></div>
+      <div class="num warn"><span class="ph" data-bind="col[3].null_pct">[ 5.1% ]</span></div>
+      <div class="num card"><span class="ph" data-bind="col[3].distinct">[ 3 ]</span></div>
+      <div class="num"><span class="ph" data-bind="col[3].minmax">[ min / max ]</span></div>
+      <div class="spark">
+        <svg viewBox="0 0 90 26" preserveAspectRatio="none">
+          <rect x="2"  y="2"  width="6" height="24" fill="var(--ink-4)"/>
+          <rect x="11" y="20" width="6" height="6"  fill="var(--ink-4)"/>
+          <rect x="20" y="2"  width="6" height="24" fill="var(--accent)"/>
+          <rect x="29" y="20" width="6" height="6"  fill="var(--ink-4)"/>
+          <rect x="38" y="2"  width="6" height="24" fill="var(--ink-4)"/>
+          <rect x="47" y="20" width="6" height="6"  fill="var(--ink-4)"/>
+          <rect x="56" y="2"  width="6" height="24" fill="var(--ink-4)"/>
+          <rect x="65" y="20" width="6" height="6"  fill="var(--ink-4)"/>
+          <rect x="74" y="2"  width="6" height="24" fill="var(--ink-4)"/>
+        </svg>
+      </div>
+      <div class="type"><span class="ph txt" data-bind="col[3].type">int8</span></div>
+      <div class="flags">
+        <span class="fchip amber">low cardinality</span>
+      </div>
+    </div>
+
+    <!-- Row: OK, no issue -->
+    <div class="prow">
+      <span class="stripe neutral"></span>
+      <div class="col"><span class="ph txt" data-bind="col[0].name">col_1</span></div>
+      <div class="num ok"><span class="ph" data-bind="col[0].null_pct">[ 0.0% ]</span></div>
+      <div class="num card"><span class="ph" data-bind="col[0].distinct">[ N ]</span></div>
+      <div class="num">—</div>
+      <div class="spark">
+        <svg viewBox="0 0 90 26" preserveAspectRatio="none">
+          <rect x="2" y="6" width="84" height="2" fill="var(--ink-4)"/>
+        </svg>
+      </div>
+      <div class="type"><span class="ph txt" data-bind="col[0].type">int64</span></div>
+      <div class="flags">
+        <span class="fchip neutral">ID — high-card</span>
+      </div>
+    </div>
+
+    <!-- Row: OK, date column -->
+    <div class="prow">
+      <span class="stripe green"></span>
+      <div class="col"><span class="ph txt" data-bind="col[2].name">col_3</span></div>
+      <div class="num ok"><span class="ph" data-bind="col[2].null_pct">[ 0.0% ]</span></div>
+      <div class="num card"><span class="ph" data-bind="col[2].distinct">[ N ]</span></div>
+      <div class="num"><span class="ph" data-bind="col[2].minmax">[ min / max ]</span></div>
+      <div class="spark">
+        <svg viewBox="0 0 90 26" preserveAspectRatio="none">
+          <rect x="2"  y="12" width="6" height="14" fill="var(--ink-4)"/>
+          <rect x="11" y="12" width="6" height="14" fill="var(--ink-4)"/>
+          <rect x="20" y="11" width="6" height="15" fill="var(--ink-4)"/>
+          <rect x="29" y="12" width="6" height="14" fill="var(--ink-4)"/>
+          <rect x="38" y="11" width="6" height="15" fill="var(--ink-4)"/>
+          <rect x="47" y="12" width="6" height="14" fill="var(--ink-4)"/>
+          <rect x="56" y="11" width="6" height="15" fill="var(--ink-4)"/>
+          <rect x="65" y="12" width="6" height="14" fill="var(--ink-4)"/>
+          <rect x="74" y="11" width="6" height="15" fill="var(--ink-4)"/>
+        </svg>
+      </div>
+      <div class="type"><span class="ph txt" data-bind="col[2].type">date</span></div>
+      <div class="flags">
+        <span class="fchip green">OK</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- §04 ISSUES TABLE (severity-sorted: Critical → Warn → Info) -->
+  <div class="sechead"><span class="ix">§ 04</span><h2>Quality issues <span class="em">/ severity-sorted</span></h2></div>
+  <p class="note">Sorted <b>Critical → Warn → Info</b>. Resolve Critical items before building any model or report on this data.</p>
+  <div class="issues">
+    <div class="head">
+      <div>Severity</div>
+      <div>Issue</div>
+      <div>Affected columns</div>
+      <div>Recommended fix</div>
+    </div>
+
+    <!-- Critical -->
+    <div class="irow">
+      <div><span class="sev critical">Critical</span></div>
+      <div class="iss"><span class="ph txt" data-bind="issue[0].desc">[ describe the critical issue in plain terms ]</span></div>
+      <div class="cols"><span class="ph txt" data-bind="issue[0].cols">col_2</span></div>
+      <div class="fix"><span class="ph txt" data-bind="issue[0].fix">[ recommended fix in business terms — what to do, not what the stat means ]</span></div>
+    </div>
+
+    <!-- Warn -->
+    <div class="irow">
+      <div><span class="sev warn">Warn</span></div>
+      <div class="iss"><span class="ph txt" data-bind="issue[1].desc">[ describe the warn-level issue ]</span></div>
+      <div class="cols"><span class="ph txt" data-bind="issue[1].cols">col_4</span></div>
+      <div class="fix"><span class="ph txt" data-bind="issue[1].fix">[ recommended fix ]</span></div>
+    </div>
+
+    <!-- Info -->
+    <div class="irow">
+      <div><span class="sev info">Info</span></div>
+      <div class="iss"><span class="ph txt" data-bind="issue[2].desc">[ informational observation ]</span></div>
+      <div class="cols"><span class="ph txt" data-bind="issue[2].cols">col_1</span></div>
+      <div class="fix"><span class="ph txt" data-bind="issue[2].fix">[ note or no action needed ]</span></div>
+    </div>
+
+  </div>
+
+  <!-- §05 RULE FLAGS -->
+  <div class="sechead"><span class="ix">§ 05</span><h2>Rule-based flags <span class="em">/ automated checks</span></h2></div>
+  <div class="flags-list">
+    <div class="rule">
+      <span class="ic">&#9679;</span>
+      <div class="b">
+        <div class="rn">High-cardinality identifier</div>
+        <div class="rw"><span class="ph txt" data-bind="rule[0]">[ column ] has near-unique values — likely an entity key; exclude from aggregations and model features.</span></div>
+      </div>
+    </div>
+    <div class="rule">
+      <span class="ic">&#9644;</span>
+      <div class="b">
+        <div class="rn">Constant column</div>
+        <div class="rw"><span class="ph txt" data-bind="rule[1]">[ column ] has only one distinct value across all rows — carries no information for analysis.</span></div>
+      </div>
+    </div>
+    <div class="rule">
+      <span class="ic">&#9651;</span>
+      <div class="b">
+        <div class="rn">Leakage risk</div>
+        <div class="rw"><span class="ph txt" data-bind="rule[2]">[ column ] may encode the outcome or a post-event signal — verify temporal ordering before using as a feature.</span></div>
+      </div>
+    </div>
+    <div class="rule">
+      <span class="ic">&#9711;</span>
+      <div class="b">
+        <div class="rn">Stale partition</div>
+        <div class="rw"><span class="ph txt" data-bind="rule[3]">The most recent partition is [ N ] days old — confirm source freshness before treating data as current.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §06 VERDICT -->
+  <div class="sechead"><span class="ix">§ 06</span><h2>Verdict <span class="em">/ fit for analysis?</span></h2></div>
+  <!-- Toggle vchip class: ready | caveat | blocked -->
+  <div class="vblock">
+    <div class="vchip caveat"><span class="ph txt" data-bind="verdict.label">Ready with caveats</span></div>
+    <div class="blockers">
+      <div class="bl">Conditions before analysis begins</div>
+      <ul>
+        <li><span class="ph txt" data-bind="blocker[0]">[ condition or blocker 1 ]</span></li>
+        <li><span class="ph txt" data-bind="blocker[1]">[ condition or blocker 2 ]</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">
+    EDA profile &middot; generated by process mode &middot;
+    <span class="ph" data-bind="run.timestamp">[ timestamp ]</span> &middot; prof-DA
+  </div>
+
+</div>
+</body>
+</html>

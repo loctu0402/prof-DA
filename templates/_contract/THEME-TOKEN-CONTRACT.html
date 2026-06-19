@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Report Library — Theme-Token Contract</title>
+<!--
+  ============================================================================
+  SHARED THEME-TOKEN CONTRACT - the lock every archetype (A1-A12) forks.
+  Org-neutral starter palette. Every component references var(--token), never an
+  inlined brand hex, so re-theming = swap ONE :root block (or set data-theme).
+  Replace the palette values below with your organization's brand tokens; keep
+  the token NAMES so the archetype skeletons keep resolving. Fonts here are a
+  neutral system stack - swap for your brand type.
+  ============================================================================
+-->
+<style>
+/* ===================== THEME TOKEN BLOCKS (the swap surface) ===================== */
+/* DEFAULT - neutral slate. Duplicate this block under html[data-theme="..."] for variants. */
+:root,
+html[data-theme="slate"]{
+  --bg:#f4f5f7; --surface:#ffffff; --surface-alt:#f7f8fa; --surface-sunk:#eceef1;
+  --ink:#1d2126; --ink-2:#434a52; --ink-3:#79818b; --ink-4:#a6adb6;
+  --border:#e2e5e9; --border-strong:#cdd2d8; --grid:#edeff2;
+  --primary:#3a5a78; --primary-deep:#28425a; --primary-soft:#e2e9f0;
+  --accent:#2f6f8f; --accent-soft:#dceaf0;
+  --success:#2e6442; --success-soft:#dbe5dc;
+  --warn:#9a6a1a;    --warn-soft:#efe6cb;
+  --danger:#a8362c;  --danger-soft:#f0dad5;
+  --neutral:#74706a; --neutral-soft:#e7e3db;
+  --shadow-sm:0 1px 3px rgba(20,24,30,0.05),0 1px 2px rgba(20,24,30,0.03);
+}
+
+/* ===================== BASE ===================== */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:14px; line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+.serif{font-family:Georgia,"Times New Roman",serif}
+.wrap{max-width:1180px;margin:0 auto;padding:30px 56px 100px}
+
+/* placeholder convention - styled, never a bare N/A. Fill the data-bind key. */
+.ph{font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;
+  background:var(--accent-soft);border-bottom:1px dotted var(--accent);
+  padding:0 2px;border-radius:1px;color:var(--ink)}
+.ph.txt{font-family:inherit;color:var(--ink-2)}
+
+/* masthead */
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:14px;border-bottom:1.5px solid var(--ink);margin-bottom:6px}
+.masthead .brand{display:flex;align-items:baseline;gap:12px}
+.masthead .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);transform:translateY(-2px)}
+.masthead .nm{font-weight:600;font-size:23px;letter-spacing:-0.01em}
+.masthead .nm .em{font-style:italic;color:var(--ink-3);font-weight:400}
+.masthead .badge{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-2);background:var(--surface);border:1px solid var(--border);padding:3px 9px;border-radius:3px;font-weight:600}
+.masthead .meta{text-align:right;font-size:11px;color:var(--ink-3);line-height:1.7}
+.masthead .meta .date{font-size:15px;color:var(--ink);font-weight:500}
+.subhead{font-size:13px;color:var(--ink-2);max-width:74ch;margin:14px 0 30px;line-height:1.6}
+.subhead b{color:var(--ink);font-weight:600}
+
+/* section heads */
+.sechead{margin:46px 0 18px;display:flex;align-items:baseline;gap:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sechead .ix{font-family:ui-monospace,monospace;font-size:10px;color:var(--accent);letter-spacing:.14em;font-weight:600}
+.sechead h2{font-weight:600;font-size:22px;letter-spacing:-0.015em;margin:0;color:var(--primary)}
+.note{font-size:12px;color:var(--ink-3);line-height:1.6;margin:0 0 18px;max-width:78ch}
+.note b{color:var(--ink-2);font-weight:600}
+.flag{display:inline-block;font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--warn);background:var(--warn-soft);padding:2px 7px;border-radius:3px;font-weight:600;margin-left:6px}
+
+/* ===================== VERDICT TABLE (deviation -> level) ===================== */
+/* generic verdict scale: normal / watch / attention / abnormal, driven by z or a robust band */
+.verdict{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.verdict th{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;text-align:left;padding:11px 16px;background:var(--surface-alt);border-bottom:1px solid var(--border)}
+.verdict td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:13px}
+.verdict tr:last-child td{border-bottom:none}
+.verdict .zc{font-family:ui-monospace,monospace;font-size:12px;color:var(--ink-2);white-space:nowrap}
+/* verdict pill - soft bg + saturated fg */
+.lv{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.03em;padding:5px 11px;border-radius:3px;white-space:nowrap}
+.lv.danger{background:var(--danger-soft);color:var(--danger)}
+.lv.warn{background:var(--warn-soft);color:var(--warn)}
+.lv.success{background:var(--success-soft);color:var(--success)}
+.lv.neutral{background:var(--neutral-soft);color:var(--neutral)}
+
+/* ===================== STATUS CHIPS ===================== */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip-x{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:4px;border:1px solid}
+.chip-x .d{width:8px;height:8px;border-radius:50%}
+.cx-success{background:var(--success-soft);color:var(--success);border-color:color-mix(in srgb,var(--success) 22%,transparent)}
+.cx-info{background:var(--accent-soft);color:var(--primary-deep);border-color:color-mix(in srgb,var(--accent) 22%,transparent)}
+.cx-warn{background:var(--warn-soft);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 22%,transparent)}
+.cx-danger{background:var(--danger-soft);color:var(--danger);border-color:color-mix(in srgb,var(--danger) 22%,transparent)}
+.cx-neutral{background:var(--neutral-soft);color:var(--neutral);border-color:color-mix(in srgb,var(--neutral) 22%,transparent)}
+
+/* ===================== METRIC BLOCK (headline + flow row + takeaway) ===================== */
+.block{background:var(--surface);border:1px solid var(--border);padding:22px 26px;border-radius:4px;position:relative;box-shadow:var(--shadow-sm)}
+.block.flag-red{border-top:3px solid var(--danger)}
+.block .lc{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:12px}
+.block .lb{font-size:52px;line-height:0.98;font-weight:600;letter-spacing:-0.025em;color:var(--ink);font-variant-numeric:tabular-nums lining-nums;margin-bottom:4px}
+.block .lb.danger{color:var(--danger)}
+.block .lb .unit{font-size:15px;color:var(--ink-3);font-weight:400;margin-left:6px}
+.lf{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:14px 0;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.lf .f{display:flex;flex-direction:column;gap:2px}
+.lf .f .lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.lf .f .v{font-family:ui-monospace,monospace;font-size:14px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.lf .f .v.up{color:var(--success)}.lf .f .v.dn{color:var(--danger)}.lf .f .v.warn{color:var(--warn)}
+.lt{font-size:15px;line-height:1.5;font-weight:500;color:var(--ink);margin:0 0 12px;display:flex;align-items:flex-start;gap:10px}
+.lt::before{content:"\25B8";color:var(--accent);font-weight:700;flex-shrink:0;margin-top:1px}
+.ln{font-size:12px;color:var(--ink-3);line-height:1.6;margin:0 0 14px;max-width:60ch}
+.cite{margin-top:10px;padding-top:8px;border-top:1px dashed var(--border);font-family:ui-monospace,monospace;font-size:9.5px;color:var(--ink-4);letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div class="brand"><span class="dot"></span>
+      <span class="nm">Report Library <span class="em">theme-token contract</span></span></div>
+    <div class="meta"><div class="date ph">[ report date ]</div><div>org-neutral starter tokens</div></div>
+  </div>
+  <p class="subhead">Every archetype (A1-A12) forks this token set. Components reference <b>var(--token)</b> only, so swapping the <b>:root</b> block above re-themes the whole library. Replace the palette with your brand tokens; keep the token <b>names</b>.</p>
+
+  <div class="sechead"><span class="ix">01</span><h2>Verdict scale</h2></div>
+  <p class="note">A deviation verdict driven by a z-score or a robust band, not a raw %gap. Render the deviation in absolute units + z, never a bare number.</p>
+  <table class="verdict">
+    <thead><tr><th>Level</th><th>Band</th><th>Reading</th></tr></thead>
+    <tbody>
+      <tr><td><span class="lv success">normal</span></td><td class="zc">|z| &lt; 1</td><td>within the usual range</td></tr>
+      <tr><td><span class="lv warn">watch</span></td><td class="zc">1 &le; |z| &lt; 2</td><td>mild deviation, keep an eye</td></tr>
+      <tr><td><span class="lv warn">attention</span></td><td class="zc">2 &le; |z| &lt; 3</td><td>notable, worth a look</td></tr>
+      <tr><td><span class="lv danger">abnormal</span></td><td class="zc">|z| &ge; 3</td><td>strong deviation, review now</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sechead"><span class="ix">02</span><h2>Metric block</h2></div>
+  <div class="block flag-red">
+    <div class="lc">Headline metric <span class="flag">attention</span></div>
+    <div class="lb danger"><span class="ph">[ value ]</span><span class="unit ph">[ unit ]</span></div>
+    <div class="lf">
+      <div class="f"><span class="lbl">vs prior</span><span class="v dn ph">[ delta ]</span></div>
+      <div class="f"><span class="lbl">vs 7d avg</span><span class="v ph">[ delta ]</span></div>
+      <div class="f"><span class="lbl">z-score</span><span class="v warn ph">[ z ]</span></div>
+    </div>
+    <p class="lt"><span class="ph txt">[ one-line takeaway in business terms ]</span></p>
+    <p class="ln"><span class="ph txt">[ why: the mechanism / driving component ]</span></p>
+    <div class="cite">source: <span class="ph">[ table / query ]</span></div>
+  </div>
+
+  <div class="sechead"><span class="ix">03</span><h2>Status chips</h2></div>
+  <div class="chips">
+    <span class="chip-x cx-success"><span class="d" style="background:var(--success)"></span>on track</span>
+    <span class="chip-x cx-info"><span class="d" style="background:var(--accent)"></span>info</span>
+    <span class="chip-x cx-warn"><span class="d" style="background:var(--warn)"></span>watch</span>
+    <span class="chip-x cx-danger"><span class="d" style="background:var(--danger)"></span>at risk</span>
+    <span class="chip-x cx-neutral"><span class="d" style="background:var(--neutral)"></span>no baseline</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>[ Report Title ] — Projection</title>
+<!--
+  A11 · PROJECTION (delta of A1) — org-neutral forkable skeleton.
+  Projection band = delta-flat ±sigma (constant width), NEVER a widening cone.
+  A widening cone gives absurd ranges and reads as worst-case; constant-width
+  communicates a steady-state uncertainty level, which is honest.
+  Method note up front — not buried in an appendix.
+  Every value is a styled placeholder; the renderer overwrites data-bind keys.
+  Fork: copy this file, swap :root tokens to your brand palette, fill data-bind.
+-->
+<style>
+/* ======================================================================
+   THEME TOKEN BLOCK — the only surface to swap when re-theming.
+   Replace values below with org brand tokens; keep token NAMES so all
+   component classes keep resolving. This is the neutral slate starter.
+   ====================================================================== */
+:root,
+html[data-theme="slate"] {
+  --bg: #f4f5f7;          --surface: #ffffff;
+  --surface-alt: #f7f8fa; --surface-sunk: #eceef1;
+  --ink: #1d2126;   --ink-2: #434a52; --ink-3: #79818b; --ink-4: #a6adb6;
+  --border: #e2e5e9; --border-strong: #cdd2d8; --grid: #edeff2;
+  --primary: #3a5a78;  --primary-deep: #28425a; --primary-soft: #e2e9f0;
+  --accent: #2f6f8f;   --accent-soft: #dceaf0;
+  --success: #2e6442;  --success-soft: #dbe5dc;
+  --warn: #9a6a1a;     --warn-soft: #efe6cb;
+  --danger: #a8362c;   --danger-soft: #f0dad5;
+  --neutral: #74706a;  --neutral-soft: #e7e3db;
+  --shadow-sm: 0 1px 3px rgba(20,24,30,0.05), 0 1px 2px rgba(20,24,30,0.03);
+}
+
+/* ======================================================================
+   BASE
+   ====================================================================== */
+* { box-sizing: border-box }
+html, body { margin: 0; padding: 0 }
+body {
+  font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--ink);
+  font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-variant-numeric: tabular-nums }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 30px 56px 100px }
+
+/* placeholder convention: styled, never a bare N/A; renderer fills data-bind key */
+.ph {
+  font-family: ui-monospace, monospace; font-variant-numeric: tabular-nums;
+  background: var(--accent-soft); border-bottom: 1px dotted var(--accent);
+  padding: 0 2px; border-radius: 1px; color: var(--ink);
+}
+.ph.txt { font-family: inherit; color: var(--ink-2) }
+
+/* ======================================================================
+   MASTHEAD
+   ====================================================================== */
+.masthead {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-bottom: 14px; border-bottom: 1.5px solid var(--ink); margin-bottom: 6px;
+}
+.masthead .brand   { display: flex; align-items: baseline; gap: 12px }
+.masthead .dot     { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); transform: translateY(-2px) }
+.masthead .nm      { font-weight: 600; font-size: 22px; letter-spacing: -0.01em }
+.masthead .nm .em  { font-style: italic; color: var(--ink-3); font-weight: 400 }
+.masthead .badge   {
+  font-family: ui-monospace, monospace; font-size: 10px;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-2); background: var(--surface);
+  border: 1px solid var(--border); padding: 3px 9px; border-radius: 3px; font-weight: 600;
+}
+.masthead .meta          { text-align: right; font-size: 11px; color: var(--ink-3); line-height: 1.7 }
+.masthead .meta .date    { font-size: 15px; color: var(--ink); font-weight: 500 }
+.subhead { font-size: 13px; color: var(--ink-2); max-width: 74ch; margin: 14px 0 30px; line-height: 1.6 }
+.subhead b { color: var(--ink); font-weight: 600 }
+
+/* ======================================================================
+   HEADLINE BLOCK — projected value + confidence band summary
+   ====================================================================== */
+.block {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 22px 26px; border-radius: 4px; position: relative; box-shadow: var(--shadow-sm);
+}
+.block .lc  { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 12px }
+.block .lb  {
+  font-size: 52px; line-height: 0.98; font-weight: 600; letter-spacing: -0.025em;
+  color: var(--ink); font-variant-numeric: tabular-nums lining-nums; margin-bottom: 4px;
+}
+.block .lb .unit { font-size: 15px; color: var(--ink-3); font-weight: 400; margin-left: 6px }
+.lf { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 14px 0; padding: 12px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border) }
+.lf .f      { display: flex; flex-direction: column; gap: 2px }
+.lf .f .lbl { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); font-weight: 600 }
+.lf .f .v   { font-family: ui-monospace, monospace; font-size: 14px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums }
+.lf .f .v.up { color: var(--success) } .lf .f .v.dn { color: var(--danger) } .lf .f .v.warn { color: var(--warn) }
+.lt { font-size: 15px; line-height: 1.5; font-weight: 500; color: var(--ink); margin: 0 0 12px; display: flex; align-items: flex-start; gap: 10px }
+.lt::before { content: "\25B8"; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px }
+.ln { font-size: 12px; color: var(--ink-3); line-height: 1.6; margin: 0 0 14px; max-width: 60ch }
+
+/* ======================================================================
+   SECTION HEADS
+   ====================================================================== */
+.sechead { margin: 46px 0 18px; display: flex; align-items: baseline; gap: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border) }
+.sechead .ix  { font-family: ui-monospace, monospace; font-size: 10px; color: var(--accent); letter-spacing: .14em; font-weight: 600 }
+.sechead h2   { font-weight: 600; font-size: 22px; letter-spacing: -0.015em; margin: 0; color: var(--primary) }
+.note { font-size: 12px; color: var(--ink-3); line-height: 1.6; margin: 0 0 18px; max-width: 78ch }
+.note b { color: var(--ink-2); font-weight: 600 }
+.flag {
+  display: inline-block; font-family: ui-monospace, monospace; font-size: 9.5px;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--warn); background: var(--warn-soft);
+  padding: 2px 7px; border-radius: 3px; font-weight: 600; margin-left: 6px;
+}
+
+/* ======================================================================
+   VERDICT PILL — deviation level driven by z or robust band, never raw %
+   ====================================================================== */
+.lv {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 600; letter-spacing: .03em;
+  padding: 5px 11px; border-radius: 3px; white-space: nowrap;
+}
+.lv.danger  { background: var(--danger-soft);  color: var(--danger) }
+.lv.warn    { background: var(--warn-soft);    color: var(--warn) }
+.lv.success { background: var(--success-soft); color: var(--success) }
+.lv.neutral { background: var(--neutral-soft); color: var(--neutral) }
+
+/* ======================================================================
+   METHOD NOTE — up front, not in appendix
+   ====================================================================== */
+.method-note {
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent); border-radius: 0 5px 5px 0;
+  padding: 16px 20px; box-shadow: var(--shadow-sm); margin-bottom: 8px;
+}
+.method-note .mt { font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; margin-bottom: 10px }
+.method-note .mrow {
+  display: grid; grid-template-columns: 130px 1fr; gap: 14px;
+  padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12.5px;
+}
+.method-note .mrow:last-child { border-bottom: none }
+.method-note .mrow .k { font-family: ui-monospace, monospace; font-size: 11px; color: var(--ink-3); font-weight: 600 }
+.method-note .mrow .v { color: var(--ink-2); line-height: 1.5 }
+.method-note .mrow .v b { color: var(--ink); font-weight: 600 }
+
+/* ======================================================================
+   PROJECTION CHART — delta-flat band: CONSTANT vertical width at every x
+   Band geometry lock: upper_y - lower_y must be equal at t=0 and t=horizon.
+   A widening cone = wrong template; reject on review.
+   ====================================================================== */
+.proj-card {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 20px 24px; border-radius: 5px; box-shadow: var(--shadow-sm);
+}
+.proj-card .ct  { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px }
+.proj-card .ttl { font-size: 15px; font-weight: 500; color: var(--ink) }
+.proj-card .leg { font-size: 10px; color: var(--ink-3); text-align: right; line-height: 1.4 }
+.proj-note {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-soft); color: var(--primary-deep);
+  font-size: 11.5px; font-weight: 600; padding: 7px 12px;
+  border-radius: 4px; margin: 8px 0 12px; line-height: 1.4;
+}
+.proj-card svg { width: 100%; height: 210px; display: block }
+.proj-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 10px; color: var(--ink-3); margin-top: 8px }
+.proj-legend .k  { display: flex; align-items: center; gap: 5px }
+.proj-legend .ln { width: 14px; height: 2px; background: var(--ink-2); border-radius: 1px }
+.proj-legend .ln.dashed { background: repeating-linear-gradient(to right, var(--accent) 0 3px, transparent 3px 6px) }
+.proj-legend .sq { width: 10px; height: 9px; border-radius: 1px; background: var(--accent-soft) }
+.proj-card .src { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); font-family: ui-monospace, monospace; font-size: 9.5px; color: var(--ink-4) }
+
+/* ======================================================================
+   SCENARIO TABLE — low / base / high
+   ====================================================================== */
+.scn { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; box-shadow: var(--shadow-sm) }
+.scn .head, .scn .row { display: grid; grid-template-columns: 140px 170px 1fr 130px; gap: 14px; align-items: center }
+.scn .head {
+  padding: 10px 22px; background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+  font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); font-weight: 600;
+}
+.scn .head .r { text-align: right }
+.scn .row { padding: 14px 22px; border-bottom: 1px solid var(--border); position: relative }
+.scn .row:last-child { border-bottom: none }
+.scn .row.base { background: var(--accent-soft) }
+.scn .row .stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 3px }
+.scn .row.base .stripe  { background: var(--accent) }
+.scn .row.high .stripe  { background: var(--success) }
+.scn .row.low  .stripe  { background: var(--warn) }
+.scn .row .nm   { font-size: 15px; font-weight: 500; color: var(--ink) }
+.scn .row .val  { font-family: ui-monospace, monospace; font-size: 16px; color: var(--ink); font-weight: 500 }
+.scn .row .asmp { font-size: 12px; color: var(--ink-2); line-height: 1.45 }
+.scn .row .delta { text-align: right; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 500 }
+.scn .row .delta.up   { color: var(--success) }
+.scn .row .delta.dn   { color: var(--danger) }
+.scn .row .delta.flat { color: var(--ink-3) }
+
+/* ======================================================================
+   ASSUMPTIONS TABLE — each assumption with documented rationale
+   ====================================================================== */
+.assum { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; box-shadow: var(--shadow-sm) }
+.assum th {
+  font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600; text-align: left;
+  padding: 11px 16px; background: var(--surface-alt); border-bottom: 1px solid var(--border);
+}
+.assum td { padding: 13px 16px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 13px }
+.assum tr:last-child td { border-bottom: none }
+.assum .ak { font-family: ui-monospace, monospace; font-size: 11px; color: var(--ink-2); white-space: nowrap; font-weight: 600 }
+.assum .ar { color: var(--ink-3); font-size: 12px; line-height: 1.5 }
+
+/* ======================================================================
+   VERDICT TABLE — deviation scale (z or robust band, never raw %)
+   ====================================================================== */
+.verdict { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; box-shadow: var(--shadow-sm) }
+.verdict th {
+  font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600; text-align: left;
+  padding: 11px 16px; background: var(--surface-alt); border-bottom: 1px solid var(--border);
+}
+.verdict td { padding: 13px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 13px }
+.verdict tr:last-child td { border-bottom: none }
+.verdict .zc { font-family: ui-monospace, monospace; font-size: 12px; color: var(--ink-2); white-space: nowrap }
+
+/* ======================================================================
+   CONFIDENCE FRAMING — invalidation triggers + re-forecast cadence
+   ====================================================================== */
+.confidence {
+  background: var(--surface-alt); border: 1px solid var(--border);
+  border-radius: 5px; padding: 18px 22px; margin-top: 8px;
+}
+.confidence .ct  { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px }
+.confidence .trig { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; margin-bottom: 12px }
+.confidence .trig .t {
+  display: flex; gap: 9px; align-items: flex-start;
+  font-size: 12.5px; color: var(--ink-2); line-height: 1.5;
+}
+.confidence .trig .t::before { content: "\25B8"; color: var(--accent); font-weight: 700; flex-shrink: 0 }
+.confidence .cadence { font-size: 12px; color: var(--ink-3); padding-top: 10px; border-top: 1px dashed var(--border) }
+.confidence .cadence b { color: var(--ink-2) }
+
+/* ======================================================================
+   FOOTER
+   ====================================================================== */
+.foot {
+  margin-top: 44px; padding-top: 18px; border-top: 2px solid var(--ink);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  font-size: 11px; color: var(--ink-3);
+}
+.foot .meta { font-family: ui-monospace, monospace; font-size: 10px; color: var(--ink-4) }
+
+/* ======================================================================
+   RESPONSIVE / PRINT
+   ====================================================================== */
+@media print {
+  body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact }
+  .wrap { padding: 24px 28px; max-width: none }
+  .method-note, .proj-card, .scn, .assum, .confidence { break-inside: avoid; box-shadow: none }
+}
+@media (max-width: 900px) {
+  .wrap { padding: 24px }
+  .method-note .mrow { grid-template-columns: 1fr; gap: 3px }
+  .scn .head, .scn .row { grid-template-columns: 1fr 1fr; gap: 8px }
+  .scn .head .h-asmp, .scn .row .asmp { display: none }
+  .confidence .trig { grid-template-columns: 1fr }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="brand">
+      <span class="dot"></span>
+      <div class="nm">
+        <span class="ph txt" data-bind="brand.team">[ Team ]</span>
+        <span class="em">/ projection</span>
+      </div>
+      <span class="badge">A11 · projection</span>
+    </div>
+    <div class="meta">
+      <div class="date"><span class="ph" data-bind="runtime.report_date">[ YYYY-MM-DD ]</span></div>
+      <div>horizon: <span class="ph mono" data-bind="proj.horizon">[ N ]</span> days</div>
+    </div>
+  </div>
+
+  <!-- ORIENTATION -->
+  <p class="subhead">
+    <b><span class="ph txt" data-bind="proj.metric">[ Metric Name ]</span></b>
+    is projected to
+    <span class="ph txt" data-bind="proj.direction">[ direction / level / range ]</span>
+    over the next
+    <span class="ph mono" data-bind="proj.horizon">[ N ]</span> days.
+    Uncertainty band is a <b>constant-width &#177;&#963; interval</b> over the lookback window,
+    not a widening cone — it represents steady-state uncertainty, not worst-case fear.
+  </p>
+
+  <!-- HEADLINE BLOCK — projected value + band summary -->
+  <div class="block">
+    <div class="lc">
+      Projected value at end of horizon
+      <span class="flag">confidence: <span class="ph" data-bind="proj.conf_label">[ % ]</span></span>
+    </div>
+    <div class="lb">
+      <span class="ph" data-bind="proj.headline_value">[ value ]</span>
+      <span class="unit ph" data-bind="proj.unit">[ unit ]</span>
+    </div>
+    <div class="lf">
+      <div class="f"><span class="lbl">Band low</span><span class="v ph" data-bind="proj.band_low">[ low ]</span></div>
+      <div class="f"><span class="lbl">Band high</span><span class="v ph" data-bind="proj.band_high">[ high ]</span></div>
+      <div class="f"><span class="lbl">&#963; (lookback)</span><span class="v mono ph" data-bind="proj.sigma">[ &#963; ]</span></div>
+    </div>
+    <p class="lt"><span class="ph txt" data-bind="proj.headline_takeaway">[ One-line business takeaway — what this projection means for the team. ]</span></p>
+    <p class="ln"><span class="ph txt" data-bind="proj.supporting_note">[ Supporting note: key driver or condition underpinning the base projection. ]</span></p>
+  </div>
+
+  <!-- §01 METHOD NOTE -->
+  <div class="sechead"><span class="ix">§ 01</span><h2>Method <span style="font-size:14px;font-weight:400;color:var(--ink-3)">/ stated up front</span></h2></div>
+  <p class="note">Model family, lookback window, key assumptions, and backtest summary. Stated here so readers can evaluate the projection's limits before seeing the numbers.</p>
+  <div class="method-note">
+    <div class="mt">Model · window · assumptions · backtest</div>
+    <div class="mrow">
+      <span class="k">Model</span>
+      <span class="v"><span class="ph txt" data-bind="method.model">[ model type — e.g. rolling mean + drift / exponential smoothing / regression ]</span></span>
+    </div>
+    <div class="mrow">
+      <span class="k">Lookback</span>
+      <span class="v"><b><span class="ph mono" data-bind="method.lookback">[ N ]</span> days</b> — window used to estimate &#963; and trend</span>
+    </div>
+    <div class="mrow">
+      <span class="k">Prediction interval</span>
+      <span class="v"><span class="ph txt" data-bind="method.pi_method">[ how the band is constructed — e.g. empirical rolling std, bootstrap, analytical ]</span></span>
+    </div>
+    <div class="mrow">
+      <span class="k">Backtest</span>
+      <span class="v"><span class="ph txt" data-bind="method.backtest">[ period tested, coverage rate, MAE/MAPE or equivalent — e.g. 90-day walk-forward, 87% in-band ]</span></span>
+    </div>
+    <div class="mrow">
+      <span class="k">Key assumptions</span>
+      <span class="v"><span class="ph txt" data-bind="method.assumptions">[ what must stay true for the projection to hold — no structural break, seasonal pattern unchanged, etc. ]</span></span>
+    </div>
+  </div>
+
+  <!-- §02 PROJECTION CHART — delta-flat band -->
+  <div class="sechead"><span class="ix">§ 02</span><h2>Projection <span style="font-size:14px;font-weight:400;color:var(--ink-3)">/ constant-width &#177;&#963; band</span></h2></div>
+  <p class="note">Historical actuals (solid line) and forward projection (dashed) with a <b>constant-width</b> confidence band. Band width = &#963; computed over the lookback window, held flat across the forecast horizon.</p>
+  <div class="proj-card">
+    <div class="ct">
+      <div class="ttl"><span class="ph txt" data-bind="proj.chart_title">[ Chart conclusion title ]</span></div>
+      <div class="leg"><span class="ph" data-bind="proj.chart_unit">[ unit ]</span></div>
+    </div>
+    <div class="proj-note">
+      &#9670; <span class="ph txt" data-bind="proj.steady_note">Steady-state projection. Band width is constant (&#177;&#963; over the lookback window) — not a worst-case cone.</span>
+    </div>
+    <!--
+      CHART: rendered by Plotly CDN (preferred for interactivity) or inline SVG (zero-JS).
+      Placeholder arrays below use neutral values — replace with real data at render time.
+      Color contract: actuals = var(--ink-2) / forecast line = var(--accent) dashed /
+      band fill = var(--accent-soft) at opacity 0.35 / today divider = var(--border-strong) dashed.
+      BAND GEOMETRY LOCK: upper_y - lower_y must be equal at every x in the forecast range.
+    -->
+    <div id="proj-chart" style="width:100%;height:240px"></div>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+    <script>
+    (function() {
+      /* ---- placeholder arrays: replace with renderer-injected data ---- */
+      var hist_x   = ['[ t-29 ]','[ t-28 ]','[ t-27 ]','[ t-14 ]','[ t-7 ]','[ today ]'];
+      var hist_y   = [100, 102, 99, 104, 101, 103];
+      var fwd_x    = ['[ today ]','[ t+7 ]','[ t+14 ]','[ t+21 ]','[ t+N ]'];
+      var fwd_y    = [103, 104, 105, 104, 106];          /* central projection */
+      var sigma    = 6;                                   /* constant half-width */
+      var band_hi  = fwd_y.map(function(v){ return v + sigma; });
+      var band_lo  = fwd_y.map(function(v){ return v - sigma; });
+
+      var traces = [
+        /* band fill: upper boundary */
+        { x: fwd_x, y: band_hi, mode: 'lines', line: { color: 'transparent' },
+          showlegend: false, hoverinfo: 'skip', name: 'band_hi' },
+        /* band fill: lower boundary (fill to previous trace) */
+        { x: fwd_x, y: band_lo, mode: 'lines', fill: 'tonexty',
+          fillcolor: 'rgba(47,111,143,0.15)',
+          line: { color: 'transparent' }, showlegend: false, hoverinfo: 'skip', name: 'band_lo' },
+        /* historical actuals */
+        { x: hist_x, y: hist_y, mode: 'lines+markers',
+          line: { color: '#434a52', width: 2 }, marker: { color: '#434a52', size: 4 },
+          name: 'Actuals' },
+        /* forward central projection */
+        { x: fwd_x, y: fwd_y, mode: 'lines',
+          line: { color: '#2f6f8f', width: 2, dash: 'dot' },
+          name: 'Projection (base)' }
+      ];
+
+      var layout = {
+        margin: { t: 10, r: 16, b: 40, l: 50 },
+        paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
+        font: { family: '-apple-system, Segoe UI, sans-serif', size: 11, color: '#79818b' },
+        legend: { orientation: 'h', y: -0.18, font: { size: 10 } },
+        xaxis: { showgrid: true, gridcolor: '#edeff2', zeroline: false },
+        yaxis: { showgrid: true, gridcolor: '#edeff2', zeroline: false,
+                 title: { text: '[ unit ]', font: { size: 10 } } },
+        shapes: [{
+          type: 'line', xref: 'x', yref: 'paper',
+          x0: '[ today ]', x1: '[ today ]', y0: 0, y1: 1,
+          line: { color: '#cdd2d8', dash: 'dot', width: 1 }
+        }],
+        annotations: [{
+          x: '[ today ]', y: 1, xref: 'x', yref: 'paper',
+          text: 'Today', showarrow: false,
+          font: { size: 10, color: '#79818b' }, xanchor: 'left', yanchor: 'top', xshift: 4
+        }]
+      };
+
+      Plotly.newPlot('proj-chart', traces, layout, { responsive: true, displayModeBar: false });
+    })();
+    </script>
+    <div class="proj-card src">Source: <span class="ph txt" data-bind="proj.source">[ data source / table / snapshot date ]</span></div>
+  </div>
+
+  <!-- §03 SCENARIO TABLE — low / base / high -->
+  <div class="sechead"><span class="ix">§ 03</span><h2>Scenarios <span style="font-size:14px;font-weight:400;color:var(--ink-3)">/ low · base · high</span></h2></div>
+  <p class="note">Three scenarios anchored to different assumption sets. Base is the central projection; High and Low reflect plausible favorable / adverse conditions. Deviation from a reference value is shown as z (not raw %) where a baseline exists.</p>
+  <div class="scn">
+    <div class="head">
+      <div>Scenario</div>
+      <div>Projected value</div>
+      <div class="h-asmp">Driving assumption</div>
+      <div class="r">vs reference (z)</div>
+    </div>
+    <!-- Base -->
+    <div class="row base">
+      <span class="stripe"></span>
+      <div class="nm">Base</div>
+      <div class="val"><span class="ph" data-bind="scn.base.value">[ value ]</span> <span style="font-size:11px;color:var(--ink-3)" class="ph" data-bind="proj.unit">[ unit ]</span></div>
+      <div class="asmp"><span class="ph txt" data-bind="scn.base.assumption">[ Central assumption — what must be true for this scenario. ]</span></div>
+      <div class="delta flat"><span class="ph" data-bind="scn.base.z">z = [ z ]</span></div>
+    </div>
+    <!-- High -->
+    <div class="row high">
+      <span class="stripe"></span>
+      <div class="nm">High</div>
+      <div class="val"><span class="ph" data-bind="scn.high.value">[ value ]</span> <span style="font-size:11px;color:var(--ink-3)" class="ph" data-bind="proj.unit">[ unit ]</span></div>
+      <div class="asmp"><span class="ph txt" data-bind="scn.high.assumption">[ Favorable assumption — what tailwind drives the upside. ]</span></div>
+      <div class="delta up"><span class="ph" data-bind="scn.high.z">z = +[ z ]</span></div>
+    </div>
+    <!-- Low -->
+    <div class="row low">
+      <span class="stripe"></span>
+      <div class="nm">Low</div>
+      <div class="val"><span class="ph" data-bind="scn.low.value">[ value ]</span> <span style="font-size:11px;color:var(--ink-3)" class="ph" data-bind="proj.unit">[ unit ]</span></div>
+      <div class="asmp"><span class="ph txt" data-bind="scn.low.assumption">[ Adverse assumption — what headwind creates downside. ]</span></div>
+      <div class="delta dn"><span class="ph" data-bind="scn.low.z">z = -[ z ]</span></div>
+    </div>
+  </div>
+
+  <!-- §04 ASSUMPTIONS — each with rationale -->
+  <div class="sechead"><span class="ix">§ 04</span><h2>Assumptions <span style="font-size:14px;font-weight:400;color:var(--ink-3)">/ each with documented rationale</span></h2></div>
+  <p class="note">Every assumption that materially affects the projection is listed with its rationale. Ungrounded assumptions must be flagged explicitly.</p>
+  <table class="assum">
+    <thead>
+      <tr><th>Assumption</th><th>Value / direction</th><th>Rationale</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ak"><span class="ph txt" data-bind="assum[0].name">[ assumption label ]</span></td>
+        <td><span class="ph txt" data-bind="assum[0].value">[ value or direction ]</span></td>
+        <td class="ar"><span class="ph txt" data-bind="assum[0].rationale">[ source / evidence / why this is the reasonable call ]</span></td>
+      </tr>
+      <tr>
+        <td class="ak"><span class="ph txt" data-bind="assum[1].name">[ assumption label ]</span></td>
+        <td><span class="ph txt" data-bind="assum[1].value">[ value or direction ]</span></td>
+        <td class="ar"><span class="ph txt" data-bind="assum[1].rationale">[ source / evidence / why this is the reasonable call ]</span></td>
+      </tr>
+      <tr>
+        <td class="ak"><span class="ph txt" data-bind="assum[2].name">[ assumption label ]</span></td>
+        <td><span class="ph txt" data-bind="assum[2].value">[ value or direction ]</span></td>
+        <td class="ar"><span class="ph txt" data-bind="assum[2].rationale">[ source / evidence / why this is the reasonable call ]</span></td>
+      </tr>
+      <tr>
+        <td class="ak"><span class="ph txt" data-bind="assum[3].name">[ assumption label ]</span></td>
+        <td><span class="ph txt" data-bind="assum[3].value">[ value or direction ]</span></td>
+        <td class="ar"><span class="ph txt" data-bind="assum[3].rationale">[ source / evidence / why this is the reasonable call ]</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- §05 METHOD NOTE — deviation verdict scale -->
+  <div class="sechead"><span class="ix">§ 05</span><h2>Deviation verdict scale <span style="font-size:14px;font-weight:400;color:var(--ink-3)">/ z-score or robust band — never raw %</span></h2></div>
+  <p class="note">Use this scale when actual outcomes arrive and must be compared to the projection. Verdict is driven by <b>z-score</b> (or a robust band equivalent) — never by a raw percentage gap, which is mechanically unstable for near-zero or high-variance metrics.</p>
+  <table class="verdict">
+    <thead><tr><th>Level</th><th>z-score (or band)</th><th>Reading</th></tr></thead>
+    <tbody>
+      <tr><td><span class="lv success">on track</span></td>    <td class="zc">|z| &lt; 1</td>      <td>within expected range; no action</td></tr>
+      <tr><td><span class="lv warn">watch</span></td>          <td class="zc">1 &le; |z| &lt; 2</td><td>mild deviation; monitor closely</td></tr>
+      <tr><td><span class="lv warn">attention</span></td>      <td class="zc">2 &le; |z| &lt; 3</td><td>notable deviation; investigate cause</td></tr>
+      <tr><td><span class="lv danger">abnormal</span></td>     <td class="zc">|z| &ge; 3</td>       <td>strong deviation; review now; re-forecast</td></tr>
+    </tbody>
+  </table>
+
+  <!-- §06 CONFIDENCE FRAMING -->
+  <div class="sechead"><span class="ix">§ 06</span><h2>Confidence framing <span style="font-size:14px;font-weight:400;color:var(--ink-3)">/ what would invalidate this projection</span></h2></div>
+  <div class="confidence">
+    <div class="ct">This projection should be revised if any of the following occur:</div>
+    <div class="trig">
+      <div class="t"><span class="ph txt" data-bind="conf.trigger[0]">[ Invalidation trigger 1 — structural break, policy change, data anomaly, etc. ]</span></div>
+      <div class="t"><span class="ph txt" data-bind="conf.trigger[1]">[ Invalidation trigger 2 ]</span></div>
+      <div class="t"><span class="ph txt" data-bind="conf.trigger[2]">[ Invalidation trigger 3 ]</span></div>
+      <div class="t"><span class="ph txt" data-bind="conf.trigger[3]">[ Invalidation trigger 4 ]</span></div>
+    </div>
+    <div class="cadence">
+      <b>Re-forecast cadence:</b>
+      <span class="ph txt" data-bind="conf.cadence">[ scheduled re-forecast interval — e.g. weekly, or on trigger activation, whichever comes first ]</span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <span>Generated: <span class="ph" data-bind="runtime.run_time">[ run timestamp ]</span></span>
+    <span class="meta">A11 · projection · prof-DA</span>
+  </div>
+
+</div>
+</body>
+</html>
