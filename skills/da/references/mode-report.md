@@ -5,31 +5,37 @@ Invoke when user asks: "build báo cáo", "làm report", "stakeholder report", "
 ## Decision Tree — Pick Template
 
 ```
-What is the report for?
+What is the report for?   (archetypes = the locked A1-A12 library under shared/templates/)
   │
   ├─ Daily ops snapshot (product / fraud / app performance)
-  │   └─ shared/templates/daily-email/
+  │   └─ shared/templates/A4-daily-email/  (email)  ·  A2-ops-dashboard/  (portal HTML)
   │
   ├─ Idea / scheme verification (gross yield, breakeven, tier proposal)
-  │   └─ shared/templates/idea-verification-compact/
+  │   └─ shared/templates/A8-idea-verification/
   │
   ├─ Deep dive WHY (AUM decline, net cash, user churn diagnostic)
-  │   └─ Use deep-dive-analysis SKILL (separate skill)
+  │   └─ shared/templates/A1-deep-dive/  (+ the deep-dive-analysis SKILL for the analysis itself)
   │
-  ├─ App / dashboard performance monitoring
-  │   └─ shared/templates/app-dashboard/
+  ├─ Editorial paper / 5-min C-level read  ·  Exec one-pager
+  │   └─ shared/templates/A3-editorial-paper/  ·  A7-exec-onepager/
+  │
+  ├─ Projection / forecast band + scenarios
+  │   └─ shared/templates/A11-projection/
   │
   ├─ Presentation deck / editable PPTX (present live, or a stakeholder-editable handoff)
-  │   └─ shared/templates/presentation/ + `references/output-slide-deck.md` (deck-authoring + PPTX export)
+  │   └─ shared/templates/A12-slide-deck-pptx/ + `references/output-slide-deck.md` (deck-authoring + PPTX export)
   │
   ├─ Google Chat webhook notification
-  │   └─ shared/templates/gchat-webhook/
+  │   └─ shared/templates/A5-gchat-card/
+  │
+  ├─ Data-quality profile  ·  Training material
+  │   └─ shared/templates/A10-data-quality/  ·  A9-training/
   │
   └─ Custom one-off
-      └─ Confirm intent → choose closest template → fork
+      └─ Confirm intent → choose closest archetype → fork
 ```
 
-Full template catalog: `<your-workspace>/shared/templates/_catalog.md` (or equivalent index file in your workspace). If you don't have a template catalog yet, start by saving one report you're happy with under `<your-workspace>/shared/templates/<name>/` and document it in the catalog.
+Full archetype catalog: `<your-workspace>/shared/templates/README.md` — the **locked A1-A12 archetype library** (build-once-then-locked; every report forks one 1:1 and swaps data only, never freestyles — this is what fixes per-report style drift). Shared design DNA (tokens, verdict ramp, comparator slot, chart-choice matrix) lives in `<your-workspace>/shared/templates/_contract/` (THEME-TOKEN-CONTRACT.html / 00-PLAYBOOK / DESIGN-DECISIONS / SPEC-TEMPLATE). If you don't have an archetype library yet, start by saving one report you're happy with under `<your-workspace>/shared/templates/<name>/` and add a row to the catalog (`README.md`).
 
 ## Workflow
 
@@ -48,7 +54,7 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
 - **Baseline / comparator (ALWAYS ask, never assume):** which reference does each metric compare against? Menu: prior period (DoD / WoW / MoM) / trailing average (7d / 28d) / SDLM or same-period-last-year (YoY) / target-or-plan or <product-b>-expected / competitor-market benchmark / cohort baseline. A bare number is noise (Rule 2) - never ship one. Default for <product> daily = DoD + vs-7d-avg, but confirm per report. The chosen comparator(s) fill the template's comparator slot (template-library handoff §4.10).
 
 ### Step 2 — Fork a locked template (fork-or-fail, NEVER freestyle)
-- Pick the template from the Decision Tree; read its `_index.md`; copy it to the project's `output/`.
+- Pick the archetype from the Decision Tree; read its `DESIGN-SPEC.md` first; copy the `<A-folder>/` into the project's `output/`.
 - NEVER edit the template source during a build — fork first.
 - **Fork-or-fail — do NOT invent a bespoke visual.** Claude Code is biased to "ship something working" and
   produces a generic per-report design; that is the root cause of "every report a different style". If the
@@ -79,6 +85,7 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
 - Every numeric statement passes 3 rungs (see `universal-workflow-rules.md`)
 - Every chart follows visualization discipline → `references/storytelling-with-data.md` (action title, grey + 1 accent, no pie / no 3D, clutter checklist, horizontal logic)
 - Every chart has inline `→ takeaway` verdict
+- **Net/difference + near-zero metrics → verdict on z-score, render in absolute units, NOT %gap.** For a metric that is a difference of two large flows (netcash = cashin − cashout; `net_*`/`nc_*`) or whose Expected sits near zero, `%gap` explodes on ordinary moves and over-alerts; judge the deviation by z (or a robust band), show the deviation in absolute units + z, make the underlying flows the primary signal, and warn the reader the metric is structurally noisy / often negative. Full rule: `recurring-report-blueprint.md` Hard rules (capture the worked pattern in your workspace knowledge base).
 - Every table sorted DESC if "Top X"
 - Organization brand theme applied (loaded from `<your-workspace>/shared/themes/` or your equivalent module)
 - Number formatting: K / M / B / T per scale; 2 decimals; comma-separated people count
@@ -311,8 +318,8 @@ Full list: `references/style-rules.md`. Top:
 
 When a one-off report stabilizes (used 3+ times, structure feels final):
 1. Extract reusable parts → `<your-workspace>/shared/templates/<name>/`
-2. Write `_index.md` with usage notes
-3. Update `<your-workspace>/shared/templates/_catalog.md`
+2. Write `README.md` + `DESIGN-SPEC.md` with usage notes + design tokens
+3. Add a row to the archetype catalog `<your-workspace>/shared/templates/README.md`
 4. Drift-check: if source file is also a template, update both same session — never defer
 
 See `feedback_stabilize_to_template.md`.
