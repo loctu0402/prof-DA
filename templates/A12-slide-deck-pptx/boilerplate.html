@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[ Presentation Title ] — [ Organization ]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* -----------------------------------------------------------------------
+   ROOT TOKENS — org-neutral slate palette.
+   Fork this block with your brand's token values; never use hardcoded
+   hex values inside slide content below.
+   ----------------------------------------------------------------------- */
+:root {
+  /* Surface */
+  --bg:           #f4f5f7;
+  --surface:      #ffffff;
+  --surface-alt:  #f7f8fa;
+  --surface-sunk: #eceef1;
+
+  /* Ink */
+  --ink:   #1d2126;
+  --ink-2: #434a52;
+  --ink-3: #79818b;
+  --ink-4: #a6adb6;
+
+  /* Border */
+  --border:        #e2e5e9;
+  --border-strong: #cdd2d8;
+  --grid:          #edeff2;
+
+  /* Brand primary (adapt for your org) */
+  --primary:      #3a5a78;
+  --primary-deep: #28425a;
+  --primary-soft: #e2e9f0;
+
+  /* Accent */
+  --accent:      #2f6f8f;
+  --accent-soft: #dceaf0;
+
+  /* Semantic states */
+  --success:      #2e6442;
+  --success-soft: #dbe5dc;
+  --warn:         #9a6a1a;
+  --warn-soft:    #efe6cb;
+  --danger:       #a8362c;
+  --danger-soft:  #f0dad5;
+  --neutral:      #74706a;
+  --neutral-soft: #e7e3db;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 3px rgba(20,24,30,.05), 0 1px 2px rgba(20,24,30,.03);
+  --shadow-md: 0 4px 12px rgba(20,24,30,.08), 0 2px 4px rgba(20,24,30,.04);
+
+  /* Data-viz series — distinct, accessible; not primary UI color */
+  --series-teal: #1b7a72;
+  --series-blue: #2255a4;
+
+  /* Typography scale — 1920x1080 canvas, floor 24px (projection safe) */
+  --type-display:  86px;
+  --type-title:    54px;
+  --type-subtitle: 38px;
+  --type-body:     30px;
+  --type-small:    26px;
+  --type-label:    24px;
+  --type-chip:     24px;
+
+  /* Layout */
+  --pad-x:      104px;
+  --pad-top:     80px;
+  --pad-bottom:  76px;
+}
+
+/* -----------------------------------------------------------------------
+   PAGE RESET
+   ----------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; overflow: hidden; background: #000; }
+
+body {
+  font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  font-size: var(--type-body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* -----------------------------------------------------------------------
+   SLIDE BASE
+   All slide sections share this foundation.
+   ----------------------------------------------------------------------- */
+section {
+  background: var(--surface);
+  overflow: hidden;
+}
+
+/* -----------------------------------------------------------------------
+   TYPOGRAPHY UTILITIES
+   ----------------------------------------------------------------------- */
+.mono   { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+.serif  { font-family: "IBM Plex Serif", Georgia, serif; }
+.light  { font-weight: 300; }
+.medium { font-weight: 500; }
+.semi   { font-weight: 600; }
+.bold   { font-weight: 700; }
+.ink-2  { color: var(--ink-2); }
+.ink-3  { color: var(--ink-3); }
+
+/* Placeholder spans — styling; do not re-define for slides */
+.ph {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  background: var(--accent-soft);
+  border-bottom: 1px dotted var(--accent);
+  padding: 0 2px;
+  border-radius: 1px;
+  color: var(--ink);
+}
+
+/* Eyebrow / kicker labels above a heading */
+.eyebrow, .kicker {
+  font-size: var(--type-label);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* -----------------------------------------------------------------------
+   VERDICT / STATUS CHIPS — lv pills for positive / caution / risk / neutral
+   ----------------------------------------------------------------------- */
+.lv {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 16px;
+  border-radius: 999px;
+  font-size: var(--type-label);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.lv::before { content: "●"; font-size: 10px; }
+.lv.positive  { background: var(--success-soft); color: var(--success); }
+.lv.caution   { background: var(--warn-soft);    color: var(--warn);    }
+.lv.risk      { background: var(--danger-soft);  color: var(--danger);  }
+.lv.neutral   { background: var(--neutral-soft); color: var(--neutral); }
+
+/* -----------------------------------------------------------------------
+   §1  BOOKEND SLIDES — COVER + ASK/CLOSE
+   ----------------------------------------------------------------------- */
+
+/* Cover slide uses primary-deep so any org token works without
+   hardcoding a specific brand color. */
+.cover {
+  background: var(--primary-deep);
+  color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+  position: relative;
+}
+
+.cover-display {
+  font-size: var(--type-display);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--surface);
+  max-width: 1400px;
+  margin-top: auto;
+}
+
+.cover-sub {
+  font-size: var(--type-subtitle);
+  font-weight: 300;
+  color: rgba(255,255,255,0.70);
+  margin-top: 24px;
+  max-width: 920px;
+}
+
+.cover-ask {
+  font-size: var(--type-body);
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  margin-top: 12px;
+}
+
+.cover-foot {
+  margin-top: auto;
+  font-size: var(--type-label);
+  color: rgba(255,255,255,0.50);
+  display: flex;
+  gap: 32px;
+}
+
+/* Ask / Closing bookend */
+.ask-next {
+  background: var(--primary-deep);
+  color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+}
+
+.ask-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 64px;
+  width: 100%;
+}
+
+.ask-close {
+  font-size: var(--type-body);
+  color: rgba(255,255,255,0.72);
+  line-height: 1.55;
+}
+
+/* -----------------------------------------------------------------------
+   §2  AGENDA / OVERVIEW
+   ----------------------------------------------------------------------- */
+.agenda {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto 1fr var(--pad-bottom);
+}
+
+.agenda .head {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 28px;
+}
+
+.agenda .agenda-items {
+  grid-column: 2 / 4;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+
+.agenda-item {
+  display: flex;
+  align-items: baseline;
+  gap: 28px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--grid);
+  font-size: var(--type-body);
+}
+
+.agenda-item .num {
+  font-size: var(--type-label);
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 32px;
+  font-variant-numeric: tabular-nums;
+}
+
+.agenda-item .label { color: var(--ink); font-weight: 500; }
+
+.agenda-item.active .label {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------
+   §3  SECTION DIVIDER
+   ----------------------------------------------------------------------- */
+.divider {
+  background: var(--primary);
+  color: var(--surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--pad-top) var(--pad-x) var(--pad-bottom);
+}
+
+.divider .stitle {
+  font-size: var(--type-display);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--surface);
+  letter-spacing: -0.02em;
+}
+
+.divider .lead {
+  font-size: var(--type-subtitle);
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  margin-top: 28px;
+  max-width: 900px;
+}
+
+/* -----------------------------------------------------------------------
+   §4  CONTENT SLIDE — one-idea-per-slide
+   ----------------------------------------------------------------------- */
+.body-fill {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto 1fr var(--pad-bottom);
+}
+
+.body-fill .head {
+  grid-column: 2;
+  grid-row: 2;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 24px;
+}
+
+.body-fill .content {
+  grid-column: 2;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.head .eyebrow { margin-bottom: 10px; }
+
+.head h1, .head h2 {
+  font-size: var(--type-title);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* -----------------------------------------------------------------------
+   §5  SCQR SLIDE — Situation / Complication / Question / Answer
+   ----------------------------------------------------------------------- */
+.scqr {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto auto 1fr var(--pad-bottom);
+  gap: 0 48px;
+}
+
+.scqr .head {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 24px;
+  margin-bottom: 36px;
+}
+
+.scqr-grid {
+  grid-column: 2 / 4;
+  grid-row: 3 / 5;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 36px 48px;
+}
+
+.scqr-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scqr-cell .tag {
+  font-size: var(--type-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.scqr-cell p {
+  font-size: var(--type-body);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.scqr-cell.answer p {
+  font-size: var(--type-subtitle);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+/* -----------------------------------------------------------------------
+   §6  EVIDENCE 3-CARD GRID
+   ----------------------------------------------------------------------- */
+.ev-grid {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr 1fr 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto 1fr var(--pad-bottom);
+  gap: 0 32px;
+}
+
+.ev-grid .head {
+  grid-column: 2 / 5;
+  grid-row: 2;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 24px;
+  margin-bottom: 36px;
+}
+
+.ev {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 36px;
+  grid-row: 3;
+}
+
+.ev .ev-num {
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--primary);
+  letter-spacing: -0.03em;
+}
+
+.ev .ev-label {
+  font-size: var(--type-small);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.ev .ev-detail {
+  font-size: var(--type-label);
+  color: var(--ink-3);
+  line-height: 1.5;
+  margin-top: auto;
+}
+
+/* -----------------------------------------------------------------------
+   §7  STAT / NSM ANCHOR
+   ----------------------------------------------------------------------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr 1fr 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto auto 1fr var(--pad-bottom);
+  gap: 0 48px;
+}
+
+.anchor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 40px;
+  border-top: 3px solid var(--border);
+}
+
+.anchor.primary-anchor { border-top-color: var(--primary); }
+
+.anchor .stat-num {
+  font-size: var(--type-display);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.anchor .stat-label {
+  font-size: var(--type-body);
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.anchor .stat-sub {
+  font-size: var(--type-label);
+  color: var(--ink-3);
+}
+
+/* -----------------------------------------------------------------------
+   §8  TABLE SLIDE
+   ----------------------------------------------------------------------- */
+.tbl-wrap {
+  overflow: auto;
+  max-height: 100%;
+}
+
+table.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--type-body);
+}
+
+table.tbl th {
+  text-align: left;
+  font-size: var(--type-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  border-bottom: 2px solid var(--border-strong);
+  padding: 14px 20px;
+}
+
+table.tbl td {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--grid);
+  color: var(--ink-2);
+  vertical-align: top;
+}
+
+table.tbl tr:last-child td { border-bottom: none; }
+
+table.tbl tr:hover td { background: var(--surface-alt); }
+
+table.tbl .num-col {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* -----------------------------------------------------------------------
+   §9  SWIMLANE DIAGRAM
+   ----------------------------------------------------------------------- */
+.swim {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto 1fr var(--pad-bottom);
+}
+
+.swim .head { grid-column: 2; grid-row: 2; border-bottom: 2px solid var(--border); padding-bottom: 24px; }
+
+.swim-body {
+  grid-column: 2;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 32px;
+}
+
+.swim-lane {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border-bottom: 1px solid var(--grid);
+  min-height: 100px;
+}
+
+.swim-lane:last-child { border-bottom: none; }
+
+.swim-lane-label {
+  font-size: var(--type-label);
+  font-weight: 600;
+  color: var(--ink-3);
+  background: var(--surface-alt);
+  border-right: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.swim-lane-cells {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  flex-wrap: wrap;
+}
+
+.swim-cell {
+  background: var(--primary-soft);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: var(--type-label);
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.swim-arrow {
+  font-size: var(--type-label);
+  color: var(--ink-4);
+  user-select: none;
+}
+
+/* -----------------------------------------------------------------------
+   §10  RACI MATRIX
+   ----------------------------------------------------------------------- */
+.raci {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto 1fr var(--pad-bottom);
+}
+
+.raci .head { grid-column: 2; grid-row: 2; border-bottom: 2px solid var(--border); padding-bottom: 24px; }
+
+.raci-table-wrap {
+  grid-column: 2;
+  grid-row: 3;
+  overflow: auto;
+  margin-top: 28px;
+}
+
+table.raci-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--type-label);
+}
+
+table.raci-tbl th {
+  text-align: center;
+  font-size: var(--type-label);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border-bottom: 2px solid var(--border-strong);
+  padding: 12px 16px;
+}
+
+table.raci-tbl th.row-hdr { text-align: left; color: var(--ink-2); }
+
+table.raci-tbl td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--grid);
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.raci-tbl td.row-hdr {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.raci-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.raci-pill.R { background: var(--primary);      color: #fff; }
+.raci-pill.A { background: var(--danger-soft);  color: var(--danger); }
+.raci-pill.C { background: var(--warn-soft);    color: var(--warn); }
+.raci-pill.I { background: var(--neutral-soft); color: var(--neutral); }
+
+/* -----------------------------------------------------------------------
+   §11  TWO-COLUMN MAPPING TABLE
+   ----------------------------------------------------------------------- */
+.map-tbl {
+  display: grid;
+  grid-template-columns: var(--pad-x) 1fr 1fr var(--pad-x);
+  grid-template-rows: var(--pad-top) auto 1fr var(--pad-bottom);
+  gap: 0 48px;
+}
+
+.map-tbl .head { grid-column: 2 / 4; grid-row: 2; border-bottom: 2px solid var(--border); padding-bottom: 24px; }
+
+.map-col {
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 28px;
+}
+
+.map-col-hdr {
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--border-strong);
+  margin-bottom: 4px;
+}
+
+.map-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--grid);
+  font-size: var(--type-small);
+}
+
+.map-row:last-child { border-bottom: none; }
+
+.map-row .icon { font-size: 20px; flex-shrink: 0; }
+
+.map-row .text { color: var(--ink-2); line-height: 1.4; }
+.map-row .text strong { display: block; color: var(--ink); font-weight: 600; margin-bottom: 4px; }
+
+/* -----------------------------------------------------------------------
+   ENTRANCE ANIMATIONS
+   Gate on [data-deck-active] + no reduced-motion preference.
+   End-state is the base style — works in print / PDF without JS.
+   ----------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  [data-deck-active] .enter-fade {
+    animation: fadeIn 360ms cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  [data-deck-active] .enter-up {
+    animation: slideUp 420ms cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  [data-deck-active] .ev:nth-child(1) { animation-delay:   0ms; }
+  [data-deck-active] .ev:nth-child(2) { animation-delay:  80ms; }
+  [data-deck-active] .ev:nth-child(3) { animation-delay: 160ms; }
+
+  [data-deck-active] .anchor:nth-child(1) { animation-delay:   0ms; }
+  [data-deck-active] .anchor:nth-child(2) { animation-delay:  60ms; }
+  [data-deck-active] .anchor:nth-child(3) { animation-delay: 120ms; }
+
+  [data-deck-active] .agenda-item { animation: slideUp 320ms cubic-bezier(.2,.8,.2,1) both; }
+  [data-deck-active] .agenda-item:nth-child(1) { animation-delay:  40ms; }
+  [data-deck-active] .agenda-item:nth-child(2) { animation-delay:  80ms; }
+  [data-deck-active] .agenda-item:nth-child(3) { animation-delay: 120ms; }
+  [data-deck-active] .agenda-item:nth-child(4) { animation-delay: 160ms; }
+  [data-deck-active] .agenda-item:nth-child(5) { animation-delay: 200ms; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+</style>
+</head>
+<body>
+
+<style>deck-stage:not(:defined){visibility:hidden}</style>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- ===============================================================
+       SLIDE 1 — COVER
+       =============================================================== -->
+  <section class="cover" data-label="Cover">
+
+    <div class="cover-display enter-up">
+      [ Presentation Title:<br>One Compelling Action Statement ]
+    </div>
+
+    <div class="cover-sub enter-fade">
+      <span class="ph">[ Subtitle or central question ]</span>
+    </div>
+
+    <div class="cover-ask enter-fade">
+      Central ask: <span class="ph">[ One-sentence ask or decision needed ]</span>
+    </div>
+
+    <div class="cover-foot enter-fade">
+      <span><span class="ph">[ Author ]</span></span>
+      <span><span class="ph">[ Team ]</span></span>
+      <span><span class="ph">[ Date ]</span></span>
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 2 — AGENDA / OVERVIEW
+       =============================================================== -->
+  <section class="agenda" data-label="Agenda">
+
+    <div class="head">
+      <div class="eyebrow">Agenda</div>
+      <h2>[ What we will cover ]</h2>
+    </div>
+
+    <div class="agenda-items">
+      <div class="agenda-item">
+        <span class="num">01</span>
+        <span class="label">[ Section one title ]</span>
+      </div>
+      <div class="agenda-item">
+        <span class="num">02</span>
+        <span class="label">[ Section two title ]</span>
+      </div>
+      <div class="agenda-item">
+        <span class="num">03</span>
+        <span class="label">[ Section three title ]</span>
+      </div>
+      <div class="agenda-item">
+        <span class="num">04</span>
+        <span class="label">[ Section four title ]</span>
+      </div>
+      <div class="agenda-item">
+        <span class="num">05</span>
+        <span class="label">[ Recommendation / Next steps ]</span>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 3 — SECTION DIVIDER
+       =============================================================== -->
+  <section class="divider" data-label="Section 1">
+
+    <span class="eyebrow" style="color:rgba(255,255,255,0.55);">01</span>
+    <div class="stitle enter-up">[ Section One<br>Title ]</div>
+    <div class="lead enter-fade">[ Optional: one-sentence context for this section ]</div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 4 — CONTENT (one-idea-per-slide)
+       =============================================================== -->
+  <section class="body-fill" data-label="Content">
+
+    <div class="head">
+      <div class="eyebrow">[ Section label ]</div>
+      <h2>[ Action title: one complete idea as a full sentence ]</h2>
+    </div>
+
+    <div class="content">
+
+      <p style="font-size:var(--type-body); color:var(--ink-2); line-height:1.55; max-width:1200px;">
+        [ Body text — one idea, supported by data or narrative. Keep to 3–5 lines maximum.
+        Every word on this slide should defend the action title above. ]
+      </p>
+
+      <ul style="margin-top:36px; display:flex; flex-direction:column; gap:16px; padding-left:28px; font-size:var(--type-body); color:var(--ink-2); max-width:1200px;">
+        <li>[ Supporting point one — concrete, quantified where possible ]</li>
+        <li>[ Supporting point two ]</li>
+        <li>[ Supporting point three ]</li>
+      </ul>
+
+      <div style="margin-top:48px;">
+        <span class="lv positive">[ Positive verdict ]</span>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 5 — SCQR (Situation / Complication / Question / Answer)
+       =============================================================== -->
+  <section class="scqr" data-label="SCQR">
+
+    <div class="head">
+      <div class="eyebrow">Situation — Complication — Question — Answer</div>
+      <h2>[ Headline that answers: what is the recommendation? ]</h2>
+    </div>
+
+    <div class="scqr-grid">
+
+      <div class="scqr-cell">
+        <div class="tag">Situation</div>
+        <p>[ Current stable fact the audience already agrees with. ]</p>
+      </div>
+
+      <div class="scqr-cell">
+        <div class="tag">Complication</div>
+        <p>[ What has changed or what problem has emerged that makes the situation insufficient. ]</p>
+      </div>
+
+      <div class="scqr-cell">
+        <div class="tag">Question</div>
+        <p>[ The implied question the audience will now ask, which this deck answers. ]</p>
+      </div>
+
+      <div class="scqr-cell answer">
+        <div class="tag">Answer</div>
+        <p>[ The direct answer — your recommendation or conclusion in one crisp sentence. ]</p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 6 — EVIDENCE 3-CARD
+       =============================================================== -->
+  <section class="ev-grid" data-label="Evidence">
+
+    <div class="head">
+      <div class="eyebrow">Evidence</div>
+      <h2>[ Action title: what do these three numbers prove? ]</h2>
+    </div>
+
+    <div class="ev enter-up" style="grid-column:2;">
+      <div class="ev-num"><span class="ph">[ N ]</span></div>
+      <div class="ev-label">[ Metric one name ]</div>
+      <div class="ev-detail">[ One sentence on source and timeframe ]</div>
+    </div>
+
+    <div class="ev enter-up" style="grid-column:3;">
+      <div class="ev-num"><span class="ph">[ N ]</span></div>
+      <div class="ev-label">[ Metric two name ]</div>
+      <div class="ev-detail">[ One sentence on source and timeframe ]</div>
+    </div>
+
+    <div class="ev enter-up" style="grid-column:4;">
+      <div class="ev-num"><span class="ph">[ N ]</span></div>
+      <div class="ev-label">[ Metric three name ]</div>
+      <div class="ev-detail">[ One sentence on source and timeframe ]</div>
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 7 — STAT / NSM ANCHOR
+       =============================================================== -->
+  <section class="stat-grid" data-label="Key Metrics">
+
+    <div class="head" style="grid-column:2/5; grid-row:2; border-bottom:2px solid var(--border); padding-bottom:24px;">
+      <div class="eyebrow">Key Metrics</div>
+      <h2>[ Action title: what story do these metrics tell together? ]</h2>
+    </div>
+
+    <div class="anchor primary-anchor enter-up" style="grid-column:2; grid-row:3; align-self:center;">
+      <div class="stat-num"><span class="ph">[ N.N ]</span></div>
+      <div class="stat-label">[ Primary metric name ]</div>
+      <div class="stat-sub"><span class="ph">[ vs. prior period ]</span> · <span class="ph">[ date range ]</span></div>
+    </div>
+
+    <div class="anchor enter-up" style="grid-column:3; grid-row:3; align-self:center;">
+      <div class="stat-num"><span class="ph">[ N ]</span></div>
+      <div class="stat-label">[ Secondary metric name ]</div>
+      <div class="stat-sub"><span class="ph">[ context ]</span></div>
+    </div>
+
+    <div class="anchor enter-up" style="grid-column:4; grid-row:3; align-self:center;">
+      <div class="stat-num"><span class="ph">[ N ]</span></div>
+      <div class="stat-label">[ Tertiary metric name ]</div>
+      <div class="stat-sub"><span class="ph">[ context ]</span></div>
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 8 — TABLE
+       =============================================================== -->
+  <section class="body-fill" data-label="Table">
+
+    <div class="head">
+      <div class="eyebrow">[ Section label ]</div>
+      <h2>[ Action title for the table — what does this data show? ]</h2>
+    </div>
+
+    <div class="content">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>[ Item ]</th>
+              <th>[ Attribute A ]</th>
+              <th>[ Attribute B ]</th>
+              <th class="num-col">[ Metric ]</th>
+              <th>[ Status ]</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>[ Row label 1 ]</td>
+              <td>[ Value ]</td>
+              <td>[ Value ]</td>
+              <td class="num-col"><span class="ph">[ N ]</span></td>
+              <td><span class="lv positive">On track</span></td>
+            </tr>
+            <tr>
+              <td>[ Row label 2 ]</td>
+              <td>[ Value ]</td>
+              <td>[ Value ]</td>
+              <td class="num-col"><span class="ph">[ N ]</span></td>
+              <td><span class="lv caution">At risk</span></td>
+            </tr>
+            <tr>
+              <td>[ Row label 3 ]</td>
+              <td>[ Value ]</td>
+              <td>[ Value ]</td>
+              <td class="num-col"><span class="ph">[ N ]</span></td>
+              <td><span class="lv risk">Off track</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 9 — SWIMLANE DIAGRAM
+       =============================================================== -->
+  <section class="swim" data-label="Process Flow">
+
+    <div class="head">
+      <div class="eyebrow">Process</div>
+      <h2>[ Action title: what does this process achieve? ]</h2>
+    </div>
+
+    <div class="swim-body">
+
+      <div class="swim-lane">
+        <div class="swim-lane-label">[ Role A ]</div>
+        <div class="swim-lane-cells">
+          <div class="swim-cell">[ Step 1 ]</div>
+          <div class="swim-arrow">→</div>
+          <div class="swim-cell">[ Step 2 ]</div>
+        </div>
+      </div>
+
+      <div class="swim-lane">
+        <div class="swim-lane-label">[ Role B ]</div>
+        <div class="swim-lane-cells">
+          <div class="swim-cell">[ Step 3 ]</div>
+          <div class="swim-arrow">→</div>
+          <div class="swim-cell">[ Step 4 ]</div>
+          <div class="swim-arrow">→</div>
+          <div class="swim-cell">[ Step 5 ]</div>
+        </div>
+      </div>
+
+      <div class="swim-lane">
+        <div class="swim-lane-label">[ Role C ]</div>
+        <div class="swim-lane-cells">
+          <div class="swim-cell">[ Step 6 ]</div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 10 — RACI MATRIX
+       =============================================================== -->
+  <section class="raci" data-label="RACI">
+
+    <div class="head">
+      <div class="eyebrow">Roles and Responsibilities</div>
+      <h2>[ Who owns what across this workstream ]</h2>
+    </div>
+
+    <div class="raci-table-wrap">
+      <table class="raci-tbl">
+        <thead>
+          <tr>
+            <th class="row-hdr">Activity</th>
+            <th>[ Role 1 ]</th>
+            <th>[ Role 2 ]</th>
+            <th>[ Role 3 ]</th>
+            <th>[ Role 4 ]</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-hdr">[ Activity 1 ]</td>
+            <td><span class="raci-pill R">R</span></td>
+            <td><span class="raci-pill A">A</span></td>
+            <td><span class="raci-pill C">C</span></td>
+            <td><span class="raci-pill I">I</span></td>
+          </tr>
+          <tr>
+            <td class="row-hdr">[ Activity 2 ]</td>
+            <td><span class="raci-pill C">C</span></td>
+            <td><span class="raci-pill R">R</span></td>
+            <td><span class="raci-pill A">A</span></td>
+            <td><span class="raci-pill I">I</span></td>
+          </tr>
+          <tr>
+            <td class="row-hdr">[ Activity 3 ]</td>
+            <td><span class="raci-pill I">I</span></td>
+            <td><span class="raci-pill C">C</span></td>
+            <td><span class="raci-pill R">R</span></td>
+            <td><span class="raci-pill A">A</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="grid-column:2; grid-row:4; align-self:end; padding-bottom:4px; display:flex; gap:28px; font-size:var(--type-label); color:var(--ink-3);">
+      <span><strong style="color:var(--primary);">R</strong> Responsible</span>
+      <span><strong style="color:var(--danger);">A</strong> Accountable</span>
+      <span><strong style="color:var(--warn);">C</strong> Consulted</span>
+      <span><strong style="color:var(--neutral);">I</strong> Informed</span>
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 11 — TWO-COLUMN MAPPING TABLE
+       =============================================================== -->
+  <section class="map-tbl" data-label="Mapping">
+
+    <div class="head">
+      <div class="eyebrow">Mapping</div>
+      <h2>[ Action title: what does this mapping reveal or recommend? ]</h2>
+    </div>
+
+    <div class="map-col" style="grid-column:2; grid-row:3;">
+      <div class="map-col-hdr">[ Left Column Label ]</div>
+      <div class="map-row">
+        <span class="icon">◆</span>
+        <div class="text">
+          <strong>[ Item A ]</strong>
+          [ Supporting detail or description for item A ]
+        </div>
+      </div>
+      <div class="map-row">
+        <span class="icon">◆</span>
+        <div class="text">
+          <strong>[ Item B ]</strong>
+          [ Supporting detail or description for item B ]
+        </div>
+      </div>
+      <div class="map-row">
+        <span class="icon">◆</span>
+        <div class="text">
+          <strong>[ Item C ]</strong>
+          [ Supporting detail or description for item C ]
+        </div>
+      </div>
+    </div>
+
+    <div class="map-col" style="grid-column:3; grid-row:3;">
+      <div class="map-col-hdr">[ Right Column Label ]</div>
+      <div class="map-row">
+        <span class="icon">◇</span>
+        <div class="text">
+          <strong>[ Mapped item X ]</strong>
+          [ How X corresponds to A ]
+        </div>
+      </div>
+      <div class="map-row">
+        <span class="icon">◇</span>
+        <div class="text">
+          <strong>[ Mapped item Y ]</strong>
+          [ How Y corresponds to B ]
+        </div>
+      </div>
+      <div class="map-row">
+        <span class="icon">◇</span>
+        <div class="text">
+          <strong>[ Mapped item Z ]</strong>
+          [ How Z corresponds to C ]
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ===============================================================
+       SLIDE 12 — ASK / CLOSING (bookend)
+       =============================================================== -->
+  <section class="ask-next" data-label="Ask">
+
+    <div style="font-size:var(--type-label); font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.50); margin-bottom:28px;">
+      Recommendation
+    </div>
+
+    <h2 style="font-size:var(--type-title); font-weight:700; color:var(--surface); line-height:1.1; max-width:1300px;">
+      [ One-sentence recommendation or decision request. Active voice. Audience-focused. ]
+    </h2>
+
+    <div class="ask-grid">
+
+      <div>
+        <div style="font-size:var(--type-label); font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:rgba(255,255,255,0.50); margin-bottom:16px;">
+          Next Steps
+        </div>
+        <ol style="list-style:none; display:flex; flex-direction:column; gap:14px; padding:0;">
+          <li style="display:flex; gap:16px; align-items:baseline;">
+            <span style="font-size:var(--type-label); font-weight:700; color:var(--accent); min-width:24px;">1</span>
+            <span class="ask-close">[ Action one — owner — by when ]</span>
+          </li>
+          <li style="display:flex; gap:16px; align-items:baseline;">
+            <span style="font-size:var(--type-label); font-weight:700; color:var(--accent); min-width:24px;">2</span>
+            <span class="ask-close">[ Action two — owner — by when ]</span>
+          </li>
+          <li style="display:flex; gap:16px; align-items:baseline;">
+            <span style="font-size:var(--type-label); font-weight:700; color:var(--accent); min-width:24px;">3</span>
+            <span class="ask-close">[ Action three — owner — by when ]</span>
+          </li>
+        </ol>
+      </div>
+
+      <div>
+        <div style="font-size:var(--type-label); font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:rgba(255,255,255,0.50); margin-bottom:16px;">
+          Contact
+        </div>
+        <div class="ask-close">
+          <span class="ph" style="background:rgba(255,255,255,0.10); border-color:rgba(255,255,255,0.25); color:rgba(255,255,255,0.85);">[ Author name ]</span><br>
+          <span style="font-size:var(--type-label); color:rgba(255,255,255,0.45); margin-top:10px; display:block;">[ Role · Team · email@org.com ]</span>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+</deck-stage>
+
+<!-- Speaker notes (optional) — JSON array, one entry per slide (0-indexed) -->
+<script type="application/json" id="speaker-notes">
+[
+  "Cover: introduce yourself and the central question. State the ask upfront.",
+  "Agenda: walk through each section briefly; confirm what the audience expects.",
+  "Section 1 divider: transition statement before diving in.",
+  "Content: read the action title aloud first. Pause. Then explain the support.",
+  "SCQR: this is the pyramid principle structure. Answer first, then justify.",
+  "Evidence: give units and timeframes for each number before showing the slide.",
+  "Key metrics: anchor on the primary number first, then put the others in context.",
+  "Table: tell the audience what to look for before they scan the rows.",
+  "Process: walk left to right, lane by lane. Highlight handoff points.",
+  "RACI: confirm that every row has exactly one A (Accountable) before publishing.",
+  "Mapping: explain the pairing logic — what rule maps left to right?",
+  "Ask: restate the recommendation first. Then surface blockers before Q&A."
+]
+</script>
+
+<script src="deck-stage.js"></script>
+</body>
+</html>

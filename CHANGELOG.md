@@ -110,6 +110,23 @@ completeness. Augment-only - the existing governance hooks are unchanged.
 - **hooks/hooks.json** - registers `req_recon_intake` (UserPromptSubmit) + `req_recon_check` (Stop).
 - **docs/portability-architecture.md**, **adapters/README.md** - marked BUILT (were placeholders).
 
+## [3.20.0] - 2026-06-19
+
+Bundle an org-neutral template foundation so `report` mode is self-contained. Before this, the plugin's `templates/` held only `proposal-walkthrough` while `report` mode referenced an A1-A12 archetype library that lived only in the user's workspace - a stranger installing the plugin got pointed at files they did not have (the self-contained-handoff gap). This ships the shared design DNA, the catalog, AND all 12 archetype skeletons.
+
+### Added
+- **`templates/_contract/THEME-TOKEN-CONTRACT.html`** - the shared token contract every archetype forks: the full token vocabulary (`--bg/--ink/--primary/--accent/--success/--warn/--danger/--neutral` + soft variants), base styles, and the core components (verdict scale, metric block, status chips). Authored org-neutral (a neutral slate palette, no brand hex, no sample data, English) so re-theming is one `:root` swap - keep the token NAMES, replace the values with your brand.
+- **`templates/README.md`** - the A1-A12 archetype catalog (each archetype's channel + what it forks for) + the fork workflow + the "adding an archetype" contract. Documents the full library so it is no longer "hidden" in the workspace.
+- **`templates/A1..A12/`** - all 12 archetype skeletons, each org-neutral (neutral slate tokens, English, `.ph` placeholders, no data, forks `_contract/`). A1 deep-dive, A2 ops-dashboard, A3 editorial-paper, A4 daily-email (email-safe inline), A7 exec-onepager, A9 training, A10 data-quality, A11 projection each ship `boilerplate.html` + `DESIGN-SPEC.md`; A5 ships `card.json` (Google Chat cardsV2) + spec; A12 ships `boilerplate.html` + `deck-stage.js` + spec; A6 + A8 are spec-only. Authored fresh (not de-branded) so they are leak-clean by construction.
+
+### Changed
+- **`skills/da/references/mode-report.md`** - the catalog reference now also points at the BUNDLED set under `${CLAUDE_PLUGIN_ROOT}/templates/` (fork these when you have no workspace library yet), closing the self-containment loop.
+- Version stamps -> v3.20.0 (plugin.json, marketplace.json, README x3, SVG x2).
+
+### Notes
+- All 12 skeletons are bundled now (no longer incremental). Each file was independently leak-scanned by the parent (brand hex / codename / private path / locale) before commit. `report` mode forks one 1:1 and re-themes by swapping the `:root` tokens; fork-or-fail still holds.
+- Pre-existing org-neutrality items remain, tracked separately (NOT in this release): the SVG poster uses a brand-pink accent, and `proposal-walkthrough` is Vietnamese with a brand palette.
+
 ## [3.19.3] - 2026-06-19
 
 Reconcile the `report` mode's template references to the locked **A1-A12 archetype library**. The decision tree + catalog pointers used stale example names (`daily-email/`, `app-dashboard/`, `gchat-webhook/`, `_catalog.md`, `_index.md`) that did not match the canonical A1-A12 folders + `README.md` catalog the report design system actually uses - the README already framed it correctly, only `mode-report.md` had drifted.

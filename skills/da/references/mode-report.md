@@ -38,7 +38,7 @@ What is the report for?   (archetypes = the locked A1-A12 library under shared/t
       └─ Confirm intent → choose closest archetype → fork
 ```
 
-Full archetype catalog: `<your-workspace>/shared/templates/README.md` — the **locked A1-A12 archetype library** (build-once-then-locked; every report forks one 1:1 and swaps data only, never freestyles — this is what fixes per-report style drift). Shared design DNA (tokens, verdict ramp, comparator slot, chart-choice matrix) lives in `<your-workspace>/shared/templates/_contract/` (THEME-TOKEN-CONTRACT.html / 00-PLAYBOOK / DESIGN-DECISIONS / SPEC-TEMPLATE). If you don't have an archetype library yet, start by saving one report you're happy with under `<your-workspace>/shared/templates/<name>/` and add a row to the catalog (`README.md`).
+Full archetype catalog: `<your-workspace>/shared/templates/README.md` — the **locked A1-A12 archetype library** (build-once-then-locked; every report forks one 1:1 and swaps data only, never freestyles — this is what fixes per-report style drift). Shared design DNA (tokens, verdict ramp, comparator slot, chart-choice matrix) lives in `<your-workspace>/shared/templates/_contract/` (THEME-TOKEN-CONTRACT.html / 00-PLAYBOOK / DESIGN-DECISIONS / SPEC-TEMPLATE). If you don't have an archetype library yet, start by saving one report you're happy with under `<your-workspace>/shared/templates/<name>/` and add a row to the catalog (`README.md`). The plugin also BUNDLES an org-neutral starter set + the shared token contract at `${CLAUDE_PLUGIN_ROOT}/templates/` (catalog `templates/README.md`, DNA `templates/_contract/THEME-TOKEN-CONTRACT.html`) - fork these directly when you have no workspace library yet, then re-theme by swapping the `:root` tokens.
 
 ## Workflow
 

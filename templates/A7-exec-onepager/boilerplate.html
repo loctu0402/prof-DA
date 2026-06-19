@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>[ Report Title ] — Exec One-Pager</title>
+<!--
+  ============================================================================
+  A7 EXEC ONE-PAGER — forkable skeleton (org-neutral).
+  Structure: BLUF statement · 2 NSM headline cards · 1 chart · directive recs.
+  One screen · one chart · one decision. No diagnostic chain. No scroll.
+  All values are <span class="ph"> placeholders the renderer replaces.
+  Fork by: (1) swap the :root token block for your brand palette,
+           (2) fill data-bind attributes from your data layer,
+           (3) replace the placeholder SVG with your actual chart.
+  ============================================================================
+-->
+<style>
+/* ===================== TOKEN BLOCK (the one swap surface) =====================
+   Replace the hex values below with your brand palette; keep the token NAMES
+   so every component keeps resolving via var(--token). */
+:root,
+html[data-theme="slate"] {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-alt: #f7f8fa;
+  --surface-sunk: #eceef1;
+  --ink: #1d2126;
+  --ink-2: #434a52;
+  --ink-3: #79818b;
+  --ink-4: #a6adb6;
+  --border: #e2e5e9;
+  --border-strong: #cdd2d8;
+  --grid: #edeff2;
+  --primary: #3a5a78;
+  --primary-deep: #28425a;
+  --primary-soft: #e2e9f0;
+  --accent: #2f6f8f;
+  --accent-soft: #dceaf0;
+  --success: #2e6442;
+  --success-soft: #dbe5dc;
+  --warn: #9a6a1a;
+  --warn-soft: #efe6cb;
+  --danger: #a8362c;
+  --danger-soft: #f0dad5;
+  --neutral: #74706a;
+  --neutral-soft: #e7e3db;
+  --shadow-sm: 0 1px 3px rgba(20,24,30,0.05), 0 1px 2px rgba(20,24,30,0.03);
+}
+
+/* ===================== BASE ===================== */
+*, *::before, *::after { box-sizing: border-box }
+html, body { margin: 0; padding: 0 }
+body {
+  font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-variant-numeric: tabular-nums }
+
+/* Placeholder convention — styled, never a bare blank. Fill via data-bind. */
+.ph {
+  font-family: ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  background: var(--accent-soft);
+  border-bottom: 1px dotted var(--accent);
+  padding: 0 2px;
+  border-radius: 1px;
+  color: var(--ink);
+}
+.ph.txt { font-family: inherit; color: var(--ink-2) }
+
+/* ===================== SHEET ===================== */
+.sheet {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 48px 32px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===================== MASTHEAD ===================== */
+.mh {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 11px;
+  border-bottom: 1.5px solid var(--ink);
+  margin-bottom: 18px;
+}
+.mh .brand { display: flex; align-items: baseline; gap: 10px }
+.mh .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); transform: translateY(-2px) }
+.mh .nm { font-weight: 600; font-size: 18px; letter-spacing: -0.01em }
+.mh .nm .em { font-style: italic; color: var(--ink-3); font-weight: 400 }
+.mh .badge {
+  font-family: ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.mh .meta { text-align: right; font-size: 10.5px; color: var(--ink-3); line-height: 1.6 }
+.mh .meta .date { font-size: 14px; color: var(--ink); font-weight: 500 }
+
+/* ===================== BLUF ===================== */
+.bluf { margin-bottom: 18px }
+.bluf .eyebrow {
+  font-size: 9.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.bluf h1 {
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.bluf h1 .hl {
+  background: linear-gradient(180deg, transparent 60%, var(--accent-soft) 60%);
+  padding: 0 3px;
+}
+.bluf .scqr3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px }
+.bluf .scqr3 .q .k {
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.bluf .scqr3 .q .t { font-size: 12px; color: var(--ink-2); line-height: 1.45 }
+.bluf .scqr3 .q .t b { color: var(--ink); font-weight: 600 }
+
+/* ===================== MAIN 2-COLUMN GRID ===================== */
+.grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 22px; flex: 1 }
+.col { display: flex; flex-direction: column; gap: 14px }
+.sectag {
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: -4px;
+}
+
+/* ===================== NSM CARDS ===================== */
+.nsm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.nsm-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 13px 15px;
+  box-shadow: var(--shadow-sm);
+}
+.nsm-card.primary-accent { border-top: 3px solid var(--accent) }
+.nsm-card .lc {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 9.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+.nsm-card .big {
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.nsm-card .big .u { font-size: 11px; color: var(--ink-3); font-weight: 400; margin-left: 3px }
+.nsm-card .big.warn { color: var(--warn) }
+.nsm-card .cmp { display: flex; gap: 7px; margin-top: 10px }
+.nsm-card .cmp .c {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+}
+.nsm-card .cmp .ref { font-size: 8px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); font-weight: 600 }
+.nsm-card .cmp .dv { font-family: ui-monospace, monospace; font-size: 12px; font-weight: 600 }
+.nsm-card .cmp .dv.up { color: var(--success) }
+.nsm-card .cmp .dv.dn { color: var(--danger) }
+.nsm-card .cmp .dv.warn { color: var(--warn) }
+
+/* verdict pill */
+.vd {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.vd.green { background: var(--success-soft); color: var(--success) }
+.vd.amber { background: var(--warn-soft); color: var(--warn) }
+.vd.red { background: var(--danger-soft); color: var(--danger) }
+.vd.neutral { background: var(--neutral-soft); color: var(--neutral) }
+
+/* ===================== KPI CARDS ===================== */
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+}
+.kpi .cap {
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.kpi .v {
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.kpi .v .u { font-size: 10px; color: var(--ink-3); font-weight: 400; margin-left: 3px }
+.kpi .cmp { display: flex; gap: 10px; margin-top: 8px; font-family: ui-monospace, monospace; font-size: 11px; color: var(--ink-3) }
+.kpi .cmp .up { color: var(--success) }
+.kpi .cmp .dn { color: var(--danger) }
+.kpi .cmp .warn { color: var(--warn) }
+
+/* ===================== THE ONE CHART ===================== */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+.chart-card .ct { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 3px }
+.chart-card .ttl { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.25 }
+.chart-card .leg { font-size: 9.5px; color: var(--ink-3); text-align: right; line-height: 1.4 }
+.chart-card .insight { font-size: 11.5px; color: var(--ink-2); margin: 5px 0 8px; line-height: 1.45 }
+.chart-card .insight b { color: var(--accent); font-weight: 600 }
+.chart-card svg { width: 100%; flex: 1; min-height: 190px; display: block }
+.chart-card .src {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  font-family: ui-monospace, monospace;
+  font-size: 9px;
+  color: var(--ink-4);
+}
+
+/* ===================== RECOMMENDATIONS ===================== */
+.recs {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 13px 15px;
+  box-shadow: var(--shadow-sm);
+}
+.rec {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rec:last-child { border-bottom: none }
+.rec .w { font-family: ui-monospace, monospace; font-size: 10.5px; font-weight: 600; color: var(--accent) }
+.rec .who { font-size: 9.5px; color: var(--ink-3); margin-top: 2px }
+.rec .act { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 3px }
+.rec .why { font-size: 11px; color: var(--ink-2); line-height: 1.45 }
+
+/* ===================== FOOTER ===================== */
+.foot {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--ink-4);
+  font-family: ui-monospace, monospace;
+}
+.foot a { color: var(--accent); text-decoration: none }
+
+/* ===================== RESPONSIVE / PRINT ===================== */
+@media print {
+  body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact }
+  .sheet { padding: 18px 22px; min-height: auto }
+  .nsm-card, .kpi, .chart-card, .recs { break-inside: avoid; box-shadow: none }
+}
+@media (max-width: 900px) {
+  .sheet { padding: 20px }
+  .grid { grid-template-columns: 1fr }
+  .bluf .scqr3 { grid-template-columns: 1fr }
+  .bluf h1 { font-size: 23px }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- MASTHEAD -->
+  <div class="mh">
+    <div class="brand">
+      <span class="dot"></span>
+      <div class="nm">
+        <span class="ph txt" data-bind="brand.name">[ Report Name ]</span>
+        <span class="em"> / executive one-pager</span>
+      </div>
+      <span class="badge">exec · A7</span>
+    </div>
+    <div class="meta">
+      <div class="date"><span class="ph" data-bind="runtime.report_date">[ YYYY-MM-DD ]</span></div>
+      <div>for executive review</div>
+    </div>
+  </div>
+
+  <!-- BLUF -->
+  <div class="bluf">
+    <div class="eyebrow">Decision</div>
+    <h1>
+      <span class="ph txt" data-bind="bluf.statement">[ One-sentence conclusion ]</span>
+      — <span class="hl ph txt" data-bind="bluf.because">[ the single most important reason ]</span>.
+    </h1>
+    <div class="scqr3">
+      <div class="q">
+        <div class="k">Situation</div>
+        <div class="t"><span class="ph txt" data-bind="bluf.situation">[ Context + what changed, one line ]</span></div>
+      </div>
+      <div class="q">
+        <div class="k">Question</div>
+        <div class="t"><span class="ph txt" data-bind="bluf.question">[ The key decision question? ]</span></div>
+      </div>
+      <div class="q">
+        <div class="k">Answer</div>
+        <div class="t"><b><span class="ph txt" data-bind="bluf.answer">[ Recommendation, stated first ]</span></b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID: left = NSM + recs | right = chart + KPIs -->
+  <div class="grid">
+
+    <!-- LEFT COLUMN -->
+    <div class="col">
+      <div class="sectag">North Star Metrics</div>
+      <div class="nsm-row">
+
+        <!-- NSM card 1 (primary) -->
+        <div class="nsm-card primary-accent">
+          <div class="lc">
+            <span class="ph txt" data-bind="nsm1.label">[ NSM #1 label ]</span>
+            <span class="vd amber" data-bind="nsm1.verdict_class"><span class="ph" data-bind="nsm1.verdict">[ status ]</span></span>
+          </div>
+          <div class="big">
+            <span class="ph" data-bind="nsm1.value">[ value ]</span>
+            <span class="u ph txt" data-bind="nsm1.unit">[ unit ]</span>
+          </div>
+          <div class="cmp">
+            <div class="c">
+              <span class="ref">vs prior</span>
+              <span class="dv dn ph" data-bind="nsm1.vs_prior">[ delta ]</span>
+            </div>
+            <div class="c">
+              <span class="ref">vs 7d avg</span>
+              <span class="dv up ph" data-bind="nsm1.vs_7d">[ delta ]</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- NSM card 2 -->
+        <div class="nsm-card">
+          <div class="lc">
+            <span class="ph txt" data-bind="nsm2.label">[ NSM #2 label ]</span>
+            <span class="vd neutral" data-bind="nsm2.verdict_class"><span class="ph" data-bind="nsm2.verdict">[ status ]</span></span>
+          </div>
+          <div class="big warn">
+            <span class="ph" data-bind="nsm2.value">[ value ]</span>
+            <span class="u ph txt" data-bind="nsm2.unit">[ unit ]</span>
+          </div>
+          <div class="cmp">
+            <div class="c">
+              <span class="ref">vs prior</span>
+              <span class="dv up ph" data-bind="nsm2.vs_prior">[ delta ]</span>
+            </div>
+            <div class="c">
+              <span class="ref">vs 7d avg</span>
+              <span class="dv warn ph" data-bind="nsm2.vs_7d">[ delta ]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sectag">Directive Recommendations</div>
+      <div class="recs">
+        <div class="rec">
+          <div>
+            <div class="w"><span class="ph txt" data-bind="rec0.when">[ This week ]</span></div>
+            <div class="who"><span class="ph txt" data-bind="rec0.owner">[ Owner ]</span></div>
+          </div>
+          <div>
+            <div class="act"><span class="ph txt" data-bind="rec0.action">[ Directive action #1. ]</span></div>
+            <div class="why"><span class="ph txt" data-bind="rec0.rationale">[ Why — one line. ]</span></div>
+          </div>
+        </div>
+        <div class="rec">
+          <div>
+            <div class="w"><span class="ph txt" data-bind="rec1.when">[ This month ]</span></div>
+            <div class="who"><span class="ph txt" data-bind="rec1.owner">[ Owner ]</span></div>
+          </div>
+          <div>
+            <div class="act"><span class="ph txt" data-bind="rec1.action">[ Directive action #2. ]</span></div>
+            <div class="why"><span class="ph txt" data-bind="rec1.rationale">[ Why — one line. ]</span></div>
+          </div>
+        </div>
+        <div class="rec">
+          <div>
+            <div class="w"><span class="ph txt" data-bind="rec2.when">[ Next quarter ]</span></div>
+            <div class="who"><span class="ph txt" data-bind="rec2.owner">[ Owner ]</span></div>
+          </div>
+          <div>
+            <div class="act"><span class="ph txt" data-bind="rec2.action">[ Directive action #3. ]</span></div>
+            <div class="why"><span class="ph txt" data-bind="rec2.rationale">[ Why — one line. ]</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col">
+
+      <!-- THE ONE CHART -->
+      <div class="chart-card">
+        <div class="ct">
+          <div class="ttl"><span class="ph txt" data-bind="chart.title">[ Chart conclusion title ]</span></div>
+          <div class="leg">
+            <span class="ph txt" data-bind="chart.unit_note">[ unit ]</span><br>
+            actual · expected band
+          </div>
+        </div>
+        <p class="insight">
+          <b>Key insight:</b>
+          <span class="ph txt" data-bind="chart.insight">[ One-line business takeaway from the chart. ]</span>
+        </p>
+        <!-- Replace the placeholder SVG below with the actual chart (inline SVG or Plotly). -->
+        <svg viewBox="0 0 600 220" preserveAspectRatio="none" aria-label="Headline chart placeholder">
+          <!-- grid lines -->
+          <line x1="0" y1="55" x2="600" y2="55" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="0" y1="110" x2="600" y2="110" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="0" y1="165" x2="600" y2="165" stroke="var(--grid)" stroke-width="1"/>
+          <!-- expected band -->
+          <polygon points="0,90 600,80 600,130 0,140" fill="var(--accent-soft)" opacity="0.5"/>
+          <!-- actual line -->
+          <polyline
+            points="0,145 75,130 150,138 225,118 300,125 375,108 450,114 525,102 600,96"
+            fill="none" stroke="var(--ink-2)" stroke-width="2"/>
+          <!-- latest point highlight -->
+          <circle cx="600" cy="96" r="5" fill="var(--accent)"/>
+        </svg>
+        <div class="src">Source: <span class="ph txt" data-bind="chart.source">[ data source / snapshot timestamp ]</span></div>
+      </div>
+
+      <!-- KPI CARDS (2x2) -->
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="cap"><span class="ph txt" data-bind="kpi0.label">[ KPI label A ]</span></div>
+          <div class="v">
+            <span class="ph" data-bind="kpi0.value">[ value ]</span>
+            <span class="u ph txt" data-bind="kpi0.unit">[ unit ]</span>
+          </div>
+          <div class="cmp">
+            <span>prior <span class="dn ph" data-bind="kpi0.vs_prior">[ delta ]</span></span>
+            <span>7d <span class="up ph" data-bind="kpi0.vs_7d">[ delta ]</span></span>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="cap"><span class="ph txt" data-bind="kpi1.label">[ KPI label B ]</span></div>
+          <div class="v">
+            <span class="ph" data-bind="kpi1.value">[ value ]</span>
+            <span class="u ph txt" data-bind="kpi1.unit">[ unit ]</span>
+          </div>
+          <div class="cmp">
+            <span>prior <span class="up ph" data-bind="kpi1.vs_prior">[ delta ]</span></span>
+            <span>7d <span class="up ph" data-bind="kpi1.vs_7d">[ delta ]</span></span>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="cap"><span class="ph txt" data-bind="kpi2.label">[ KPI label C ]</span></div>
+          <div class="v">
+            <span class="ph" data-bind="kpi2.value">[ value ]</span>
+            <span class="u ph txt" data-bind="kpi2.unit">[ unit ]</span>
+          </div>
+          <div class="cmp">
+            <span>prior <span class="warn ph" data-bind="kpi2.vs_prior">[ delta ]</span></span>
+            <span>7d <span class="dn ph" data-bind="kpi2.vs_7d">[ delta ]</span></span>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="cap"><span class="ph txt" data-bind="kpi3.label">[ KPI label D ]</span></div>
+          <div class="v">
+            <span class="ph" data-bind="kpi3.value">[ value ]</span>
+            <span class="u ph txt" data-bind="kpi3.unit">[ unit ]</span>
+          </div>
+          <div class="cmp">
+            <span>prior <span class="dn ph" data-bind="kpi3.vs_prior">[ delta ]</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <span>auto-generated · <span class="ph" data-bind="runtime.run_time">[ run timestamp ]</span> · prof-DA</span>
+    <span><a href="#" data-bind="foot.full_report_url">Full report</a></span>
+  </div>
+
+</div>
+</body>
+</html>

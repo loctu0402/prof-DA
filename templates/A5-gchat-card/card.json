@@ -1,0 +1,112 @@
+{
+  "cardsV2": [
+    {
+      "cardId": "[ report-id ]",
+      "card": {
+        "header": {
+          "title": "[ Product / Report Name ] · Daily Snapshot",
+          "subtitle": "[ YYYY-MM-DD ] · auto-generated [ HH:MM ] UTC",
+          "imageType": "CIRCLE",
+          "imageUrl": "https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/bar_chart/default/24px.svg"
+        },
+        "sections": [
+          {
+            "header": "Summary",
+            "collapsible": false,
+            "widgets": [
+              {
+                "decoratedText": {
+                  "topLabel": "[ Primary Metric Label ]",
+                  "text": "<b>[ value ]</b>  ·  <font color=\"#6b6b6b\">✓ normal</font>",
+                  "bottomLabel": "vs yesterday [ delta ]  ·  vs 7-day avg [ delta ]",
+                  "startIcon": {
+                    "knownIcon": "STAR"
+                  }
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "[ Secondary Metric Label ]",
+                  "text": "<b>[ value ]</b>  ·  <font color=\"#7a5c00\">⚠ watch</font>",
+                  "bottomLabel": "vs yesterday [ delta ]  ·  vs 7-day avg [ delta ]",
+                  "startIcon": {
+                    "knownIcon": "BOOKMARK"
+                  }
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "[ Flow / Net Metric Label ]",
+                  "text": "<b>[ value ]</b>  ·  <font color=\"#a83200\">🚨 abnormal</font>",
+                  "bottomLabel": "[ inflow component ] [ value ]  ·  [ outflow component ] [ value ]",
+                  "startIcon": {
+                    "knownIcon": "FLIGHT_TAKEOFF"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "header": "Key Metrics",
+            "collapsible": true,
+            "widgets": [
+              {
+                "decoratedText": {
+                  "topLabel": "[ Metric Label A ]",
+                  "text": "<b>[ value ]</b>  ·  <font color=\"#6b6b6b\">✓ normal</font>"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "[ Metric Label B ]",
+                  "text": "<b>[ value ]</b>  ·  <font color=\"#7a5c00\">⚠ watch</font>"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "[ Metric Label C ]",
+                  "text": "<b>[ value ]</b>  ·  <font color=\"#7a3200\">⚠ attention</font>"
+                }
+              },
+              {
+                "decoratedText": {
+                  "topLabel": "[ Metric Label D ]",
+                  "text": "<b>[ value ]</b>  ·  <font color=\"#6b6b6b\">✓ normal</font>"
+                }
+              }
+            ]
+          },
+          {
+            "header": "Legend",
+            "collapsible": false,
+            "widgets": [
+              {
+                "textParagraph": {
+                  "text": "🚨 <b>abnormal</b> — strong deviation, review now (|z| ≥ 3)\n⚠ <b>attention</b> — notable, worth a look (2 ≤ |z| &lt; 3)\n⚠ <b>watch</b> — mild deviation, keep an eye (1 ≤ |z| &lt; 2)\n✓ <b>normal</b> — within the usual range (|z| &lt; 1)"
+                }
+              }
+            ]
+          },
+          {
+            "widgets": [
+              {
+                "buttonList": {
+                  "buttons": [
+                    {
+                      "text": "Open full report",
+                      "onClick": {
+                        "openLink": {
+                          "url": "https://[ portal-url ]/[ report-path ]"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

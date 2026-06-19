@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>[ product / topic ] — Deep-Dive Diagnostic</title>
+<!--
+  ============================================================================
+  A1 · DEEP-DIVE DIAGNOSTIC — org-neutral forkable skeleton.
+  Archetype: causal "WHY" report. Signatures: SCQR orientation frame,
+  observation ladder (baseline -> noise -> impact), diagnostic chain
+  (Fact -> Mechanism -> Behavior -> Impact -> Evidence + structural/cyclical
+  tag + counter-argument), 8-field recommendation brief.
+  Fork rule: copy this file; replace .ph placeholders with live data;
+  swap the :root block for your brand tokens (keep token NAMES).
+  Colors: var(--token) only — no hardcoded hex.
+  Language: English structural text; body prose in your org's language.
+  Charts: Plotly 2.27 from CDN; skeleton data is illustrative only.
+  ============================================================================
+-->
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+<style>
+/* ============================================================
+   THEME TOKEN BLOCK — the only swap surface.
+   Source: shared contract slate palette (org-neutral starter).
+   To re-theme: replace hex values below; keep token NAMES.
+   ============================================================ */
+:root,
+html[data-theme="slate"] {
+  --bg: #f4f5f7; --surface: #ffffff; --surface-alt: #f7f8fa; --surface-sunk: #eceef1;
+  --ink: #1d2126; --ink-2: #434a52; --ink-3: #79818b; --ink-4: #a6adb6;
+  --border: #e2e5e9; --border-strong: #cdd2d8; --grid: #edeff2;
+  --primary: #3a5a78; --primary-deep: #28425a; --primary-soft: #e2e9f0;
+  --accent: #2f6f8f; --accent-soft: #dceaf0;
+  --success: #2e6442; --success-soft: #dbe5dc;
+  --warn: #9a6a1a;   --warn-soft: #efe6cb;
+  --danger: #a8362c; --danger-soft: #f0dad5;
+  --neutral: #74706a; --neutral-soft: #e7e3db;
+  --shadow-sm: 0 1px 3px rgba(20,24,30,0.05), 0 1px 2px rgba(20,24,30,0.03);
+}
+
+/* ============================================================ BASE */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--ink);
+  font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-variant-numeric: tabular-nums; }
+.serif { font-family: Georgia, "Times New Roman", serif; }
+.paper { max-width: 1180px; margin: 0 auto; padding: 36px 56px 80px; }
+
+/* placeholder — styled accent underline; renderer overwrites with live data */
+.ph {
+  font-family: ui-monospace, monospace; font-variant-numeric: tabular-nums;
+  background: var(--accent-soft); border-bottom: 1px dotted var(--accent);
+  padding: 0 2px; border-radius: 1px; color: var(--ink);
+}
+.ph.txt { font-family: inherit; color: var(--ink-2); }
+
+/* ============================================================ MASTHEAD */
+.masthead {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-bottom: 14px; border-bottom: 1.5px solid var(--ink); margin-bottom: 24px;
+}
+.masthead .brand { display: flex; align-items: baseline; gap: 12px; }
+.masthead .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); transform: translateY(-2px); }
+.masthead .nm { font-weight: 600; font-size: 22px; letter-spacing: -0.01em; }
+.masthead .nm .em { font-style: italic; color: var(--ink-3); font-weight: 400; }
+.masthead .badge {
+  font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink-2); background: var(--surface); border: 1px solid var(--border);
+  padding: 3px 9px; border-radius: 3px; font-weight: 600;
+}
+.masthead .meta { text-align: right; font-size: 11px; color: var(--ink-3); line-height: 1.7; }
+.masthead .meta .date { font-size: 16px; color: var(--ink); font-weight: 500; }
+
+/* ============================================================ CAUSAL QUESTION TITLE */
+.causal { margin-bottom: 24px; }
+.causal .eyebrow {
+  font-size: 10px; letter-spacing: .20em; text-transform: uppercase; color: var(--ink-3); font-weight: 600;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 12px;
+}
+.causal .eyebrow .line { flex: 1; height: 1px; background: var(--border); max-width: 80px; }
+.causal h1 {
+  font-family: Georgia, serif; font-weight: 400; font-size: 36px; line-height: 1.18;
+  letter-spacing: -0.02em; margin: 0; color: var(--ink);
+}
+.causal h1 .hl {
+  background: linear-gradient(180deg, transparent 64%, var(--accent-soft) 64%);
+  padding: 0 3px;
+}
+
+/* ============================================================ SCQR FRAME */
+.scqr {
+  display: grid; grid-template-columns: repeat(4, 1fr); margin-bottom: 26px;
+  border: 1px solid var(--border); border-radius: 5px; overflow: hidden;
+  background: var(--surface); box-shadow: var(--shadow-sm);
+}
+.scqr .q { padding: 14px 18px; border-right: 1px solid var(--border); }
+.scqr .q:last-child { border-right: none; }
+.scqr .q .k {
+  font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--accent); font-weight: 600; margin-bottom: 6px;
+}
+.scqr .q .t { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.scqr .q .t b { color: var(--ink); font-weight: 600; }
+
+/* ============================================================ SECTION HEADING */
+.sechead {
+  margin: 36px 0 16px; display: flex; align-items: baseline; gap: 14px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.sechead .ix {
+  font-family: ui-monospace, monospace; font-size: 10px; color: var(--accent);
+  letter-spacing: .14em; font-weight: 600;
+}
+.sechead h2 {
+  font-family: Georgia, serif; font-weight: 400; font-size: 21px;
+  letter-spacing: -0.015em; margin: 0; color: var(--primary);
+}
+.sechead h2 .em { font-style: italic; color: var(--ink-3); }
+.sechead .right { margin-left: auto; font-size: 10.5px; color: var(--ink-3); letter-spacing: .04em; text-transform: uppercase; font-weight: 500; }
+
+/* ============================================================ 6-LAYER METRIC BLOCK */
+.block {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 22px 26px; border-radius: 4px; position: relative; box-shadow: var(--shadow-sm);
+}
+.block.flag-neutral { border-top: 3px solid var(--border-strong); }
+.block.flag-amber   { border-top: 3px solid var(--warn); }
+.block.flag-red     { border-top: 3px solid var(--danger); }
+.lc {
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600; margin-bottom: 12px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+}
+.lc .tag { font-family: ui-monospace, monospace; font-size: 9.5px; color: var(--ink-4); text-transform: none; }
+.lb {
+  font-family: Georgia, serif; font-size: 52px; line-height: 0.98; font-weight: 400;
+  letter-spacing: -0.025em; color: var(--ink); font-variant-numeric: tabular-nums lining-nums; margin-bottom: 4px;
+}
+.lb .unit { font-size: 15px; color: var(--ink-3); margin-left: 6px; font-family: inherit; }
+.lb.danger { color: var(--danger); }
+.lf {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+  margin: 14px 0; padding: 12px 0;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.lf .f { display: flex; flex-direction: column; gap: 2px; }
+.lf .f .lbl { font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.lf .f .v { font-family: ui-monospace, monospace; font-size: 14px; font-weight: 500; color: var(--ink); }
+.lf .f .v.up { color: var(--success); }
+.lf .f .v.dn { color: var(--danger); }
+.lf .f .v.warn { color: var(--warn); }
+.lf .f .sub { font-size: 10px; color: var(--ink-3); font-family: ui-monospace, monospace; }
+.lt {
+  font-family: Georgia, serif; font-size: 15px; line-height: 1.5; font-weight: 500;
+  color: var(--ink); margin: 0 0 12px; display: flex; align-items: flex-start; gap: 10px;
+}
+.lt::before { content: "\25B8"; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.ln { font-size: 12px; color: var(--ink-3); line-height: 1.6; margin: 0 0 14px; max-width: 60ch; }
+.lv {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 11px;
+  font-weight: 600; letter-spacing: .04em; padding: 5px 10px; border-radius: 3px;
+}
+.lv.success { background: var(--success-soft); color: var(--success); }
+.lv.warn    { background: var(--warn-soft);    color: var(--warn); }
+.lv.danger  { background: var(--danger-soft);  color: var(--danger); }
+.lv.neutral { background: var(--neutral-soft); color: var(--neutral); }
+.hero-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.driver-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+
+/* ============================================================ MARKET CONTEXT STRIP */
+.market-card {
+  background: var(--surface); border: 1px solid var(--border); padding: 18px 22px;
+  border-radius: 4px; box-shadow: var(--shadow-sm);
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px;
+}
+.market-chips { display: flex; flex-direction: column; gap: 6px; }
+.mc {
+  display: grid; grid-template-columns: 120px 1fr 80px; gap: 10px;
+  align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 11.5px;
+}
+.mc:last-child { border-bottom: none; }
+.mc .nm { color: var(--ink-2); font-weight: 500; }
+.mc .v  { font-family: ui-monospace, monospace; color: var(--ink); font-weight: 500; text-align: right; }
+.mc .delta { font-family: ui-monospace, monospace; font-size: 11px; text-align: right; }
+.mc .delta.up   { color: var(--success); }
+.mc .delta.dn   { color: var(--danger); }
+.mc .delta.flat { color: var(--ink-4); }
+.news-feed { border-left: 1px solid var(--border); padding-left: 24px; }
+.news-feed .ttl {
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600; margin-bottom: 10px;
+}
+.news-item .src {
+  font-family: ui-monospace, monospace; font-size: 9.5px; color: var(--accent);
+  letter-spacing: .08em; text-transform: uppercase; font-weight: 600;
+}
+.news-item .headline {
+  font-family: Georgia, serif; font-size: 14px; font-weight: 500;
+  color: var(--ink); margin-top: 3px; line-height: 1.35;
+}
+.news-item .summary { font-size: 11.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.45; }
+
+/* ============================================================ OBSERVATION LADDER (signature) */
+.ladder-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 5px;
+  padding: 20px 24px; box-shadow: var(--shadow-sm); margin-bottom: 16px;
+}
+.ladder-card .lc { margin-bottom: 6px; }
+.ladder-top { display: flex; align-items: baseline; gap: 14px; margin-bottom: 16px; }
+.ladder-top .big {
+  font-family: Georgia, serif; font-size: 34px; line-height: 1; font-weight: 400;
+  letter-spacing: -0.02em; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.ladder-top .big .u { font-size: 13px; color: var(--ink-3); margin-left: 5px; font-family: inherit; }
+.ladder { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+.lstage {
+  padding: 14px 18px; border: 1px solid var(--border); border-right: none; position: relative;
+}
+.lstage:first-child { border-radius: 6px 0 0 6px; }
+.lstage:last-child  { border-right: 1px solid var(--border); border-radius: 0 6px 6px 0; }
+.lstage.decisive    { background: var(--accent-soft); }
+.lstage .sl {
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 600; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.lstage .sl .n { font-family: ui-monospace, monospace; color: var(--accent); font-weight: 700; }
+.lstage .sv {
+  font-family: Georgia, serif; font-size: 20px; font-weight: 500;
+  color: var(--ink); line-height: 1.1; font-variant-numeric: tabular-nums;
+}
+.lstage .sv.success { color: var(--success); }
+.lstage .sv.warn    { color: var(--warn); }
+.lstage .sv.danger  { color: var(--danger); }
+.lstage .sd { font-size: 11px; color: var(--ink-3); margin-top: 5px; line-height: 1.45; }
+.lstage::after {
+  content: "\2192"; position: absolute; right: -9px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-4); font-size: 13px; z-index: 1; background: var(--bg); width: 18px; text-align: center;
+}
+.lstage:last-child::after { display: none; }
+
+/* ============================================================ DIAGNOSTIC CHAIN (core signature) */
+.diag {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 5px;
+  padding: 22px 26px; box-shadow: var(--shadow-sm); margin-bottom: 18px;
+}
+.diag.flag-red   { border-top: 3px solid var(--danger); }
+.diag.flag-amber { border-top: 3px solid var(--warn); }
+.dx-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+.dx-q {
+  font-family: Georgia, serif; font-size: 18px; font-weight: 500;
+  color: var(--ink); line-height: 1.3; letter-spacing: -0.008em;
+}
+.dx-tag {
+  flex-shrink: 0; font-size: 10px; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 3px; white-space: nowrap;
+}
+.dx-tag.structural { background: var(--neutral-soft); color: var(--neutral); }
+.dx-tag.cyclical   { background: var(--warn-soft);    color: var(--warn); }
+.dx-chain { list-style: none; margin: 0; padding: 0; }
+.dx-chain li {
+  display: grid; grid-template-columns: 116px 1fr; gap: 16px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.dx-chain li:last-child { border-bottom: none; }
+.dx-chain li .s {
+  font-family: Georgia, serif; font-size: 13px; font-weight: 600; color: var(--accent);
+  display: flex; align-items: baseline; gap: 7px;
+}
+.dx-chain li .s::before {
+  content: attr(data-n); font-family: ui-monospace, monospace;
+  font-size: 10px; color: var(--ink-4); font-weight: 600;
+}
+.dx-chain li p { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+.dx-chain li p b { color: var(--ink); font-weight: 600; }
+.counter {
+  margin-top: 16px; padding: 13px 16px;
+  background: var(--surface-alt); border-left: 3px solid var(--accent);
+  border-radius: 0 5px 5px 0; font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
+}
+.counter b { font-style: italic; color: var(--ink); font-weight: 600; }
+.evidence { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.evidence .ct {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 4px;
+}
+.evidence .ttl { font-family: Georgia, serif; font-size: 14px; font-weight: 500; color: var(--ink); }
+.evidence .leg { font-size: 10px; color: var(--ink-3); text-align: right; line-height: 1.4; }
+.evidence .takeaway { font-size: 11.5px; color: var(--ink-2); margin: 4px 0 8px; line-height: 1.5; }
+.evidence .takeaway b { color: var(--accent); font-weight: 600; }
+.evidence .plot { width: 100%; height: 280px; }
+
+/* ============================================================ 8-FIELD RECOMMENDATION BRIEF (signature) */
+.brief {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 5px;
+  padding: 20px 24px; box-shadow: var(--shadow-sm); margin-bottom: 16px;
+  border-left: 3px solid var(--accent);
+}
+.brief .bh {
+  font-family: Georgia, serif; font-size: 16px; font-weight: 500;
+  color: var(--ink); margin-bottom: 14px; line-height: 1.3;
+}
+.brief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; margin-bottom: 14px; }
+.bf { display: flex; flex-direction: column; gap: 3px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.bf .bl { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+.bf .bv { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.kpi-target {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-family: ui-monospace, monospace; font-size: 12px; color: var(--ink);
+  background: var(--surface-alt); border: 1px solid var(--border);
+  padding: 9px 14px; border-radius: 4px;
+}
+.kpi-target b { color: var(--accent); }
+.kpi-target .prec { margin-left: auto; font-size: 10px; color: var(--ink-4); }
+
+/* ============================================================ METHODOLOGY APPENDIX */
+.method {
+  background: var(--surface-alt); border: 1px solid var(--border); border-radius: 5px;
+  padding: 20px 24px; font-size: 12.5px; color: var(--ink-2); line-height: 1.6;
+}
+.method .mt { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.method .term {
+  display: grid; grid-template-columns: 130px 1fr; gap: 14px;
+  padding: 7px 0; border-bottom: 1px solid var(--border);
+}
+.method .term:last-child { border-bottom: none; }
+.method .term .k { font-family: ui-monospace, monospace; font-size: 11px; color: var(--ink-3); font-weight: 600; }
+
+/* ============================================================ FOOTER */
+.foot {
+  margin-top: 48px; padding-top: 20px; border-top: 2px solid var(--ink);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+  font-size: 11px; color: var(--ink-3); line-height: 1.6;
+}
+.foot .signal {
+  font-family: Georgia, serif; font-size: 13.5px; color: var(--ink-2);
+  max-width: 58ch; font-weight: 500;
+}
+.foot .links { display: flex; gap: 10px; flex-wrap: wrap; }
+.foot .links a {
+  font-size: 11.5px; font-weight: 500; color: var(--ink); text-decoration: none;
+  padding: 5px 12px; border: 1px solid var(--border-strong); border-radius: 3px; background: var(--surface);
+}
+.foot .links a:hover { background: var(--ink); color: var(--surface); }
+.foot .meta { font-family: ui-monospace, monospace; font-size: 10px; color: var(--ink-4); }
+
+/* ============================================================ RESPONSIVE + PRINT */
+@media print {
+  body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .paper { padding: 24px 28px; max-width: none; }
+  .block, .market-card, .ladder-card, .diag, .brief, .method { break-inside: avoid; box-shadow: none; }
+}
+@media (max-width: 900px) {
+  .paper { padding: 24px; }
+  .driver-grid { grid-template-columns: 1fr; }
+  .market-card { grid-template-columns: 1fr; }
+  .news-feed { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 14px; }
+  .lf { grid-template-columns: 1fr; gap: 8px; }
+  .ladder { grid-template-columns: 1fr; }
+  .lstage { border-right: 1px solid var(--border); border-bottom: none; }
+  .lstage:first-child { border-radius: 6px 6px 0 0; }
+  .lstage:last-child  { border-radius: 0 0 6px 6px; }
+  .lstage::after { content: "\2193"; right: 50%; top: auto; bottom: -9px; transform: translateX(50%); }
+  .brief-grid { grid-template-columns: 1fr; }
+  .dx-chain li { grid-template-columns: 1fr; gap: 3px; }
+}
+@media (max-width: 820px) {
+  .scqr { grid-template-columns: 1fr 1fr; }
+  .scqr .q:nth-child(2) { border-right: none; }
+}
+</style>
+</head>
+<body>
+<div class="paper">
+
+  <!-- ── MASTHEAD ─────────────────────────────────────────────────────── -->
+  <div class="masthead">
+    <div class="brand">
+      <span class="dot"></span>
+      <div class="nm">
+        <span class="ph txt" data-bind="brand.product">[ product / topic ]</span>
+        <span class="em"> / diagnostic deep-dive</span>
+      </div>
+      <span class="badge">v1 · deep-dive</span>
+    </div>
+    <div class="meta">
+      <div class="date"><span class="ph" data-bind="runtime.report_date">[ YYYY-MM-DD ]</span></div>
+      <div>causal analysis · <span class="ph mono" data-bind="runtime.run_time">[ HH:MM TZ ]</span></div>
+    </div>
+  </div>
+
+  <!-- ── CAUSAL QUESTION TITLE ─────────────────────────────────────────── -->
+  <div class="causal">
+    <div class="eyebrow"><span class="line"></span><span>Causal question</span></div>
+    <h1>
+      <span class="ph txt" data-bind="causal.stem">Why did</span>
+      <span class="hl ph txt" data-bind="causal.subject">[ primary metric ] decline N%</span>
+      <span class="ph txt" data-bind="causal.frame">while the benchmark held flat?</span>
+    </h1>
+  </div>
+
+  <!-- ── SCQR ORIENTATION FRAME ──────────────────────────────────────── -->
+  <div class="scqr">
+    <div class="q">
+      <div class="k">Situation</div>
+      <div class="t"><span class="ph txt" data-bind="scqr.situation">[ Context: the metric, period, and scope of inquiry. ]</span></div>
+    </div>
+    <div class="q">
+      <div class="k">Complication</div>
+      <div class="t"><span class="ph txt" data-bind="scqr.complication">[ The anomaly that triggered this investigation. ]</span></div>
+    </div>
+    <div class="q">
+      <div class="k">Question</div>
+      <div class="t"><span class="ph txt" data-bind="scqr.question">[ The single causal question to answer. ]</span></div>
+    </div>
+    <div class="q">
+      <div class="k">Resolution</div>
+      <div class="t"><b><span class="ph txt" data-bind="scqr.resolution">[ Causal conclusion — stated up front before the evidence. ]</span></b></div>
+    </div>
+  </div>
+
+  <!-- ── §01 NORTH-STAR METRIC ANCHOR ──────────────────────────────────── -->
+  <div class="sechead">
+    <span class="ix">§ 01</span>
+    <h2>North-Star Metric <span class="em">/ primary + secondary anchors</span></h2>
+    <span class="right">hero · driver family subordinate</span>
+  </div>
+
+  <div class="hero-grid">
+    <div class="block flag-red">
+      <div class="lc">
+        <span><span class="ph txt" data-bind="nsm.label">[ Primary metric label ]</span> · <span class="ph txt" data-bind="nsm.description">[ short description ]</span></span>
+        <span class="tag"><span class="ph mono" data-bind="nsm.field_id">[ field.id ]</span></span>
+      </div>
+      <div class="lb danger">
+        <span class="ph" data-bind="nsm.value">[ value ]</span>
+        <span class="unit"><span class="ph txt" data-bind="nsm.unit">[ unit ]</span></span>
+      </div>
+      <div class="lf">
+        <div class="f">
+          <span class="lbl">vs prior period</span>
+          <span class="v dn"><span class="ph" data-bind="nsm.dod">[ delta % ]</span></span>
+          <span class="sub"><span class="ph" data-bind="nsm.dod_abs">[ +/- absolute ]</span></span>
+        </div>
+        <div class="f">
+          <span class="lbl">vs 7-day avg</span>
+          <span class="v"><span class="ph" data-bind="nsm.vs7d">[ delta % ]</span></span>
+          <span class="sub">trailing 7d</span>
+        </div>
+        <div class="f">
+          <span class="lbl">vs expected</span>
+          <span class="v warn"><span class="ph" data-bind="nsm.z">[ z ]</span></span>
+          <span class="sub">deviation score</span>
+        </div>
+      </div>
+      <p class="lt"><span class="ph txt" data-bind="nsm.takeaway">[ One-sentence business takeaway about the movement under investigation. ]</span></p>
+      <span class="lv danger"><span class="ph txt" data-bind="nsm.verdict">[ Verdict label, e.g. Below expected — review now ]</span></span>
+    </div>
+  </div>
+
+  <div class="driver-grid">
+    <div class="block flag-neutral">
+      <div class="lc">
+        <span><span class="ph txt" data-bind="drv[0].label">[ Driver A label ]</span></span>
+        <span class="tag"><span class="ph mono" data-bind="drv[0].field_id">[ field.id ]</span></span>
+      </div>
+      <div class="lb"><span class="ph" data-bind="drv[0].value">[ value ]</span><span class="unit"><span class="ph txt" data-bind="drv[0].unit">[ unit ]</span></span></div>
+      <div class="lf">
+        <div class="f"><span class="lbl">vs prior</span><span class="v"><span class="ph" data-bind="drv[0].dod">[ delta ]</span></span></div>
+        <div class="f"><span class="lbl">vs 7d avg</span><span class="v"><span class="ph" data-bind="drv[0].vs7d">[ delta ]</span></span></div>
+        <div class="f"><span class="lbl">vs expected</span><span class="v warn"><span class="ph" data-bind="drv[0].z">[ z ]</span></span></div>
+      </div>
+      <p class="lt"><span class="ph txt" data-bind="drv[0].takeaway">[ Takeaway for Driver A. ]</span></p>
+    </div>
+    <div class="block flag-neutral">
+      <div class="lc">
+        <span><span class="ph txt" data-bind="drv[1].label">[ Driver B label ]</span></span>
+        <span class="tag"><span class="ph mono" data-bind="drv[1].field_id">[ field.id ]</span></span>
+      </div>
+      <div class="lb"><span class="ph" data-bind="drv[1].value">[ value ]</span><span class="unit"><span class="ph txt" data-bind="drv[1].unit">[ unit ]</span></span></div>
+      <div class="lf">
+        <div class="f"><span class="lbl">vs prior</span><span class="v"><span class="ph" data-bind="drv[1].dod">[ delta ]</span></span></div>
+        <div class="f"><span class="lbl">vs 7d avg</span><span class="v"><span class="ph" data-bind="drv[1].vs7d">[ delta ]</span></span></div>
+        <div class="f"><span class="lbl">vs expected</span><span class="v"><span class="ph" data-bind="drv[1].z">[ z ]</span></span></div>
+      </div>
+      <p class="lt"><span class="ph txt" data-bind="drv[1].takeaway">[ Takeaway for Driver B. ]</span></p>
+    </div>
+  </div>
+
+  <!-- ── §02 MARKET CONTEXT ─────────────────────────────────────────────── -->
+  <div class="sechead">
+    <span class="ix">§ 02</span>
+    <h2>Market Context <span class="em">/ fetched live, not hard-coded</span></h2>
+    <span class="right">macro signals + competitor benchmark</span>
+  </div>
+  <div class="market-card">
+    <div class="market-chips">
+      <div class="mc"><span class="nm"><span class="ph txt" data-bind="mkt[0].name">[ Index 1 ]</span></span><span class="v"><span class="ph" data-bind="mkt[0].val">[ val ]</span></span><span class="delta flat"><span class="ph" data-bind="mkt[0].delta">[ +/- % ]</span></span></div>
+      <div class="mc"><span class="nm"><span class="ph txt" data-bind="mkt[1].name">[ Index 2 ]</span></span><span class="v"><span class="ph" data-bind="mkt[1].val">[ val ]</span></span><span class="delta flat"><span class="ph" data-bind="mkt[1].delta">[ +/- % ]</span></span></div>
+      <div class="mc"><span class="nm"><span class="ph txt" data-bind="mkt[2].name">[ Index 3 ]</span></span><span class="v"><span class="ph" data-bind="mkt[2].val">[ val ]</span></span><span class="delta up"><span class="ph" data-bind="mkt[2].delta">[ +/- % ]</span></span></div>
+      <div class="mc"><span class="nm"><span class="ph txt" data-bind="mkt[3].name">[ Index 4 ]</span></span><span class="v"><span class="ph" data-bind="mkt[3].val">[ val ]</span></span><span class="delta dn"><span class="ph" data-bind="mkt[3].delta">[ +/- % ]</span></span></div>
+      <div class="mc"><span class="nm"><span class="ph txt" data-bind="mkt[4].name">[ Rate / Benchmark ]</span></span><span class="v"><span class="ph" data-bind="mkt[4].val">[ val ]</span></span><span class="delta flat"><span class="ph txt" data-bind="mkt[4].period">[ period ]</span></span></div>
+      <div class="mc"><span class="nm"><span class="ph txt" data-bind="mkt[5].name">[ Competitor signal ]</span></span><span class="v"><span class="ph" data-bind="mkt[5].val">[ val ]</span></span><span class="delta flat">benchmark</span></div>
+    </div>
+    <div class="news-feed">
+      <div class="ttl">Impact event</div>
+      <div class="news-item">
+        <div class="src"><span class="ph txt" data-bind="news[0].src">[ source ]</span> <span class="ph" data-bind="news[0].ts">[ HH:MM ]</span></div>
+        <div class="headline"><span class="ph txt" data-bind="news[0].headline">[ One-line impact headline. ]</span></div>
+        <div class="summary"><span class="ph txt" data-bind="news[0].summary">[ Summary of how this event affects the metric under investigation. ]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── §03 OBSERVATION LADDER ─────────────────────────────────────────── -->
+  <div class="sechead">
+    <span class="ix">§ 03</span>
+    <h2>Observation <span class="em">/ baseline &#x2192; noise &#x2192; impact</span></h2>
+    <span class="right">CI · p-value · effect size</span>
+  </div>
+  <div class="ladder-card">
+    <div class="lc">
+      <span><span class="ph txt" data-bind="obs.metric_label">[ Primary metric ]</span> — movement today</span>
+      <span class="tag"><span class="ph mono" data-bind="obs.field_id">[ field.id ]</span></span>
+    </div>
+    <div class="ladder-top">
+      <div class="big">
+        <span class="ph" data-bind="obs.movement_abs">[ +/- value ]</span>
+        <span class="u">(<span class="ph" data-bind="obs.movement_pct">[ +/- % ]</span>)</span>
+      </div>
+    </div>
+    <div class="ladder">
+      <div class="lstage">
+        <div class="sl"><span class="n">1</span>Baseline</div>
+        <div class="sv"><span class="ph" data-bind="obs.baseline.value">[ reference value ]</span></div>
+        <div class="sd"><span class="ph txt" data-bind="obs.baseline.basis">[ How the baseline was set — e.g., rolling 14-day median, same-weekday average. ]</span></div>
+      </div>
+      <div class="lstage decisive">
+        <div class="sl"><span class="n">2</span>Noise / Signal</div>
+        <div class="sv warn"><span class="ph" data-bind="obs.noise.ci">[ +/- N sigma ]</span></div>
+        <div class="sd">p = <span class="ph" data-bind="obs.noise.p">[ p-value ]</span> · <span class="ph txt" data-bind="obs.noise.verdict">[ Signal verdict — e.g., exceeds confidence interval, not noise. ]</span></div>
+      </div>
+      <div class="lstage">
+        <div class="sl"><span class="n">3</span>Impact</div>
+        <div class="sv"><span class="ph" data-bind="obs.impact.effect">[ effect size ]</span></div>
+        <div class="sd"><span class="ph txt" data-bind="obs.impact.business">[ Impact translated to business terms. ]</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── §04 DIAGNOSTIC CHAINS ──────────────────────────────────────────── -->
+  <div class="sechead">
+    <span class="ix">§ 04</span>
+    <h2>Diagnostic <span class="em">/ every hot spot investigated, none abandoned</span></h2>
+    <span class="right">Fact &#x2192; Mechanism &#x2192; Behavior &#x2192; Impact &#x2192; Evidence</span>
+  </div>
+
+  <!-- Diagnostic chain #1 — cyclical cause, red severity -->
+  <div class="diag flag-red">
+    <div class="dx-head">
+      <div class="dx-q"><span class="ph txt" data-bind="dx[0].question">[ Why did hot spot #1 occur? ]</span></div>
+      <span class="dx-tag cyclical">Cyclical</span>
+    </div>
+    <ol class="dx-chain">
+      <li>
+        <span class="s" data-n="01">Fact</span>
+        <p><span class="ph txt" data-bind="dx[0].fact">[ What the data shows — observed value, delta, and deviation score. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="02">Mechanism</span>
+        <p><span class="ph txt" data-bind="dx[0].mechanism">[ The causal mechanism — why this happened in terms of the system or user incentive. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="03">Behavior</span>
+        <p><span class="ph txt" data-bind="dx[0].behavior">[ What users or the system did — observed action that connects mechanism to impact. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="04">Impact</span>
+        <p><span class="ph txt" data-bind="dx[0].impact">[ Quantified effect on the primary metric / north-star — how much and what share of total movement. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="05">Evidence</span>
+        <p><span class="ph txt" data-bind="dx[0].evidence">[ Chart or number that proves the chain — reference the evidence chart below. ]</span></p>
+      </li>
+    </ol>
+    <div class="counter">
+      <b>Counter-argument:</b>
+      <span class="ph txt" data-bind="dx[0].counter">[ If this were structural, signal X would also deviate — it does not. Therefore this is cyclical, not a trend. ]</span>
+    </div>
+    <div class="evidence">
+      <div class="ct">
+        <div class="ttl"><span class="ph txt" data-bind="dx[0].chart_title">[ Evidence chart title ]</span></div>
+        <div class="leg"><span class="ph txt" data-bind="dx[0].chart_legend">[ unit · highlight marker description ]</span></div>
+      </div>
+      <p class="takeaway"><b>Takeaway:</b> <span class="ph txt" data-bind="dx[0].evidence_takeaway">[ One-line insight from this chart. ]</span></p>
+      <div class="plot" id="ev1"></div>
+    </div>
+  </div>
+
+  <!-- Diagnostic chain #2 — structural cause, amber severity -->
+  <div class="diag flag-amber">
+    <div class="dx-head">
+      <div class="dx-q"><span class="ph txt" data-bind="dx[1].question">[ Why did hot spot #2 occur? ]</span></div>
+      <span class="dx-tag structural">Structural</span>
+    </div>
+    <ol class="dx-chain">
+      <li>
+        <span class="s" data-n="01">Fact</span>
+        <p><span class="ph txt" data-bind="dx[1].fact">[ Observed data point for hot spot #2. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="02">Mechanism</span>
+        <p><span class="ph txt" data-bind="dx[1].mechanism">[ Causal mechanism for hot spot #2. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="03">Behavior</span>
+        <p><span class="ph txt" data-bind="dx[1].behavior">[ Observed user or system behavior. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="04">Impact</span>
+        <p><span class="ph txt" data-bind="dx[1].impact">[ Quantified impact on the primary metric. ]</span></p>
+      </li>
+      <li>
+        <span class="s" data-n="05">Evidence</span>
+        <p><span class="ph txt" data-bind="dx[1].evidence">[ Supporting chart or number. ]</span></p>
+      </li>
+    </ol>
+    <div class="counter">
+      <b>Counter-argument:</b>
+      <span class="ph txt" data-bind="dx[1].counter">[ If this were cyclical, it would revert within the rolling window — the 4-week trend shows it does not. ]</span>
+    </div>
+  </div>
+
+  <!-- ── §05 RECOMMENDATIONS ────────────────────────────────────────────── -->
+  <div class="sechead">
+    <span class="ix">§ 05</span>
+    <h2>Recommendations <span class="em">/ 8-field brief · KPI = Base &#xD7; (1+Lift)</span></h2>
+    <span class="right">cited precedent required</span>
+  </div>
+
+  <div class="brief">
+    <div class="bh"><span class="ph txt" data-bind="rec[0].title">[ Recommended action #1 — stated as a directive. ]</span></div>
+    <div class="brief-grid">
+      <div class="bf"><span class="bl">Question</span><span class="bv"><span class="ph txt" data-bind="rec[0].question">[ Question this action resolves. ]</span></span></div>
+      <div class="bf"><span class="bl">Goal</span><span class="bv"><span class="ph txt" data-bind="rec[0].goal">[ Measurable goal. ]</span></span></div>
+      <div class="bf"><span class="bl">Why</span><span class="bv"><span class="ph txt" data-bind="rec[0].why">[ Rationale grounded in the diagnostic. ]</span></span></div>
+      <div class="bf"><span class="bl">What</span><span class="bv"><span class="ph txt" data-bind="rec[0].what">[ Specific action or deliverable. ]</span></span></div>
+      <div class="bf"><span class="bl">Who</span><span class="bv"><span class="ph txt" data-bind="rec[0].who">[ Responsible team or role. ]</span></span></div>
+      <div class="bf"><span class="bl">When</span><span class="bv"><span class="ph txt" data-bind="rec[0].when">[ Target date or milestone. ]</span></span></div>
+      <div class="bf"><span class="bl">Where</span><span class="bv"><span class="ph txt" data-bind="rec[0].where">[ Channel, segment, or surface. ]</span></span></div>
+      <div class="bf"><span class="bl">How</span><span class="bv"><span class="ph txt" data-bind="rec[0].how">[ Implementation approach. ]</span></span></div>
+    </div>
+    <div class="kpi-target">
+      KPI = <span class="ph" data-bind="rec[0].base">[ Base ]</span>
+      &#xD7; (1 + <b><span class="ph" data-bind="rec[0].lift">[ Lift ]</span></b>)
+      = <span class="ph" data-bind="rec[0].target">[ target value ]</span>
+      <span class="prec">precedent: <span class="ph txt" data-bind="rec[0].precedent">[ cited lift source ]</span></span>
+    </div>
+  </div>
+
+  <!-- ── §06 METHODOLOGY APPENDIX ───────────────────────────────────────── -->
+  <div class="sechead">
+    <span class="ix">§ 06</span>
+    <h2>Methodology <span class="em">/ appendix</span></h2>
+    <span class="right">only place statistical notation is used</span>
+  </div>
+  <div class="method">
+    <div class="mt">Expected-value model and verdict derivation</div>
+    <div class="term">
+      <span class="k">deviation score</span>
+      <span><span class="ph txt" data-bind="method.zscore">[ Definition of the deviation score and how the expected value is computed for each metric. ]</span></span>
+    </div>
+    <div class="term">
+      <span class="k">CI / sigma</span>
+      <span><span class="ph txt" data-bind="method.sigma">[ Confidence interval width used to separate signal from noise. ]</span></span>
+    </div>
+    <div class="term">
+      <span class="k">effect size</span>
+      <span><span class="ph txt" data-bind="method.effect">[ How raw deviation is translated into a business-impact magnitude. ]</span></span>
+    </div>
+    <div class="term">
+      <span class="k">structural / cyclical</span>
+      <span><span class="ph txt" data-bind="method.tags">[ Criteria for tagging a cause structural (persistent trend) vs cyclical (transient pattern). ]</span></span>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────────────────── -->
+  <div class="foot">
+    <div class="signal"><span class="ph txt" data-bind="foot.signal">[ One-sentence causal signal that should stay with the reader. ]</span></div>
+    <div class="links">
+      <a href="#" data-bind="foot.dashboard_link">Dashboard</a>
+      <a href="#" data-bind="foot.method_link">Methodology</a>
+    </div>
+    <div class="meta">auto-generated · <span class="ph" data-bind="runtime.run_time">[ HH:MM TZ ]</span> · prof-DA</div>
+  </div>
+
+</div><!-- /paper -->
+
+<script>
+/* ── Verdict label helper (org-neutral, no brand or locale baked in) ── */
+function verdictLabel(z) {
+  const a = Math.abs(z);
+  if (a >= 3)  return 'Strong deviation — review now';
+  if (a >= 2)  return 'Notable deviation — worth a look';
+  if (a >= 1)  return 'Mild deviation — keep an eye';
+  return 'Within normal range';
+}
+
+/* ── Evidence chart §04 dx[0] — illustrative skeleton data only ─────── */
+(function () {
+  if (typeof Plotly === 'undefined') return;
+  const cs   = getComputedStyle(document.documentElement);
+  const ACC  = cs.getPropertyValue('--accent').trim();
+  const GREY = cs.getPropertyValue('--ink-4').trim();
+  const INK2 = cs.getPropertyValue('--ink-2').trim();
+  const GRID = cs.getPropertyValue('--grid').trim();
+
+  const days   = ['D-6','D-5','D-4','D-3','D-2','D-1','D0'];
+  const actual   = [20, 22, 19, 24, 21, 23, 38];   /* skeleton — renderer overwrites */
+  const expected = [21, 21, 20, 22, 21, 22, 24];   /* skeleton — renderer overwrites */
+
+  const traceExp = {
+    x: days, y: expected, type: 'scatter', mode: 'lines', name: 'Expected',
+    line: { color: GREY, width: 1.5, dash: 'dot' },
+    hovertemplate: 'Expected %{y}<extra></extra>'
+  };
+  const traceAct = {
+    x: days, y: actual, type: 'scatter', mode: 'lines+markers', name: 'Actual',
+    line: { color: INK2, width: 2 },
+    marker: {
+      size:  days.map((d, i) => i === days.length - 1 ? 11 : 6),
+      color: days.map((d, i) => i === days.length - 1 ? ACC : INK2)
+    },
+    hovertemplate: 'Actual %{y}<extra></extra>'
+  };
+
+  Plotly.newPlot('ev1', [traceExp, traceAct], {
+    margin: { l: 42, r: 12, t: 6, b: 34 },
+    height: 280,
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor:  'rgba(0,0,0,0)',
+    font: { family: '-apple-system,Segoe UI,Roboto,sans-serif', color: INK2, size: 11 },
+    legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 10 } },
+    xaxis: { title: { text: 'Day', font: { size: 10 } }, gridcolor: GRID },
+    yaxis: { title: { text: '[ unit ]', font: { size: 10 } }, gridcolor: GRID, zeroline: false, rangemode: 'tozero' }
+  }, { displayModeBar: false, responsive: true });
+})();
+</script>
+</body>
+</html>

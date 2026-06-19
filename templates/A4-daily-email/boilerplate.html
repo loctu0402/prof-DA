@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="color-scheme" content="light only"/>
+<meta name="supported-color-schemes" content="light only"/>
+<title>[ report-title ] — Daily Snapshot</title>
+<!--
+  ============================================================================
+  A4 · DAILY EMAIL — forkable skeleton (boilerplate).
+  Org-neutral. Palette: neutral slate tokens inlined (no CSS variables — email
+  clients strip them). Force-light 3-layer override is the email signature.
+  Layout: <table>-based, inline styles on every element. No JS. Charts = <img>
+  placeholder (replace src with base64 data-URI or CID). Max 80 KB total.
+  Fork: copy this file, replace every [ placeholder-key ] with your renderer.
+  ============================================================================
+-->
+<style type="text/css">
+  /* Force LIGHT MODE — 3-layer override. Lives in <head>; coexists with inline body styles. */
+  /* Palette (slate neutral, from token contract :root):
+       page   #f4f5f7   surface #ffffff   surface-alt #f7f8fa
+       ink    #1d2126   ink-2   #434a52   ink-3  #79818b   ink-4 #a6adb6
+       border #e2e5e9   border-strong #cdd2d8
+       primary #3a5a78  primary-soft #e2e9f0
+       accent  #2f6f8f  accent-soft  #dceaf0
+       success #2e6442  success-soft #dbe5dc
+       warn    #9a6a1a  warn-soft    #efe6cb
+       danger  #a8362c  danger-soft  #f0dad5
+       neutral #74706a  neutral-soft #e7e3db
+  */
+  /* Layer 1 — declare light-only at property level */
+  :root { color-scheme: light only; supported-color-schemes: light only; }
+  body, table, td, div, p, span, a { color-scheme: light only !important; }
+  /* Layer 2 — Outlook.com / Outlook mobile dark mode (data-ogsc/data-ogsb) */
+  [data-ogsc] body,  [data-ogsb] body  { background:#f4f5f7 !important; color:#1d2126 !important; }
+  [data-ogsc] .card, [data-ogsb] .card { background:#ffffff !important; color:#1d2126 !important; }
+  [data-ogsc] .ink,  [data-ogsb] .ink  { color:#1d2126 !important; }
+  [data-ogsc] .ink2, [data-ogsb] .ink2 { color:#434a52 !important; }
+  [data-ogsc] .cta td, [data-ogsb] .cta td { background:#3a5a78 !important; }
+  /* Layer 3 — Apple Mail / Gmail mobile dark mode */
+  @media (prefers-color-scheme: dark) {
+    body, table, td, div, p, span { background-color:#f4f5f7 !important; color:#1d2126 !important; }
+    .card  { background-color:#ffffff !important; color:#1d2126 !important; }
+    .soft  { background-color:#f7f8fa !important; }
+    .ink   { color:#1d2126 !important; }
+    .ink2  { color:#434a52 !important; }
+    .ink3  { color:#79818b !important; }
+    .cta td { background-color:#3a5a78 !important; }
+  }
+  /* CTA white text survives dark mode */
+  .cta a { color:#ffffff !important; text-decoration:none !important; }
+</style>
+</head>
+<body bgcolor="#f4f5f7" style="margin:0;padding:0;background:#f4f5f7 !important;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:#1d2126 !important">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#f4f5f7" style="background:#f4f5f7 !important">
+<tr><td align="center" style="padding:22px 12px">
+
+  <!-- Outer card: 720px max, white surface, neutral border -->
+  <table role="presentation" class="card" cellpadding="0" cellspacing="0" border="0" width="720" style="max-width:720px;background:#ffffff;border:1px solid #e2e5e9;border-radius:10px;overflow:hidden">
+
+    <!-- ─── HEADER: brand mark + date + snapshot subline ─── -->
+    <tr><td style="padding:18px 24px;border-bottom:1.5px solid #1d2126">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+        <td align="left" style="vertical-align:middle">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+            <!-- Accent dot: replace color with your brand primary if forking -->
+            <td style="vertical-align:middle;padding-right:9px"><div style="width:9px;height:9px;background:#3a5a78;border-radius:50%;font-size:0;line-height:0">&nbsp;</div></td>
+            <td style="vertical-align:middle">
+              <span class="ink" style="font-size:18px;font-weight:600;color:#1d2126">[ product-name ]</span>
+              <span class="ink3" style="font-size:13px;font-style:italic;color:#79818b"> / daily snapshot</span>
+            </td>
+          </tr></table>
+        </td>
+        <td align="right" style="vertical-align:middle">
+          <div class="ink" style="font-size:15px;font-weight:600;color:#1d2126">[ report-date ]</div>
+          <div class="ink3" style="font-size:11px;color:#79818b;margin-top:2px">snapshot T&#8722;1 &nbsp;&#183;&nbsp; [ run-time ] local</div>
+        </td>
+      </tr></table>
+    </td></tr>
+
+    <!-- ─── 3-LINE INTRO: compact orientation sentence ─── -->
+    <tr><td class="soft" style="padding:14px 24px;background:#f7f8fa;border-bottom:1px solid #e2e5e9">
+      <p class="ink2" style="margin:0;font-size:13px;line-height:1.6;color:#434a52">
+        This is the <b style="color:#1d2126">T&#8722;1 snapshot</b> for <b style="color:#1d2126">[ product-name ]</b>.
+        The primary indicator today is <b style="color:#1d2126">[ primary-kpi-value ]</b>, a shift of
+        <b style="color:#1d2126">[ primary-kpi-delta ]</b> vs. yesterday.
+        What is driving the movement and does it require action?
+        Full context is in the portal link at the bottom.
+      </p>
+    </td></tr>
+
+    <!-- ─── NSM STRIP: 2 headline metrics with verdict icons ─── -->
+    <tr><td style="padding:18px 24px 8px">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+
+        <!-- NSM card 1: flagged (danger/warn example — remove border-top for neutral) -->
+        <td width="50%" style="vertical-align:top;padding-right:7px">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" class="soft"
+            style="background:#f7f8fa;border:1px solid #e2e5e9;border-radius:8px;border-top:3px solid #a8362c"><tr><td style="padding:13px 15px">
+            <div class="ink3" style="font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#79818b">[ nsm-metric-1-label ] &nbsp;&#183;&nbsp; [ short-description ]</div>
+            <div class="ink" style="font-size:26px;color:#1d2126;margin-top:5px">
+              <span style="border-bottom:1px dotted #cdd2d8">[ nsm-1-value ]</span>
+              <span class="ink3" style="font-size:12px;color:#79818b"> [ unit ]</span>
+            </div>
+            <!-- Verdict pill: swap color class for success/warn/danger/neutral -->
+            <div style="display:inline-block;margin-top:7px;font-size:11px;font-weight:600;
+              background:#f0dad5;color:#a8362c;padding:3px 8px;border-radius:3px">
+              &#9888; [ verdict-label ] &nbsp;&#183;&nbsp; [ dod-delta ] DoD &nbsp;&#183;&nbsp; [ w7d-delta ] vs 7d
+            </div>
+          </td></tr></table>
+        </td>
+
+        <!-- NSM card 2: normal example -->
+        <td width="50%" style="vertical-align:top;padding-left:7px">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" class="soft"
+            style="background:#f7f8fa;border:1px solid #e2e5e9;border-radius:8px"><tr><td style="padding:13px 15px">
+            <div class="ink3" style="font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#79818b">[ nsm-metric-2-label ]</div>
+            <div class="ink" style="font-size:26px;color:#1d2126;margin-top:5px">
+              <span style="border-bottom:1px dotted #cdd2d8">[ nsm-2-value ]</span>
+              <span class="ink3" style="font-size:12px;color:#79818b"> [ unit ]</span>
+            </div>
+            <div style="display:inline-block;margin-top:7px;font-size:11px;font-weight:600;
+              background:#dbe5dc;color:#2e6442;padding:3px 8px;border-radius:3px">
+              &#10003; [ verdict-label ] &nbsp;&#183;&nbsp; [ dod-delta ] DoD &nbsp;&#183;&nbsp; [ w7d-delta ] vs 7d
+            </div>
+          </td></tr></table>
+        </td>
+
+      </tr></table>
+    </td></tr>
+
+    <!-- ─── DUAL-COMPARISON KPI STRIP: 3–4 secondary metrics ─── -->
+    <tr><td style="padding:8px 24px 16px">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+
+        <!-- KPI cell 1 -->
+        <td width="33%" style="vertical-align:top;padding:0 4px 0 0">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+            style="border:1px solid #e2e5e9;border-radius:6px"><tr><td style="padding:11px 13px">
+            <div class="ink3" style="font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b">[ kpi-1-label ]</div>
+            <div class="ink" style="font-size:17px;color:#a8362c;margin-top:4px">[ kpi-1-value ]</div>
+            <div class="ink3" style="font-size:10.5px;color:#79818b;margin-top:5px">
+              DoD <span style="color:#a8362c">[ kpi-1-dod ]</span>
+              &nbsp;&#183;&nbsp; 7d <span style="color:#2e6442">[ kpi-1-w7d ]</span>
+            </div>
+          </td></tr></table>
+        </td>
+
+        <!-- KPI cell 2 -->
+        <td width="33%" style="vertical-align:top;padding:0 4px">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+            style="border:1px solid #e2e5e9;border-radius:6px"><tr><td style="padding:11px 13px">
+            <div class="ink3" style="font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b">[ kpi-2-label ]</div>
+            <div class="ink" style="font-size:17px;color:#1d2126;margin-top:4px">[ kpi-2-value ]</div>
+            <div class="ink3" style="font-size:10.5px;color:#79818b;margin-top:5px">
+              DoD <span style="color:#2e6442">[ kpi-2-dod ]</span>
+              &nbsp;&#183;&nbsp; 7d <span style="color:#2e6442">[ kpi-2-w7d ]</span>
+            </div>
+          </td></tr></table>
+        </td>
+
+        <!-- KPI cell 3 -->
+        <td width="33%" style="vertical-align:top;padding:0 0 0 4px">
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+            style="border:1px solid #e2e5e9;border-radius:6px"><tr><td style="padding:11px 13px">
+            <div class="ink3" style="font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b">[ kpi-3-label ]</div>
+            <div class="ink" style="font-size:17px;color:#9a6a1a;margin-top:4px">[ kpi-3-value ]</div>
+            <div class="ink3" style="font-size:10.5px;color:#79818b;margin-top:5px">
+              DoD <span style="color:#9a6a1a">[ kpi-3-dod ]</span>
+              &nbsp;&#183;&nbsp; 7d <span style="color:#a8362c">[ kpi-3-w7d ]</span>
+            </div>
+          </td></tr></table>
+        </td>
+
+      </tr></table>
+    </td></tr>
+
+    <!-- ─── CHANNEL / SEGMENT BREAKDOWN TABLE ─── -->
+    <tr><td style="padding:0 24px 16px">
+      <div class="ink" style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#434a52;margin-bottom:8px">[ breakdown-section-title ]</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+        style="border:1px solid #e2e5e9;border-radius:6px;border-collapse:collapse">
+        <!-- Header row -->
+        <tr style="background:#f7f8fa">
+          <td style="padding:9px 13px;font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b;border-bottom:1px solid #e2e5e9">[ segment-col ]</td>
+          <td align="right" style="padding:9px 13px;font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b;border-bottom:1px solid #e2e5e9">[ value-col ]</td>
+          <td align="right" style="padding:9px 13px;font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b;border-bottom:1px solid #e2e5e9">DoD</td>
+          <td align="right" style="padding:9px 13px;font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b;border-bottom:1px solid #e2e5e9">vs 7d</td>
+          <td align="center" style="padding:9px 13px;font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#79818b;border-bottom:1px solid #e2e5e9">Status</td>
+        </tr>
+        <!-- Data row 1 -->
+        <tr>
+          <td style="padding:10px 13px;font-size:12.5px;color:#1d2126;border-bottom:1px solid #e2e5e9">[ segment-1 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12.5px;font-weight:600;color:#1d2126;border-bottom:1px solid #e2e5e9">[ value-1 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12px;color:#a8362c;border-bottom:1px solid #e2e5e9">[ dod-1 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12px;color:#2e6442;border-bottom:1px solid #e2e5e9">[ w7d-1 ]</td>
+          <td align="center" style="padding:10px 13px;border-bottom:1px solid #e2e5e9">
+            <span style="font-size:10.5px;font-weight:600;background:#f0dad5;color:#a8362c;padding:2px 7px;border-radius:3px">[ status-1 ]</span>
+          </td>
+        </tr>
+        <!-- Data row 2 -->
+        <tr>
+          <td style="padding:10px 13px;font-size:12.5px;color:#1d2126;border-bottom:1px solid #e2e5e9">[ segment-2 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12.5px;font-weight:600;color:#1d2126;border-bottom:1px solid #e2e5e9">[ value-2 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12px;color:#2e6442;border-bottom:1px solid #e2e5e9">[ dod-2 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12px;color:#2e6442;border-bottom:1px solid #e2e5e9">[ w7d-2 ]</td>
+          <td align="center" style="padding:10px 13px;border-bottom:1px solid #e2e5e9">
+            <span style="font-size:10.5px;font-weight:600;background:#dbe5dc;color:#2e6442;padding:2px 7px;border-radius:3px">[ status-2 ]</span>
+          </td>
+        </tr>
+        <!-- Data row 3 -->
+        <tr>
+          <td style="padding:10px 13px;font-size:12.5px;color:#1d2126">[ segment-3 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12.5px;font-weight:600;color:#1d2126">[ value-3 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12px;color:#9a6a1a">[ dod-3 ]</td>
+          <td align="right" style="padding:10px 13px;font-size:12px;color:#9a6a1a">[ w7d-3 ]</td>
+          <td align="center" style="padding:10px 13px">
+            <span style="font-size:10.5px;font-weight:600;background:#efe6cb;color:#9a6a1a;padding:2px 7px;border-radius:3px">[ status-3 ]</span>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- ─── CHART BLOCK: one image, inline src placeholder ─── -->
+    <tr><td style="padding:0 24px 16px">
+      <div class="ink" style="font-size:14px;font-weight:600;color:#1d2126;margin-bottom:4px">[ chart-title ]</div>
+      <div class="ink2" style="font-size:11.5px;color:#434a52;margin-bottom:9px">
+        <b style="color:#3a5a78">Insight:</b> [ one-line chart takeaway — renderer fills this ]
+      </div>
+      <!--
+        Renderer replaces this placeholder table with:
+        <img src="[ chart-image-url-or-cid ]" width="672" alt="[ chart-alt-text ]"
+             style="display:block;border:0;max-width:100%;height:auto"/>
+        Keep src as a base64 data-URI (data:image/png;base64,...) or CID reference (cid:chart1.png)
+        to avoid external image blocking. Max size: keep total email under 80 KB.
+      -->
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" class="soft"
+        style="background:#f7f8fa;border:1px dashed #cdd2d8;border-radius:6px"><tr><td align="center" style="padding:36px 16px">
+        <div class="ink3" style="font-size:12px;color:#79818b;line-height:1.5">
+          &#9636;&nbsp; Chart image slot (base64 PNG or CID)<br/>
+          <span style="font-size:10.5px;color:#a6adb6">Replace this block with &lt;img src="[ chart-image-url-or-cid ]"&gt;</span>
+        </div>
+      </td></tr></table>
+    </td></tr>
+
+    <!-- ─── VERDICT SUMMARY + TAKEAWAYS ─── -->
+    <tr><td style="padding:0 24px 18px">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"
+        style="background:#f7f8fa;border-left:3px solid #3a5a78;border-radius:0 6px 6px 0"><tr><td style="padding:13px 16px">
+        <!-- Overall verdict sentence -->
+        <div class="ink" style="font-size:13px;font-weight:600;color:#1d2126">
+          [ verdict-icon ] [ verdict-summary-sentence ]
+        </div>
+        <!-- Takeaway bullets -->
+        <div class="ink2" style="font-size:12.5px;color:#434a52;line-height:1.7;margin-top:8px">
+          <span style="color:#2f6f8f">&#9656;</span> [ takeaway-1 ]<br/>
+          <span style="color:#2f6f8f">&#9656;</span> [ takeaway-2 ]
+        </div>
+      </td></tr></table>
+    </td></tr>
+
+    <!-- ─── CTA BUTTON (bulletproof table-wrapped link) ─── -->
+    <tr><td align="center" style="padding:4px 24px 22px">
+      <table role="presentation" class="cta" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td align="center" bgcolor="#3a5a78" style="background:#3a5a78;border-radius:6px">
+          <a href="[ portal-url ]" style="display:inline-block;padding:13px 28px;font-family:'Segoe UI',Arial;font-size:14px;font-weight:600;color:#ffffff;text-decoration:none">
+            View full report on portal &#8594;
+          </a>
+        </td>
+      </tr></table>
+    </td></tr>
+
+    <!-- ─── FOOTER: run stamp + unsubscribe ─── -->
+    <tr><td style="padding:14px 24px;border-top:1px solid #e2e5e9">
+      <div class="ink3" style="font-size:10.5px;color:#79818b;line-height:1.7">
+        Auto-generated &nbsp;&#183;&nbsp; [ run-timestamp ] &nbsp;&#183;&nbsp; [ system-name ]
+        &nbsp;&#183;&nbsp;
+        <a href="[ methodology-url ]" style="color:#2f6f8f;text-decoration:none">Methodology</a>
+        &nbsp;&#183;&nbsp;
+        <a href="[ unsubscribe-url ]" style="color:#2f6f8f;text-decoration:none">Unsubscribe</a>
+      </div>
+    </td></tr>
+
+  </table>
+
+</td></tr>
+</table>
+</body>
+</html>

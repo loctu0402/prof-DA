@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="slate">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>[ product ] — Operations Dashboard</title>
+<!--
+  ============================================================================
+  A2 · OPS DASHBOARD — org-neutral forkable skeleton.
+  Forked from prof-DA-plugin/templates/A2-ops-dashboard/.
+  Palette = slate theme tokens (the :root block below). Re-theme by swapping
+  only the :root block; every component resolves var(--token), never a hardcoded hex.
+  Signatures: honest-interactivity classification + data-card-on-hover (actual /
+  expected / %gap / z / verdict). Single-page scroll + sidebar scroll-spy.
+  Charts: Plotly 2.27.0 via CDN, placeholder data inline.
+  All values are styled .ph placeholders; none are real data.
+  ============================================================================
+-->
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+<style>
+/* ─── THEME TOKEN BLOCK — the only swap surface ─────────────────────────── */
+:root,html[data-theme="slate"]{
+  --bg:#f4f5f7; --surface:#ffffff; --surface-alt:#f7f8fa; --surface-sunk:#eceef1;
+  --ink:#1d2126; --ink-2:#434a52; --ink-3:#79818b; --ink-4:#a6adb6;
+  --border:#e2e5e9; --border-strong:#cdd2d8; --grid:#edeff2;
+  --primary:#3a5a78; --primary-deep:#28425a; --primary-soft:#e2e9f0;
+  --accent:#2f6f8f; --accent-soft:#dceaf0;
+  --success:#2e6442; --success-soft:#dbe5dc;
+  --warn:#9a6a1a;    --warn-soft:#efe6cb;
+  --danger:#a8362c;  --danger-soft:#f0dad5;
+  --neutral:#74706a; --neutral-soft:#e7e3db;
+  --shadow-sm:0 1px 3px rgba(20,24,30,0.05),0 1px 2px rgba(20,24,30,0.03);
+}
+
+/* ─── BASE ───────────────────────────────────────────────────────────────── */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-variant-numeric:tabular-nums}
+.serif{font-family:Georgia,"Times New Roman",serif}
+
+/* placeholder styling — fill the data-bind key when rendering */
+.ph{font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;
+  background:var(--accent-soft);border-bottom:1px dotted var(--accent);
+  padding:0 2px;border-radius:1px;color:var(--ink)}
+.ph.txt{font-family:inherit;color:var(--ink-2)}
+
+/* ─── SHELL LAYOUT (sidebar + content) ──────────────────────────────────── */
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+
+/* ─── SIDEBAR ────────────────────────────────────────────────────────────── */
+.side{background:var(--surface);border-right:1px solid var(--border);
+  padding:18px 14px;position:sticky;top:0;align-self:start;
+  height:100vh;overflow-y:auto}
+.side .brand{display:flex;align-items:center;gap:9px;padding:6px 6px 14px;
+  border-bottom:1px solid var(--border);margin-bottom:14px}
+.side .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.side .brand .nm{font-weight:600;font-size:15px;line-height:1.2}
+.side .brand .nm .em{color:var(--ink-3);font-style:italic;font-weight:400;
+  font-size:11px;display:block;margin-top:1px;font-family:ui-monospace,monospace}
+.grp{margin-bottom:18px}
+.grp > .lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-4);font-weight:600;padding:0 6px;margin-bottom:7px}
+.nav{display:flex;flex-direction:column;gap:1px}
+.nav a{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:6px;
+  color:var(--ink-2);text-decoration:none;font-size:12.5px;font-weight:500;
+  border-left:2px solid transparent}
+.nav a .ic{font-family:ui-monospace,monospace;font-size:11px;color:var(--ink-4);width:14px;text-align:center}
+.nav a:hover{background:var(--surface-alt)}
+.nav a.on{background:var(--surface-alt);color:var(--ink);border-left-color:var(--accent)}
+.nav a.on .ic{color:var(--accent)}
+.bdg{margin-left:auto;font-family:ui-monospace,monospace;font-size:9.5px;font-weight:600;
+  color:var(--ink-3);background:var(--surface-sunk);padding:1px 6px;border-radius:10px}
+.bdg.warn{color:var(--warn);background:var(--warn-soft)}
+.filter{margin-bottom:11px}
+.filter > label{display:block;font-size:10px;letter-spacing:.06em;
+  color:var(--ink-3);font-weight:600;margin-bottom:4px}
+.ctl{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--border);
+  border-radius:6px;font-size:12px;color:var(--ink-2);cursor:pointer;background:var(--surface-alt)}
+.ctl .caret{margin-left:auto;color:var(--ink-4)}
+.checks{display:flex;flex-direction:column;gap:2px}
+.chk{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);
+  padding:3px 6px;border-radius:5px;cursor:pointer}
+.chk:hover{background:var(--surface-alt)}
+.chk input{accent-color:var(--accent);width:13px;height:13px}
+.chk .pc{margin-left:auto;font-size:10.5px;color:var(--ink-3);font-family:ui-monospace,monospace}
+.actions{display:flex;flex-wrap:wrap;gap:6px;padding:0 2px;margin-top:6px}
+.btn{flex:1;min-width:66px;font-size:11px;font-weight:500;color:var(--ink-2);
+  background:var(--surface-alt);border:1px solid var(--border);border-radius:6px;
+  padding:7px 8px;cursor:pointer}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.side .footstamp{margin-top:16px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:10.5px;color:var(--ink-3)}
+.side .footstamp .row{display:flex;justify-content:space-between;padding:2px 0}
+.side .footstamp .v{font-family:ui-monospace,monospace;color:var(--ink-2)}
+
+/* ─── CONTENT AREA ───────────────────────────────────────────────────────── */
+.main{padding:26px 40px 80px;max-width:1180px}
+.topline{display:flex;align-items:center;justify-content:space-between;
+  gap:14px;margin-bottom:16px}
+.topline .pulse{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3)}
+.topline .pulse .dot{width:7px;height:7px;border-radius:50%;background:var(--success);position:relative}
+.topline .pulse .dot::after{content:"";position:absolute;inset:-3px;border-radius:50%;
+  border:1px solid var(--success);opacity:.6;animation:pulse 2s ease-out infinite}
+@media (prefers-reduced-motion:reduce){.topline .pulse .dot::after{animation:none}}
+@keyframes pulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.2);opacity:0}}
+.topline .badge{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-2);background:var(--surface);
+  border:1px solid var(--border);padding:3px 9px;border-radius:3px;font-weight:600}
+
+/* story headline + how-to-read */
+.story-h{font-size:24px;font-weight:600;letter-spacing:-0.018em;line-height:1.25;
+  margin:0 0 10px;color:var(--ink)}
+.story-h .hl{background:linear-gradient(180deg,transparent 60%,var(--accent-soft) 60%);padding:0 2px}
+.how-read{font-size:13px;color:var(--ink-2);line-height:1.6;max-width:80ch;margin:0 0 22px;
+  padding:12px 16px;background:var(--surface);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:6px}
+.how-read b{color:var(--ink);font-weight:600}
+
+/* family snapshot row (executive overview, click card → jump to section) */
+.family-snapshot{margin:0 0 26px;padding:18px 20px;background:var(--surface);
+  border-radius:8px;border:1px solid var(--border)}
+.family-snapshot .fs-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.family-snapshot .fs-head h3{margin:0;font-size:14px;font-weight:600;color:var(--primary)}
+.family-snapshot .fs-head .hint{font-size:11px;color:var(--ink-3)}
+.fs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.fs-card{display:block;text-decoration:none;color:inherit;padding:12px 13px;
+  background:var(--surface-alt);border:1px solid var(--border);border-radius:6px;
+  transition:transform .18s ease,box-shadow .18s ease}
+.fs-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+@media (prefers-reduced-motion:reduce){.fs-card:hover{transform:none}}
+.fs-card .fl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600}
+.fs-card .fv{font-family:ui-monospace,monospace;font-size:18px;color:var(--ink);
+  font-weight:600;margin-top:5px}
+.fs-card .fm{font-size:10.5px;color:var(--ink-3);margin-top:5px;
+  display:flex;align-items:center;gap:5px}
+
+/* section heading + pane */
+.sechead{margin:30px 0 14px;display:flex;align-items:baseline;gap:12px;
+  padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sechead .ix{font-family:ui-monospace,monospace;font-size:10px;color:var(--accent);
+  letter-spacing:.14em;font-weight:600}
+.sechead h2{font-weight:600;font-size:19px;letter-spacing:-0.015em;margin:0;color:var(--primary)}
+.sechead h2 .em{font-style:italic;color:var(--ink-3);font-weight:400}
+.sechead .right{margin-left:auto;font-size:10.5px;color:var(--ink-3);
+  letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+.pane{scroll-margin-top:14px;margin-bottom:8px}
+.note{font-size:12px;color:var(--ink-3);line-height:1.6;margin:0 0 14px;max-width:78ch}
+
+/* NSM hero cards */
+.hero-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.nsm-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;position:relative;cursor:help}
+.nsm-card.primary-top{border-top:3px solid var(--accent)}
+.nsm-card .lc{display:flex;align-items:baseline;justify-content:space-between;
+  gap:8px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;margin-bottom:9px}
+.nsm-card .big{font-size:30px;line-height:1;font-weight:600;
+  letter-spacing:-0.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.nsm-card .big.warn{color:var(--warn)}.nsm-card .big.danger{color:var(--danger)}
+.nsm-card .big .u{font-size:12px;color:var(--ink-3);font-weight:400;margin-left:4px}
+.nsm-card .cmp{display:flex;gap:8px;margin-top:12px}
+.nsm-card .cmp .c{flex:1;display:flex;flex-direction:column;gap:1px;padding:7px 9px;
+  border-radius:6px;background:var(--surface-alt);border:1px solid var(--border)}
+.nsm-card .cmp .ref{font-size:8.5px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600}
+.nsm-card .cmp .dv{font-family:ui-monospace,monospace;font-size:13px;font-weight:600}
+.nsm-card .cmp .dv.up{color:var(--success)}.nsm-card .cmp .dv.dn{color:var(--danger)}
+.nsm-card .cmp .dv.warn{color:var(--warn)}
+.by-segment{display:flex;height:6px;border-radius:2px;overflow:hidden;margin-top:12px}
+.by-segment .seg.a{background:var(--ink-2)}
+.by-segment .seg.b{background:var(--warn)}
+.by-segment .seg.c{background:var(--ink-4)}
+.by-segment .seg.d{background:var(--accent)}
+
+/* verdict pill */
+.vd{display:inline-flex;align-items:center;gap:5px;font-size:10px;
+  font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:3px}
+.vd.danger{background:var(--danger-soft);color:var(--danger)}
+.vd.warn{background:var(--warn-soft);color:var(--warn)}
+.vd.success{background:var(--success-soft);color:var(--success)}
+.vd.neutral{background:var(--neutral-soft);color:var(--neutral)}
+
+/* stat cards */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  padding:15px 17px;cursor:help}
+.stat.flag-danger{border-left:3px solid var(--danger)}
+.stat.flag-warn{border-left:3px solid var(--warn)}
+.stat .lc{display:flex;align-items:baseline;justify-content:space-between;
+  gap:8px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;margin-bottom:8px}
+.stat .v{font-size:24px;line-height:1;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .v.danger{color:var(--danger)}.stat .v.success{color:var(--success)}.stat .v.warn{color:var(--warn)}
+.stat .v .u{font-size:11px;color:var(--ink-3);font-weight:400;margin-left:4px}
+.stat .row{font-size:11.5px;color:var(--ink-2);margin-top:8px;line-height:1.5}
+.stat .row b{color:var(--ink);font-weight:600}
+.stat .insight{font-size:11px;color:var(--ink-3);font-style:italic;margin-top:9px;
+  padding-top:8px;border-top:1px dashed var(--border);line-height:1.5}
+
+/* status chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip-x{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;
+  font-weight:600;letter-spacing:.02em;padding:6px 12px;border-radius:4px;border:1px solid}
+.chip-x .d{width:8px;height:8px;border-radius:50%}
+.cx-success{background:var(--success-soft);color:var(--success);border-color:color-mix(in srgb,var(--success) 22%,transparent)}
+.cx-info{background:var(--accent-soft);color:var(--primary-deep);border-color:color-mix(in srgb,var(--accent) 22%,transparent)}
+.cx-warn{background:var(--warn-soft);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 22%,transparent)}
+.cx-danger{background:var(--danger-soft);color:var(--danger);border-color:color-mix(in srgb,var(--danger) 22%,transparent)}
+.cx-neutral{background:var(--neutral-soft);color:var(--neutral);border-color:color-mix(in srgb,var(--neutral) 22%,transparent)}
+
+/* quality / badge labels */
+.lv{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;
+  letter-spacing:.03em;padding:5px 11px;border-radius:3px;white-space:nowrap}
+.lv.danger{background:var(--danger-soft);color:var(--danger)}
+.lv.warn{background:var(--warn-soft);color:var(--warn)}
+.lv.success{background:var(--success-soft);color:var(--success)}
+.lv.neutral{background:var(--neutral-soft);color:var(--neutral)}
+
+/* chart card (7-anatomy frame) */
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;margin-top:14px}
+.chart-card .ct{display:flex;align-items:baseline;justify-content:space-between;
+  gap:12px;margin-bottom:3px}
+.chart-card .ct .ttl{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.005em}
+.chart-card .ct .leg{font-size:10.5px;color:var(--ink-3);text-align:right;line-height:1.4}
+.chart-card .takeaway{font-size:12px;color:var(--ink-2);line-height:1.5;margin:6px 0 10px}
+.chart-card .takeaway b{color:var(--accent);font-weight:600}
+.chart-card .plot{width:100%;height:340px}
+.chart-card .src{display:flex;justify-content:space-between;gap:12px;margin-top:8px;
+  padding-top:8px;border-top:1px dashed var(--border);
+  font-family:ui-monospace,monospace;font-size:9.5px;color:var(--ink-4)}
+
+/* driver table */
+.drv{background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  overflow:hidden;margin-top:14px}
+.drv .head,.drv .drow{display:grid;
+  grid-template-columns:28px 1.4fr 95px 110px 1.1fr 130px;gap:12px;align-items:center}
+.drv .head{padding:9px 18px;background:var(--surface-alt);border-bottom:1px solid var(--border);
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.drv .head .r{text-align:right}
+.drv .drow{padding:13px 18px;border-bottom:1px solid var(--border);position:relative;
+  cursor:pointer;transition:background .15s ease}
+.drv .drow:last-child{border-bottom:none}
+.drv .drow:hover{background:var(--surface-alt)}
+.drv .drow.dim{opacity:.25}
+.drv .drow .stripe{position:absolute;left:0;top:0;bottom:0;width:3px}
+.drv .drow .stripe.danger{background:var(--danger)}
+.drv .drow .stripe.warn{background:var(--warn)}
+.drv .drow .stripe.neutral{background:var(--neutral)}
+.drv .drow .stripe.success{background:var(--success)}
+.drv .drow .rank{font-size:20px;font-style:italic;color:var(--ink-4);line-height:1}
+.drv .drow .nm{font-size:14px;font-weight:600;color:var(--ink);line-height:1.25}
+.drv .drow .nm .fam{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;margin-bottom:2px}
+.drv .drow .num{text-align:right;font-family:ui-monospace,monospace;font-size:13px;
+  color:var(--ink);font-weight:500}
+.drv .drow .num.up{color:var(--success)}.drv .drow .num.dn{color:var(--danger)}
+.drv .drow .num.warn{color:var(--warn)}
+.drv .drow .num .sub{display:block;font-size:9px;color:var(--ink-3);font-weight:400;margin-top:2px}
+.drv .drow .reading{font-size:11.5px;color:var(--ink-2);line-height:1.45}
+.drv .drow .reading b{color:var(--ink);font-weight:500}
+.drv .drow .vd-cell{display:flex;align-items:center;gap:5px;font-size:10.5px}
+.drv .drow .vd-cell.danger{color:var(--danger)}.drv .drow .vd-cell.warn{color:var(--warn)}
+.drv .drow .vd-cell.neutral{color:var(--neutral)}.drv .drow .vd-cell.success{color:var(--success)}
+
+/* footer */
+.foot{margin-top:40px;padding-top:18px;border-top:2px solid var(--ink);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  font-size:11px;color:var(--ink-3)}
+.foot .meta{font-family:ui-monospace,monospace;font-size:10px;color:var(--ink-4)}
+
+/* data-card hover tooltip */
+#cardTip{position:fixed;z-index:90;pointer-events:none;opacity:0;transform:translateY(4px);
+  transition:opacity .15s ease,transform .15s ease;background:var(--surface);
+  border:1px solid var(--border);box-shadow:0 6px 20px rgba(20,24,30,.12);
+  border-radius:8px;padding:11px 13px;max-width:280px}
+#cardTip.show{opacity:1;transform:translateY(0)}
+#cardTip .h{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;margin-bottom:8px}
+#cardTip .grid{display:grid;grid-template-columns:auto auto;gap:3px 14px;
+  font-family:ui-monospace,monospace;font-size:11.5px}
+#cardTip .grid .k{color:var(--ink-3)}
+#cardTip .grid .val{color:var(--ink);text-align:right;font-weight:500}
+#cardTip .grid .val.up{color:var(--success)}
+#cardTip .grid .val.dn{color:var(--danger)}
+#cardTip .vd{margin-top:9px}
+
+/* toast */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(10px);
+  background:var(--ink);color:var(--surface);padding:10px 18px;border-radius:8px;
+  font-size:12.5px;max-width:560px;line-height:1.5;opacity:0;
+  transition:opacity .3s ease,transform .3s ease;z-index:95;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#filterLoading{position:fixed;top:18px;right:22px;display:none;align-items:center;
+  gap:8px;background:var(--surface);border:1px solid var(--border);
+  box-shadow:var(--shadow-sm);padding:8px 14px;border-radius:8px;
+  font-size:12px;color:var(--ink-2);z-index:95}
+#filterLoading.show{display:flex}
+.spin{width:13px;height:13px;border:2px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width:1100px){
+  .shell{grid-template-columns:1fr}
+  .side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);
+    display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+  .side .brand{width:100%;margin-bottom:8px}
+  .grp{flex:1;min-width:200px;margin-bottom:8px}
+  .side .footstamp{width:100%}
+  .fs-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:900px){
+  .main{padding:20px}
+  .hero-grid,.g2,.g3{grid-template-columns:1fr}
+  .drv .head,.drv .drow{grid-template-columns:24px 1fr 90px;gap:8px}
+  .drv .head .h-exp,.drv .head .h-read,
+  .drv .drow .num.exp,.drv .drow .reading{display:none}
+}
+@media (max-width:700px){.fs-grid{grid-template-columns:repeat(2,1fr)}}
+@media print{
+  .side,#toast,#filterLoading,#cardTip{display:none!important}
+  .shell{grid-template-columns:1fr}
+  .main{max-width:none}
+  .nsm-card,.stat,.chart-card,.drv,.family-snapshot{break-inside:avoid;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="side">
+    <div class="brand">
+      <span class="dot"></span>
+      <div class="nm">
+        <span class="ph txt" data-bind="brand.product">[ product name ]</span>
+        <span class="em">Operations Dashboard</span>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="lbl">Sections</div>
+      <nav class="nav" id="nav">
+        <a class="on" href="#top">
+          <span class="ic">&#9675;</span>Overview
+          <span class="bdg warn ph" data-bind="nav.alert_count">—</span>
+        </a>
+        <a href="#f1"><span class="ic">§1</span>[ Primary metric / flow ]</a>
+        <a href="#f2"><span class="ic">§2</span>[ Users / audience ]</a>
+        <a href="#f3"><span class="ic">§3</span>[ Channel / cohort A ] <span class="bdg">!</span></a>
+        <a href="#f4"><span class="ic">§4</span>[ Quality / satisfaction ] <span class="bdg warn">!</span></a>
+        <a href="#f5"><span class="ic">§5</span>[ Segment / sub-group ]</a>
+        <a href="#f6"><span class="ic">§6</span>[ External / context ]</a>
+      </nav>
+    </div>
+
+    <div class="grp">
+      <div class="lbl">Filters</div>
+      <div class="filter">
+        <label>Date snapshot</label>
+        <div class="ctl" data-snapshot>
+          <span class="ph mono" data-bind="runtime.report_date">YYYY-MM-DD</span>
+          <span class="caret">&#9660;</span>
+        </div>
+      </div>
+      <div class="filter">
+        <label>Segment filter
+          <span class="pc" style="font-weight:400;color:var(--ink-4);font-size:10px">
+            (recomputes primary metric)
+          </span>
+        </label>
+        <div class="checks">
+          <label class="chk">
+            <input type="checkbox" checked data-seg="a"> [ Segment A ]
+            <span class="pc"><span class="ph" data-bind="seg.a.pct">——</span>%</span>
+          </label>
+          <label class="chk">
+            <input type="checkbox" checked data-seg="b"> [ Segment B ]
+            <span class="pc"><span class="ph" data-bind="seg.b.pct">——</span>%</span>
+          </label>
+          <label class="chk">
+            <input type="checkbox" checked data-seg="c"> [ Segment C ]
+            <span class="pc"><span class="ph" data-bind="seg.c.pct">——</span>%</span>
+          </label>
+          <label class="chk">
+            <input type="checkbox" checked data-seg="d"> [ Segment D ]
+            <span class="pc"><span class="ph" data-bind="seg.d.pct">——</span>%</span>
+          </label>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" data-act="reset">&#8635; Reset</button>
+        <button class="btn primary" data-act="save">Save view</button>
+        <button class="btn" data-act="share">Share</button>
+        <button class="btn" data-act="pdf">Export PDF</button>
+      </div>
+    </div>
+
+    <div class="footstamp">
+      <div class="row"><span>Updated</span><span class="v ph" data-bind="runtime.run_time">—— UTC</span></div>
+      <div class="row"><span>Last refit</span><span class="v ph" data-bind="runtime.last_refit">YYYY-MM-DD</span></div>
+    </div>
+  </aside>
+
+  <!-- ═══════ CONTENT ═══════ -->
+  <main class="main" id="top">
+
+    <div class="topline">
+      <div class="pulse">
+        <span class="dot"></span>
+        Data snapshot T&#8722;1 &middot; updated <span class="ph mono" data-bind="runtime.run_time">——</span>
+      </div>
+      <span class="badge">v1 &middot; dashboard</span>
+    </div>
+
+    <!-- ORIENTATION — 3-line how-to-read; must embed "snapshot" + end with "?" -->
+    <h1 class="story-h">
+      [ Primary KPI ] today <span class="hl ph" data-bind="f0.primary_kpi.value">———.—</span>
+      <span class="ph" data-bind="f0.primary_kpi.unit">[ unit ]</span>
+      — <em>movement</em> <span class="ph" data-bind="f0.primary_kpi.dod">—.—%</span> vs yesterday.
+    </h1>
+    <p class="how-read">
+      <b>How to read:</b> this is a <b>snapshot</b> of T&#8722;1 data.
+      Start at <b>Overview</b> to get one headline number per operational area,
+      then scroll into each area to drill the drivers.
+      Key question for today: <span class="ph txt" data-bind="orient.question">What is driving [ primary KPI ] and does it require action?</span>
+    </p>
+
+    <!-- FAMILY SNAPSHOT — executive overview; clicking a card smooth-scrolls to its section -->
+    <div class="family-snapshot">
+      <div class="fs-head">
+        <h3>Full-dashboard snapshot &mdash; one key number per area</h3>
+        <span class="hint">click a card &rarr; jump to that section</span>
+      </div>
+      <div class="fs-grid">
+        <a class="fs-card" href="#f1">
+          <div class="fl">[ Primary metric / flow ]</div>
+          <div class="fv"><span class="ph" data-bind="f1.key_value">&#177;—.—</span> <span style="font-size:12px;color:var(--ink-3)" class="ph" data-bind="f1.key_unit">[ unit ]</span></div>
+          <div class="fm"><span class="ph" data-bind="f1.verdict_icon">&#10003;</span> <span class="ph txt" data-bind="f1.verdict_label">Normal</span></div>
+        </a>
+        <a class="fs-card" href="#f2">
+          <div class="fl">[ Users / audience ]</div>
+          <div class="fv"><span class="ph" data-bind="f2.key_value">—,———,———</span></div>
+          <div class="fm"><span class="ph" data-bind="f2.verdict_icon">&#10003;</span> <span class="ph txt" data-bind="f2.verdict_label">[ user KPI label ]</span></div>
+        </a>
+        <a class="fs-card" href="#f3">
+          <div class="fl">[ Channel / cohort A ]</div>
+          <div class="fv"><span class="ph" data-bind="f3.key_value">—.—</span> <span style="font-size:12px;color:var(--ink-3)" class="ph" data-bind="f3.key_unit">[ unit ]</span></div>
+          <div class="fm"><span class="ph" data-bind="f3.verdict_icon">&#9888;</span> <span class="ph txt" data-bind="f3.verdict_label">Watch</span></div>
+        </a>
+        <a class="fs-card" href="#f4">
+          <div class="fl">[ Quality / satisfaction ]</div>
+          <div class="fv"><span class="ph" data-bind="f4.key_value">—.—</span>%</div>
+          <div class="fm"><span class="ph" data-bind="f4.verdict_icon">&#9888;</span> <span class="ph txt" data-bind="f4.verdict_label">Attention</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ═══ §01 NSM ANCHOR — primary KPI + headline metrics ═══ -->
+    <div class="sechead" id="f0-head">
+      <span class="ix">§ 01</span>
+      <h2>North-star metric <span class="em">/ [ Primary KPI ] &amp; [ Secondary KPI ]</span></h2>
+      <span class="right">NSM &middot; hero &mdash; read first</span>
+    </div>
+    <section class="pane" id="f0">
+      <div class="hero-grid">
+
+        <!-- NSM card A — primary KPI; data-hover carries the full tooltip payload -->
+        <div class="nsm-card primary-top" data-hover='{"label":"[ Primary KPI ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Normal","cls":"neutral"}'>
+          <div class="lc">
+            <span>[ Primary KPI ] &middot; [ brief description ]</span>
+            <span class="vd neutral">&#10003; Normal</span>
+          </div>
+          <div class="big"><span class="ph" data-bind="f0.kpi_a.value">———.—</span><span class="u ph" data-bind="f0.kpi_a.unit">[ unit ]</span></div>
+          <div class="cmp">
+            <div class="c">
+              <span class="ref">vs yesterday</span>
+              <span class="dv dn"><span class="ph" data-bind="f0.kpi_a.dod">—.—%</span></span>
+            </div>
+            <div class="c">
+              <span class="ref">vs 7d avg</span>
+              <span class="dv up"><span class="ph" data-bind="f0.kpi_a.vs7d">—.—%</span></span>
+            </div>
+          </div>
+          <div class="by-segment">
+            <span class="seg a" style="flex:45"></span>
+            <span class="seg b" style="flex:30"></span>
+            <span class="seg c" style="flex:10"></span>
+            <span class="seg d" style="flex:15"></span>
+          </div>
+        </div>
+
+        <!-- NSM card B — secondary KPI -->
+        <div class="nsm-card" data-hover='{"label":"[ Secondary KPI ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Watch","cls":"warn"}'>
+          <div class="lc">
+            <span>[ Secondary KPI ]</span>
+            <span class="vd warn">&#9888; Watch</span>
+          </div>
+          <div class="big warn"><span class="ph" data-bind="f0.kpi_b.value">—.—</span><span class="u ph" data-bind="f0.kpi_b.unit">[ unit ]</span></div>
+          <div class="cmp">
+            <div class="c">
+              <span class="ref">DoD</span>
+              <span class="dv dn"><span class="ph" data-bind="f0.kpi_b.dod">—.—%</span></span>
+            </div>
+            <div class="c">
+              <span class="ref">vs 7d</span>
+              <span class="dv warn"><span class="ph" data-bind="f0.kpi_b.vs7d">—.—%</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- NSM card C — net flow / difference metric -->
+        <div class="nsm-card" data-hover='{"label":"[ Net flow ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ — ]","z":"[ —.— ]","verdict":"Normal","cls":"neutral"}'>
+          <div class="lc">
+            <span>[ Net flow / balance metric ]</span>
+            <span class="vd neutral">&#10003; Normal</span>
+          </div>
+          <div class="big danger"><span class="ph" data-bind="f0.kpi_c.value">&#177;—.—</span><span class="u ph" data-bind="f0.kpi_c.unit">[ unit ]</span></div>
+          <div class="cmp">
+            <div class="c">
+              <span class="ref">[ Inflow component ]</span>
+              <span class="dv up"><span class="ph" data-bind="f0.kpi_c.in">—.—</span></span>
+            </div>
+            <div class="c">
+              <span class="ref">[ Outflow component ]</span>
+              <span class="dv dn"><span class="ph" data-bind="f0.kpi_c.out">—.—</span></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ §02 PRIMARY FLOW — waterfall + expected overlay ═══ -->
+    <div class="sechead">
+      <span class="ix">§ 02</span>
+      <h2>[ Primary metric / flow ] <span class="em">/ breakdown by [ N ] channels</span></h2>
+      <span class="right">waterfall + expected overlay</span>
+    </div>
+    <section class="pane" id="f1">
+      <div class="g2">
+        <div class="stat" data-hover='{"label":"[ Inflow ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Normal","cls":"success"}'>
+          <div class="lc"><span>[ Inflow ] today</span><span class="vd success">&#10003; Normal</span></div>
+          <div class="v success"><span class="ph" data-bind="f1.in.value">—.—</span><span class="u ph" data-bind="f1.in.unit">[ unit ]</span></div>
+          <div class="row">vs expected <b><span class="ph" data-bind="f1.in.expected">—.—</span></b> &middot; z=<span class="ph mono" data-bind="f1.in.z">—.—</span></div>
+        </div>
+        <div class="stat flag-danger" data-hover='{"label":"[ Outflow ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Investigate now","cls":"danger"}'>
+          <div class="lc"><span>[ Outflow ] today</span><span class="vd danger">&#9888; Investigate now</span></div>
+          <div class="v danger"><span class="ph" data-bind="f1.out.value">—.—</span><span class="u ph" data-bind="f1.out.unit">[ unit ]</span></div>
+          <div class="row">vs expected <b><span class="ph" data-bind="f1.out.expected">—.—</span></b> &middot; z=<span class="ph mono" data-bind="f1.out.z">—.—</span></div>
+        </div>
+      </div>
+
+      <!-- Waterfall chart — channel breakdown with expected-value overlay -->
+      <div class="chart-card">
+        <div class="ct">
+          <div class="ttl"><span class="ph txt" data-bind="f1.chart.conclusion_title">[ Conclusion-first chart title ]</span></div>
+          <div class="leg">unit: [ unit ] &middot; grey bar = within expected<br>accent bar = deviation &gt;2&#963; &middot; tick mark = expected value</div>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> <span class="ph txt" data-bind="f1.chart.takeaway">[ One-line business takeaway about the channel with the largest impact. ]</span></p>
+        <div class="plot" id="plotWaterfall"></div>
+        <div class="src">
+          <span>source: <span class="ph" data-bind="f1.chart.source">[ table / query ]</span></span>
+          <span><span class="ph" data-bind="f1.chart.as_of">[ as-of date ]</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ §03 USERS / AUDIENCE ═══ -->
+    <div class="sechead">
+      <span class="ix">§ 03</span>
+      <h2>[ Users / audience ] <span class="em">/ active users &amp; engagement</span></h2>
+      <span class="right">user metrics</span>
+    </div>
+    <section class="pane" id="f2">
+      <div class="chips">
+        <span class="chip-x cx-info"><span class="d" style="background:var(--accent)"></span>MAU: <span class="ph mono" data-bind="f2.mau">—,———,———</span></span>
+        <span class="chip-x cx-success"><span class="d" style="background:var(--success)"></span>DAU/MAU: <span class="ph mono" data-bind="f2.dau_mau">—.—%</span></span>
+        <span class="chip-x cx-warn"><span class="d" style="background:var(--warn)"></span>[ Retention / repeat ]: <span class="ph mono" data-bind="f2.retention">—.—%</span></span>
+      </div>
+      <div class="g3">
+        <div class="stat" data-hover='{"label":"MAU","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Normal","cls":"neutral"}'>
+          <div class="lc"><span>MAU</span><span class="vd neutral">Normal</span></div>
+          <div class="v"><span class="ph" data-bind="f2.mau_val">—,———,———</span></div>
+          <div class="row">DoD: <b><span class="ph" data-bind="f2.mau_dod">—.—%</span></b> &middot; vs 7d: <span class="ph" data-bind="f2.mau_vs7d">—.—%</span></div>
+        </div>
+        <div class="stat" data-hover='{"label":"DAU","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Normal","cls":"neutral"}'>
+          <div class="lc"><span>DAU</span><span class="vd neutral">Normal</span></div>
+          <div class="v"><span class="ph" data-bind="f2.dau_val">—,———,———</span></div>
+          <div class="row">DoD: <b><span class="ph" data-bind="f2.dau_dod">—.—%</span></b></div>
+        </div>
+        <div class="stat flag-warn" data-hover='{"label":"[ Premium / tier metric ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Watch","cls":"warn"}'>
+          <div class="lc"><span>[ Premium / tier metric ]</span><span class="vd warn">&#9888; Watch</span></div>
+          <div class="v warn"><span class="ph" data-bind="f2.tier_val">—,———,———</span></div>
+          <div class="row">DoD: <b><span class="ph" data-bind="f2.tier_dod">—.—%</span></b></div>
+        </div>
+      </div>
+
+      <!-- Line chart: user trend -->
+      <div class="chart-card">
+        <div class="ct">
+          <div class="ttl"><span class="ph txt" data-bind="f2.chart.conclusion_title">[ User trend conclusion title ]</span></div>
+          <div class="leg">30-day trailing &middot; shaded band = expected range</div>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> <span class="ph txt" data-bind="f2.chart.takeaway">[ One-line business takeaway about user trend. ]</span></p>
+        <div class="plot" id="plotUsers"></div>
+        <div class="src">
+          <span>source: <span class="ph" data-bind="f2.chart.source">[ table / query ]</span></span>
+        </div>
+      </div>
+
+      <!-- Driver table for user area -->
+      <div class="drv" id="drv2">
+        <div class="head">
+          <span>#</span>
+          <span>Driver</span>
+          <span class="r">Actual</span>
+          <span class="r h-exp">Expected</span>
+          <span class="h-read">Reading</span>
+          <span>Verdict</span>
+        </div>
+        <!-- driver row template: data-target="#{sectionId}" scrolls on click -->
+        <div class="drow" data-target="#f2" onclick="scrollToSection(this)">
+          <span class="stripe warn"></span>
+          <span class="rank">1</span>
+          <span class="nm"><span class="fam">Users</span><span class="ph txt" data-bind="drv2.r1.nm">[ Driver name ]</span></span>
+          <span class="num warn"><span class="ph" data-bind="drv2.r1.actual">—.—</span><span class="sub ph" data-bind="drv2.r1.actual_unit">[ unit ]</span></span>
+          <span class="num exp ph" data-bind="drv2.r1.expected">—.—</span>
+          <span class="reading ph txt" data-bind="drv2.r1.reading">[ Business reading of this driver. ]</span>
+          <span class="vd-cell warn">&#9888; <span class="ph txt" data-bind="drv2.r1.verdict">Watch</span></span>
+        </div>
+        <div class="drow" data-target="#f2" onclick="scrollToSection(this)">
+          <span class="stripe neutral"></span>
+          <span class="rank">2</span>
+          <span class="nm"><span class="fam">Users</span><span class="ph txt" data-bind="drv2.r2.nm">[ Driver name ]</span></span>
+          <span class="num ph" data-bind="drv2.r2.actual">—.—</span>
+          <span class="num exp ph" data-bind="drv2.r2.expected">—.—</span>
+          <span class="reading ph txt" data-bind="drv2.r2.reading">[ Business reading. ]</span>
+          <span class="vd-cell neutral">&#9675; <span class="ph txt" data-bind="drv2.r2.verdict">Normal</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ §04 CHANNEL / COHORT A ═══ -->
+    <div class="sechead">
+      <span class="ix">§ 04</span>
+      <h2>[ Channel / cohort A ] <span class="em">/ volume &amp; quality</span></h2>
+      <span class="right">sorted bar &middot; by impact</span>
+    </div>
+    <section class="pane" id="f3">
+      <div class="g2">
+        <div class="stat" data-hover='{"label":"[ Volume metric ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Attention","cls":"warn"}'>
+          <div class="lc"><span>[ Volume metric ]</span><span class="vd warn">&#9888; Attention</span></div>
+          <div class="v warn"><span class="ph" data-bind="f3.vol.value">—.—</span><span class="u ph" data-bind="f3.vol.unit">[ unit ]</span></div>
+          <div class="row">vs expected <b><span class="ph" data-bind="f3.vol.expected">—.—</span></b> &middot; z=<span class="ph mono" data-bind="f3.vol.z">—.—</span></div>
+          <p class="insight"><span class="ph txt" data-bind="f3.vol.insight">[ Concise driver insight. ]</span></p>
+        </div>
+        <div class="stat" data-hover='{"label":"[ Quality metric ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Normal","cls":"neutral"}'>
+          <div class="lc"><span>[ Quality metric ]</span><span class="vd neutral">&#10003; Normal</span></div>
+          <div class="v"><span class="ph" data-bind="f3.qual.value">—.—%</span></div>
+          <div class="row">vs target <b><span class="ph" data-bind="f3.qual.target">—.—%</span></b></div>
+        </div>
+      </div>
+
+      <!-- Sorted horizontal bar chart: channel ranking by impact -->
+      <div class="chart-card">
+        <div class="ct">
+          <div class="ttl"><span class="ph txt" data-bind="f3.chart.conclusion_title">[ Top channels by impact ]</span></div>
+          <div class="leg">sorted by absolute deviation &middot; accent = flagged</div>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> <span class="ph txt" data-bind="f3.chart.takeaway">[ Top channel is driving the bulk of deviation. ]</span></p>
+        <div class="plot" id="plotChannelBar"></div>
+        <div class="src"><span>source: <span class="ph" data-bind="f3.chart.source">[ table ]</span></span></div>
+      </div>
+    </section>
+
+    <!-- ═══ §05 QUALITY / SATISFACTION ═══ -->
+    <div class="sechead">
+      <span class="ix">§ 05</span>
+      <h2>[ Quality / satisfaction ] <span class="em">/ trend &amp; category breakdown</span></h2>
+      <span class="right">line &middot; 30d trailing</span>
+    </div>
+    <section class="pane" id="f4">
+      <div class="g3">
+        <div class="stat" data-hover='{"label":"[ Overall score ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Attention","cls":"warn"}'>
+          <div class="lc"><span>[ Overall score ]</span><span class="vd warn">&#9888; Attention</span></div>
+          <div class="v warn"><span class="ph" data-bind="f4.score.value">—.—</span><span class="u">/ 5</span></div>
+          <div class="row">vs target <b><span class="ph" data-bind="f4.score.target">—.—</span></b></div>
+        </div>
+        <div class="stat" data-hover='{"label":"[ Positive rate ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Normal","cls":"neutral"}'>
+          <div class="lc"><span>[ Positive rate ]</span><span class="vd neutral">&#10003; Normal</span></div>
+          <div class="v"><span class="ph" data-bind="f4.pos.value">—.—%</span></div>
+          <div class="row">DoD: <b><span class="ph" data-bind="f4.pos.dod">—.—pp</span></b></div>
+        </div>
+        <div class="stat" data-hover='{"label":"[ Volume ]","actual":"[ —— ]","expected":"[ —— ]","gap":"[ —.—% ]","z":"[ —.— ]","verdict":"Normal","cls":"neutral"}'>
+          <div class="lc"><span>[ Response volume ]</span><span class="vd neutral">&#10003; Normal</span></div>
+          <div class="v"><span class="ph" data-bind="f4.vol.value">—,———</span></div>
+          <div class="row">vs 7d avg: <b><span class="ph" data-bind="f4.vol.vs7d">—.—%</span></b></div>
+        </div>
+      </div>
+
+      <!-- Line chart: quality trend -->
+      <div class="chart-card">
+        <div class="ct">
+          <div class="ttl"><span class="ph txt" data-bind="f4.chart.conclusion_title">[ Quality trend conclusion title ]</span></div>
+          <div class="leg">30-day trailing &middot; dashed = target</div>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> <span class="ph txt" data-bind="f4.chart.takeaway">[ Key observation about quality trend. ]</span></p>
+        <div class="plot" id="plotQuality"></div>
+        <div class="src"><span>source: <span class="ph" data-bind="f4.chart.source">[ table ]</span></span></div>
+      </div>
+    </section>
+
+    <!-- ═══ §06 SEGMENT / SUB-GROUP ═══ -->
+    <div class="sechead">
+      <span class="ix">§ 06</span>
+      <h2>[ Segment / sub-group ] <span class="em">/ comparative scan</span></h2>
+      <span class="right">scatter &middot; segment vs metric</span>
+    </div>
+    <section class="pane" id="f5">
+      <p class="note">Each point = one sub-group. Axes: x = [ metric A ], y = [ metric B ]. Point size = population. Quadrant top-right = healthy; bottom-left = at risk.</p>
+
+      <!-- Scatter chart: segment positioning -->
+      <div class="chart-card">
+        <div class="ct">
+          <div class="ttl"><span class="ph txt" data-bind="f5.chart.conclusion_title">[ Segment positioning conclusion ]</span></div>
+          <div class="leg">point size = population &middot; colour = verdict tier</div>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> <span class="ph txt" data-bind="f5.chart.takeaway">[ Which sub-group is outlying and why. ]</span></p>
+        <div class="plot" id="plotScatter"></div>
+        <div class="src"><span>source: <span class="ph" data-bind="f5.chart.source">[ table ]</span></span></div>
+      </div>
+    </section>
+
+    <!-- ═══ §07 EXTERNAL / CONTEXT ═══ -->
+    <div class="sechead">
+      <span class="ix">§ 07</span>
+      <h2>[ External / context ] <span class="em">/ market &amp; macro signals</span></h2>
+      <span class="right">heatmap &middot; day-of-week pattern</span>
+    </div>
+    <section class="pane" id="f6">
+      <div class="g2">
+        <div class="stat" data-hover='{"label":"[ External signal A ]","actual":"[ —— ]","expected":"—","gap":"—","z":"—","verdict":"No baseline","cls":"neutral"}'>
+          <div class="lc"><span>[ External signal A ]</span><span class="vd neutral">No baseline</span></div>
+          <div class="v"><span class="ph" data-bind="f6.ext_a.value">—.—</span><span class="u ph" data-bind="f6.ext_a.unit">[ unit ]</span></div>
+          <div class="row"><span class="ph txt" data-bind="f6.ext_a.context">[ Contextual note. ]</span></div>
+        </div>
+        <div class="stat" data-hover='{"label":"[ External signal B ]","actual":"[ —— ]","expected":"—","gap":"—","z":"—","verdict":"No baseline","cls":"neutral"}'>
+          <div class="lc"><span>[ External signal B ]</span><span class="vd neutral">No baseline</span></div>
+          <div class="v"><span class="ph" data-bind="f6.ext_b.value">—.—</span><span class="u ph" data-bind="f6.ext_b.unit">[ unit ]</span></div>
+          <div class="row"><span class="ph txt" data-bind="f6.ext_b.context">[ Contextual note. ]</span></div>
+        </div>
+      </div>
+
+      <!-- Heatmap: day-of-week seasonality pattern -->
+      <div class="chart-card">
+        <div class="ct">
+          <div class="ttl"><span class="ph txt" data-bind="f6.chart.conclusion_title">[ Day-of-week pattern — seasonality ]</span></div>
+          <div class="leg">rows = weeks &middot; columns = Mon&ndash;Sun &middot; colour = index vs weekly avg</div>
+        </div>
+        <p class="takeaway"><b>Takeaway:</b> <span class="ph txt" data-bind="f6.chart.takeaway">[ Pattern insight — which day consistently under/over-performs. ]</span></p>
+        <div class="plot" id="plotHeatmap"></div>
+        <div class="src"><span>source: <span class="ph" data-bind="f6.chart.source">[ table ]</span></span></div>
+      </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <div class="foot">
+      <div>
+        <div>Run: <span class="ph" data-bind="runtime.run_time">YYYY-MM-DD HH:MM UTC</span></div>
+        <div>Method: <a href="#" data-snapshot>[ link to methodology doc ]</a></div>
+      </div>
+      <div class="meta">
+        v1 &middot; A2 ops-dashboard archetype &middot;
+        <span class="ph" data-bind="runtime.data_as_of">as of YYYY-MM-DD</span>
+      </div>
+    </div>
+
+  </main><!-- /.main -->
+</div><!-- /.shell -->
+
+<!-- ─── DATA-CARD HOVER TOOLTIP ───────────────────────────────────────────── -->
+<div id="cardTip">
+  <div class="h" id="tipLabel">[ metric ]</div>
+  <div class="grid">
+    <span class="k">Actual</span>    <span class="val" id="tipActual">—</span>
+    <span class="k">Expected</span>  <span class="val" id="tipExpected">—</span>
+    <span class="k">Gap</span>       <span class="val" id="tipGap">—</span>
+    <span class="k">z-score</span>   <span class="val" id="tipZ">—</span>
+  </div>
+  <div class="vd neutral" id="tipVerdict">Normal</div>
+</div>
+
+<!-- ─── TOAST ─────────────────────────────────────────────────────────────── -->
+<div id="toast"></div>
+<div id="filterLoading"><span class="spin"></span>Applying filter…</div>
+
+<!-- ─── SCRIPTS ───────────────────────────────────────────────────────────── -->
+<script>
+/* ── CHART PALETTE (token-derived neutrals; no brand hex) ── */
+const GREY    = '#9ea8b3';   /* ≈ var(--ink-4) */
+const ACCENT  = '#2f6f8f';   /* ≈ var(--accent) */
+const SUCCESS = '#2e6442';   /* ≈ var(--success) */
+const WARN    = '#9a6a1a';   /* ≈ var(--warn) */
+const DANGER  = '#a8362c';   /* ≈ var(--danger) */
+const GRID_C  = '#edeff2';   /* ≈ var(--grid) */
+const INK3    = '#79818b';   /* ≈ var(--ink-3) */
+
+/* ── PLACEHOLDER DATA (replace with real data on fork) ── */
+const CHANNELS      = ['Ch A','Ch B','Ch C','Ch D','Ch E','Ch F','Ch G','Total'];
+const WATERFALL_Y   = [12, -8, 5, -3, 9, -6, 4, 13];
+const WATERFALL_EXP = [10, -5, 5, -2, 8, -4, 3, 15];
+const WATERFALL_Z   = [0.4, -1.8, 0.0, -0.5, 0.3, -3.1, 0.2, -0.6];
+
+const DAYS_30 = Array.from({length:30},(_,i)=>{ const d=new Date(); d.setDate(d.getDate()-29+i); return d.toISOString().slice(0,10); });
+const USER_MAU    = DAYS_30.map((_,i)=>1200000 + Math.round((Math.sin(i/4)*18000) + (i*2200)));
+const USER_UPPER  = USER_MAU.map(v=>v+35000);
+const USER_LOWER  = USER_MAU.map(v=>v-35000);
+
+const SCATTER_X   = [0.42, 0.55, 0.31, 0.68, 0.48, 0.73, 0.36, 0.61];
+const SCATTER_Y   = [4.1,  3.8,  3.5,  4.4,  4.0,  4.5,  3.3,  4.2];
+const SCATTER_SZ  = [22,   18,   12,   28,   15,   30,   10,   20];
+const SCATTER_NM  = ['Seg 1','Seg 2','Seg 3','Seg 4','Seg 5','Seg 6','Seg 7','Seg 8'];
+const SCATTER_CLR = [WARN,GREY,DANGER,ACCENT,GREY,SUCCESS,WARN,GREY];
+
+const QUAL_TREND  = DAYS_30.map((_,i)=>3.6 + Math.sin(i/5)*0.2 + (i>22?-0.3:0));
+const QUAL_TARGET = DAYS_30.map(()=>4.0);
+
+const HM_WEEKS    = ['Wk-4','Wk-3','Wk-2','Wk-1'];
+const HM_DAYS     = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const HM_Z        = [[0.2,-0.5,0.1,0.8,-1.2,1.5,0.3],[0.4,-0.2,-0.9,0.6,-0.8,1.8,-0.1],[0.1,0.3,-0.4,0.9,-1.5,2.1,0.2],[-0.3,0.7,0.2,0.5,-0.7,1.6,0.4]];
+
+/* opacity ramp by |z| for waterfall bars */
+function zOpacity(z){ const a=Math.abs(z); return a<1?0.40:a<2?0.70:1.0; }
+function zColor(z){ return Math.abs(z)>=2 ? ACCENT : GREY; }
+
+const LAYOUT_BASE = {
+  paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+  font:{family:'-apple-system,Segoe UI,Roboto,sans-serif',color:'#434a52',size:11.5},
+  margin:{t:10,r:10,b:44,l:54},
+  xaxis:{gridcolor:GRID_C,tickcolor:INK3,linecolor:GRID_C},
+  yaxis:{gridcolor:GRID_C,tickcolor:INK3,linecolor:GRID_C},
+  hoverlabel:{bgcolor:'#ffffff',bordercolor:'#e2e5e9',font:{size:12}},
+  showlegend:false
+};
+
+/* ── WATERFALL: channel breakdown ── */
+Plotly.newPlot('plotWaterfall',[{
+  type:'waterfall', orientation:'v',
+  x:CHANNELS, y:WATERFALL_Y,
+  connector:{line:{color:GRID_C,width:1}},
+  decreasing:{marker:{color:WATERFALL_Y.map((v,i)=>v<0?zColor(WATERFALL_Z[i]):GREY)}},
+  increasing:{marker:{color:WATERFALL_Y.map((v,i)=>v>0?zColor(WATERFALL_Z[i]):GREY)}},
+  totals:{marker:{color:ACCENT,opacity:0.85}},
+  opacity:1,
+  marker:{opacity:WATERFALL_Z.map(zOpacity)},
+  customdata:CHANNELS.map((_,i)=>[
+    WATERFALL_Y[i].toFixed(1),
+    WATERFALL_EXP[i].toFixed(1),
+    ((WATERFALL_Y[i]-WATERFALL_EXP[i])/Math.abs(WATERFALL_EXP[i])*100).toFixed(1)+'%',
+    WATERFALL_Z[i].toFixed(2)
+  ]),
+  hovertemplate:'<b>%{x}</b><br>Actual: %{customdata[0]}<br>Expected: %{customdata[1]}<br>Gap: %{customdata[2]}<br>z: %{customdata[3]}<extra></extra>'
+}],{
+  ...LAYOUT_BASE,
+  yaxis:{...LAYOUT_BASE.yaxis, title:{text:'[ unit ]',font:{size:10}}},
+  xaxis:{...LAYOUT_BASE.xaxis, title:{text:'Channel',font:{size:10}}},
+  shapes:CHANNELS.map((c,i)=>({
+    type:'line',xref:'x',yref:'y',
+    x0:i-0.45,x1:i+0.45,y0:WATERFALL_EXP[i],y1:WATERFALL_EXP[i],
+    line:{color:INK3,width:1.5,dash:'dot'}
+  }))
+},{responsive:true,displayModeBar:false});
+
+/* ── LINE: user trend ── */
+Plotly.newPlot('plotUsers',[
+  {x:DAYS_30, y:USER_UPPER, mode:'lines',line:{width:0},showlegend:false,hoverinfo:'skip',fill:'none'},
+  {x:DAYS_30, y:USER_LOWER, mode:'lines',line:{width:0},fill:'tonexty',
+    fillcolor:'rgba(46,100,66,0.10)',showlegend:false,hoverinfo:'skip'},
+  {x:DAYS_30, y:USER_MAU, mode:'lines+markers',
+    line:{color:ACCENT,width:2},
+    marker:{color:ACCENT,size:4},
+    name:'MAU',
+    hovertemplate:'%{x}<br>MAU: %{y:,.0f}<extra></extra>'}
+],{
+  ...LAYOUT_BASE,
+  yaxis:{...LAYOUT_BASE.yaxis, title:{text:'Monthly Active Users',font:{size:10}}},
+  xaxis:{...LAYOUT_BASE.xaxis, title:{text:'Date',font:{size:10}}}
+},{responsive:true,displayModeBar:false});
+
+/* ── SORTED BAR: channel impact ── */
+const barChannels = ['Ch F','Ch B','Ch E','Ch D','Ch G','Ch C','Ch A'];
+const barDeltas   = [-3.1, -1.8, 0.3, -0.5, 0.2, 0.0, 0.4];
+const barColors   = barDeltas.map(z=>Math.abs(z)>=2?ACCENT:GREY);
+Plotly.newPlot('plotChannelBar',[{
+  type:'bar', orientation:'h',
+  x:barDeltas, y:barChannels,
+  marker:{color:barColors},
+  hovertemplate:'%{y}: z = %{x:.2f}<extra></extra>'
+}],{
+  ...LAYOUT_BASE,
+  margin:{t:10,r:20,b:44,l:60},
+  xaxis:{...LAYOUT_BASE.xaxis, title:{text:'z-score (deviation from expected)',font:{size:10}}, zeroline:true, zerolinecolor:INK3},
+  yaxis:{...LAYOUT_BASE.yaxis, title:{text:'Channel',font:{size:10}}}
+},{responsive:true,displayModeBar:false});
+
+/* ── LINE: quality trend ── */
+Plotly.newPlot('plotQuality',[
+  {x:DAYS_30, y:QUAL_TARGET, mode:'lines',
+    line:{color:GREY,width:1.2,dash:'dash'},name:'Target',
+    hovertemplate:'Target: %{y:.2f}<extra></extra>'},
+  {x:DAYS_30, y:QUAL_TREND, mode:'lines+markers',
+    line:{color:WARN,width:2},marker:{color:WARN,size:4},
+    name:'Score',
+    hovertemplate:'%{x}<br>Score: %{y:.2f}<extra></extra>'}
+],{
+  ...LAYOUT_BASE,
+  yaxis:{...LAYOUT_BASE.yaxis, title:{text:'[ Score / 5 ]',font:{size:10}}, range:[2.5,5]},
+  xaxis:{...LAYOUT_BASE.xaxis, title:{text:'Date',font:{size:10}}}
+},{responsive:true,displayModeBar:false});
+
+/* ── SCATTER: segment positioning ── */
+Plotly.newPlot('plotScatter',[{
+  type:'scatter', mode:'markers+text',
+  x:SCATTER_X, y:SCATTER_Y,
+  text:SCATTER_NM, textposition:'top center',
+  textfont:{size:10,color:INK3},
+  marker:{size:SCATTER_SZ, color:SCATTER_CLR, opacity:0.75, line:{color:'#fff',width:1}},
+  customdata:SCATTER_NM,
+  hovertemplate:'<b>%{customdata}</b><br>[ metric A ]: %{x:.2f}<br>[ metric B ]: %{y:.2f}<extra></extra>'
+}],{
+  ...LAYOUT_BASE,
+  xaxis:{...LAYOUT_BASE.xaxis, title:{text:'[ Metric A ]',font:{size:10}}, range:[0,1]},
+  yaxis:{...LAYOUT_BASE.yaxis, title:{text:'[ Metric B ]',font:{size:10}}, range:[2.5,5]}
+},{responsive:true,displayModeBar:false});
+
+/* ── HEATMAP: day-of-week seasonality ── */
+Plotly.newPlot('plotHeatmap',[{
+  type:'heatmap',
+  x:HM_DAYS, y:HM_WEEKS, z:HM_Z,
+  colorscale:[[0,DANGER],[0.5,GRID_C],[1,SUCCESS]],
+  zmid:0, showscale:true,
+  hovertemplate:'%{y} %{x}<br>z = %{z:.2f}<extra></extra>'
+}],{
+  ...LAYOUT_BASE,
+  margin:{t:10,r:80,b:44,l:54},
+  xaxis:{...LAYOUT_BASE.xaxis, title:{text:'Day of week',font:{size:10}}},
+  yaxis:{...LAYOUT_BASE.yaxis, title:{text:'Week',font:{size:10}}}
+},{responsive:true,displayModeBar:false});
+
+/* ── SCROLL-SPY ── */
+const navLinks = document.querySelectorAll('#nav a');
+const sections = document.querySelectorAll('.pane[id]');
+function updateSpy(){
+  let active = null;
+  sections.forEach(s=>{
+    const r=s.getBoundingClientRect();
+    if(r.top<=120) active=s.id;
+  });
+  navLinks.forEach(a=>{
+    const href=a.getAttribute('href').replace('#','');
+    a.classList.toggle('on', href===active||(active===null&&href==='top'));
+  });
+}
+document.querySelector('.main').addEventListener('scroll',updateSpy,{passive:true});
+window.addEventListener('scroll',updateSpy,{passive:true});
+
+/* ── SMOOTH-SCROLL (truly_interactive: driver table rows) ── */
+function scrollToSection(el){
+  const t=el.dataset.target;
+  if(t){ document.querySelector(t)?.scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+
+/* ── SNAPSHOT EXPLAINER TOAST (snapshot_explainer: date/segment controls) ── */
+const SNAP_MSG = 'This is a T−1 data snapshot. Changing date or segment is available in the full interactive version on the data portal.';
+function showToast(msg,ms=3200){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),ms);
+}
+document.querySelectorAll('[data-snapshot]').forEach(el=>{
+  el.addEventListener('click',e=>{ e.preventDefault(); showToast(SNAP_MSG); });
+});
+
+/* ── SEGMENT FILTER (truly_interactive: recomputes primary-metric breakdown) ── */
+document.querySelectorAll('[data-seg]').forEach(cb=>{
+  cb.addEventListener('change',()=>{
+    const selected=Array.from(document.querySelectorAll('[data-seg]:checked')).map(c=>c.dataset.seg);
+    /* TODO: implement inline recompute of by-segment bar using baked segment data */
+    showToast('Segment filter applied. Primary metric updated for: '+selected.join(', '),2800);
+  });
+});
+
+/* ── ACTION BUTTONS (metadata_action) ── */
+document.querySelectorAll('[data-act]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const act=btn.dataset.act;
+    if(act==='reset'){ location.reload(); }
+    else if(act==='save'){ try{localStorage.setItem('ops-dash-view',JSON.stringify({ts:Date.now()})); showToast('View saved.');}catch(e){showToast('Could not save (storage blocked).');} }
+    else if(act==='share'){ const u=location.href; if(navigator.share){navigator.share({url:u});}else{navigator.clipboard.writeText(u).then(()=>showToast('Link copied to clipboard.'));} }
+    else if(act==='pdf'){ window.print(); }
+  });
+});
+
+/* ── DATA-CARD HOVER TOOLTIP ── */
+const tip=document.getElementById('cardTip');
+const verdictClsMap={success:'success',warn:'warn',danger:'danger',neutral:'neutral'};
+document.querySelectorAll('[data-hover]').forEach(card=>{
+  card.addEventListener('mouseenter',e=>{
+    const d=JSON.parse(card.dataset.hover);
+    document.getElementById('tipLabel').textContent=d.label||'Metric';
+    document.getElementById('tipActual').textContent=d.actual||'—';
+    document.getElementById('tipExpected').textContent=d.expected||'—';
+    const gapEl=document.getElementById('tipGap');
+    gapEl.textContent=d.gap||'—';
+    gapEl.className='val '+(d.gap&&d.gap.startsWith('-')?'dn':'up');
+    document.getElementById('tipZ').textContent=d.z||'—';
+    const vd=document.getElementById('tipVerdict');
+    vd.textContent=d.verdict||'—';
+    vd.className='vd '+(verdictClsMap[d.cls]||'neutral');
+    tip.classList.add('show');
+  });
+  card.addEventListener('mousemove',e=>{
+    tip.style.left=Math.min(e.clientX+14,window.innerWidth-300)+'px';
+    tip.style.top=Math.max(e.clientY-60,8)+'px';
+  });
+  card.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+});
+</script>
+</body>
+</html>
