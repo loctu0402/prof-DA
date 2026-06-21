@@ -4,6 +4,35 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.20.0] - 2026-06-21
+
+prof-DA is now **multi-agent + a 2nd brain**. Two layers: (1) the project-keyed SCD2 **requirement
+monitor** bundled as prof-DA's flagship "agent -> 2nd brain" governance (capture asks, never forget
+across sessions, gate done on an independent review receipt) with the gate made portable; (2) the
+**functional per-platform adapters** so the same mechanism runs on Codex, Gemini CLI, GitHub Copilot,
+and Cursor, not only Claude Code. Augment-only - the existing governance hooks are unchanged.
+
+### Added
+- **Requirement monitor** (`hooks/req_recon_lib.py`, `req_recon_intake.py`, `req_recon_check.py`,
+  `_host_detect.py`): a project-keyed append-only SCD2 ledger; intake seeds it (skips harness-injected
+  turns; Windows stdin-utf-8); the Stop gate blocks until OPEN asks clear via a fresh all-MET review
+  receipt; detect-and-defer (silent when a host already runs it); atomic + append-mode durable writes.
+- **Functional gate** (`adapters/gate_core.py` + `gate.py`): `python adapters/gate.py` runs the
+  requirement-monitor check + the report-consistency check; exit 0 = done, 2 = not done.
+- **Multi-agent adapters**: per-platform routers (`.cursor/rules/`, `.github/copilot-instructions.md`,
+  `.gemini/commands/prof-da.toml`, `.codex/` via the root `AGENTS.md`) + L3 gate triggers
+  (`adapters/git/pre-commit`, `.github/workflows/gate.yml`, `adapters/ci/gate-step.yml`) + the filled
+  L4 tool-name map (`adapters/toolmaps/_toolmap.md`).
+- **docs/governance.md** - the monitor + the governance suite as the "second brain" mechanism.
+
+### Changed
+- **README.md** / **AGENTS.md** - positioned multi-agent (Claude Code / Codex / Gemini / Copilot /
+  Cursor) + the cross-session monitor + the portable gate.
+- **hooks/session_start_dispatch.py** - surfaces this project's OPEN monitor items at SessionStart
+  (detect-and-defer); the dispatch protocol is unchanged.
+- **hooks/hooks.json** - registers `req_recon_intake` (UserPromptSubmit) + `req_recon_check` (Stop).
+- **docs/portability-architecture.md**, **adapters/README.md** - marked BUILT (were placeholders).
+
 ## [3.19.3] - 2026-06-19
 
 Reconcile the `report` mode's template references to the locked **A1-A12 archetype library**. The decision tree + catalog pointers used stale example names (`daily-email/`, `app-dashboard/`, `gchat-webhook/`, `_catalog.md`, `_index.md`) that did not match the canonical A1-A12 folders + `README.md` catalog the report design system actually uses - the README already framed it correctly, only `mode-report.md` had drifted.

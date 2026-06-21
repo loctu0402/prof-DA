@@ -1,13 +1,13 @@
 # prof-DA
 
-**prof-DA turns Claude Code into a disciplined data analyst that anyone can drive, analyst or not.** Ask for a number, a chart, a root cause, or a stakeholder report, in Vietnamese or English, and it runs a fixed, governed analyst workflow instead of improvising, so the answer is consistent, checkable, and reads the same every time.
+**prof-DA turns your AI coding agent into a disciplined data analyst that anyone can drive, analyst or not.** Ask for a number, a chart, a root cause, or a stakeholder report, in Vietnamese or English, and it runs a fixed, governed analyst workflow instead of improvising, so the answer is consistent, checkable, and reads the same every time.
 
-- **What it is:** a Claude Code plugin that wraps Claude in 12 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `deliver` / `submit` / `review` / `fix` / `workspace`) behind one natural-language entry point.
+- **What it is:** a plugin that wraps your agent (Claude Code, Codex, Gemini CLI, GitHub Copilot, or Cursor) in 12 analyst modes (`frame -> model -> query -> process -> insight -> automate -> report`, plus `deliver` / `submit` / `review` / `fix` / `workspace`) behind one natural-language entry point.
 - **Who it's for:** not only data analysts and analytics engineers. It is built so **business stakeholders and non-technical users can self-serve data** and still get an analyst-grade result, and so the experts get rigor and consistency instead of improvisation. The aim is **consistent, high-quality, trustworthy self-serve output**, first and foremost for <organization> stakeholders.
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
-`v3.19.3` · MIT · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.20.0` · MIT · runs on Claude Code / Codex / Gemini CLI / GitHub Copilot / Cursor · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## The whole system on one page
 
@@ -79,7 +79,7 @@ Claude Code marketplaces use a 2-step pattern (like `apt-add-repository` then `a
 /plugin install prof-DA@loctu-marketplace
 
 # Verify
-/plugin list      # prof-DA 3.19.3 should appear
+/plugin list      # prof-DA 3.20.0 should appear
 ```
 
 Both steps are required (if Step 2 says `Marketplace ... not found`, Step 1 was skipped). Update with `/plugin update prof-DA@loctu-marketplace`, uninstall with `/plugin uninstall prof-DA`. Upgrading from the old `prof-data-analyst` package (v3.3 or earlier)? Uninstall it first - the namespace and repo were renamed ([CHANGELOG.md](CHANGELOG.md)).
@@ -115,7 +115,7 @@ Every deliverable passes **5 universal rules** (4 quality - orientation block, b
 
 A task is "done" only on **evidence** (a run, a rendered artifact on disk, a corrected number, never "seems right"), defended by an anti-rationalization checklist and a **doubt pass** (an adversarial self-review that tries to DISPROVE the result, not confirm it); then an **independent reconcile** diffs delivered work against the captured asks (MET / PARTIAL / MISSED). Multi-step builds run 1 task = 1 commit with a per-task verify gate, stopping on the first failure or irreversible step; when one asset changes, a staleness-trace re-syncs its dependents.
 
-**Hooks make all of this non-optional, not advisory:** a per-prompt pass injects the contract; Stop-hooks block a turn until the deliverable passes its consistency gate, the asks reconcile, and a claimed artifact is proven present; index-first retrieval + an llm-wiki size budget + a curator consolidation pass + subagent depth-1 walls keep the workspace healthy; a learning loop turns each correction into a permanent rule. prof-DA **ships** its own gates (report-consistency Stop-gate, intent dispatch + auto-fire, learning capture) and **consumes** the standalone `workspace-brain` governance layer for the rest, with in-plugin copies of the discipline so the behavior holds even when run alone.
+**Hooks make all of this non-optional, not advisory:** a per-prompt pass injects the contract; Stop-hooks block a turn until the deliverable passes its consistency gate, the asks reconcile, and a claimed artifact is proven present; index-first retrieval + an llm-wiki size budget + a curator consolidation pass + subagent depth-1 walls keep the workspace healthy; a learning loop turns each correction into a permanent rule. prof-DA **ships** its own gates (report-consistency Stop-gate, intent dispatch + auto-fire, learning capture) and **consumes** the standalone `workspace-brain` governance layer for the rest, with in-plugin copies of the discipline so the behavior holds even when run alone. The requirements ledger is **project-keyed and append-only**, surviving across chat sessions (a new session continues your open asks instead of restarting blank), and the done-gate clears only on an **independent review receipt**, not self-ticked boxes; that enforcement is portable via `python adapters/gate.py`, so the same "2nd brain" discipline runs on Codex, Gemini, Cursor, and Copilot, not only Claude Code. See [Governance - the agent as your second brain](docs/governance.md).
 
 Full detail (the 5 rules, the contract, the loops, the hooks): **[GUIDE sections 4-5](docs/GUIDE.md)** + the `execution-discipline` / `evidence-based-done` / `build-auto` references. For recurring reports, an optional **section contract** grades each section against its definition-of-done (`submit` mode); stakeholder visuals follow Storytelling-with-Data discipline.
 
@@ -160,7 +160,7 @@ The intent is bigger than one plugin. prof-DA is meant as a **reference blueprin
 
 ## Versioning
 
-Current version `3.19.3`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.20.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 
