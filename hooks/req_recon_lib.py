@@ -114,15 +114,11 @@ def read_ledger(cwd=None):
         return None
 
 
-def count_open(cwd=None):
-    """Number of OPEN (or bare-unchecked) items, or None if no ledger. Bare '- [ ]' counts
-    as open too, so a hand-written checklist still gates."""
-    text = read_ledger(cwd)
-    if text is None:
+def count_open(cwd=None, session_id=None):
+    """Number of OPEN items, session-scoped when session_id is given (None if no ledger)."""
+    if read_ledger(cwd) is None:
         return None
-    tagged = len(OPEN_RE.findall(text))
-    bare = len(BARE_UNCHECKED_RE.findall(text))
-    return max(tagged, bare)
+    return len(open_ids(cwd, session_id))
 
 
 def has_reconciliation(cwd=None):
@@ -186,7 +182,7 @@ def bump_turn(cwd=None):
         return 0
 
 
-def append_items(asks, turn, cwd=None):
+def append_items(asks, turn, cwd=None, session_id=None):
     """Append each ask as a new OPEN item with a fresh id. Uses O_APPEND (mode 'a') instead of a
     read-modify-write of the whole file, so a CONCURRENT session's append is never lost and a
     torn write can never truncate the ledger (the observed 0-byte wipe of a project-shared
@@ -199,9 +195,10 @@ def append_items(asks, turn, cwd=None):
         p = ledger_path(cwd)
         nid = next_id(cwd)
         lines, written = [], []
+        sess = f" - sess:{session_id[:8]}" if session_id else ""
         for ask in asks:
             ask1 = " ".join(str(ask).split())[:300]
-            lines.append(f"- [ ] (R{nid} - OPEN - t{turn}) {ask1} | DoD: [fill] | AC: [fill]")
+            lines.append(f"- [ ] (R{nid} - OPEN - t{turn}{sess}) {ask1} | DoD: [fill] | AC: [fill]")
             written.append(nid)
             nid += 1
         block = "\n".join(lines) + "\n"
@@ -253,17 +250,30 @@ def ledger_mtime(cwd=None):
         return None
 
 
-def open_ids(cwd=None):
-    """Currently-OPEN requirement ids. A tagged item counts only with the OPEN status (DONE /
-    SUPERSEDED / DEFERRED are excluded). A bare '- [ ]' line with no R-tag yields a synthetic
-    'bare-<n>' id so a hand-written checklist still keeps the gate closed until it is refined
-    into a tagged, verifiable item."""
+SESS_RE = re.compile(r"sess:([0-9A-Za-z-]{4,})")
+
+
+def _line_is_session(line, session_id):
+    """True if an OPEN line is tagged for THIS session. An untagged legacy line is NOT this session's
+    -> excluded from the gate (grandfathered), which stops a parallel session's debt from blocking you."""
+    sm = SESS_RE.search(line)
+    return bool(sm and session_id.startswith(sm.group(1)))
+
+
+def open_ids(cwd=None, session_id=None):
+    """Currently-OPEN requirement ids. With session_id, only items tagged `sess:<id>` for THIS session
+    count (untagged legacy items are grandfathered = excluded) so the GATE blocks only on the current
+    session's asks. Without session_id (SessionStart surfacing) ALL OPEN items return (cross-session)."""
     text = read_ledger(cwd)
     if text is None:
         return []
-    ids = ["R" + m for m in OPEN_ID_RE.findall(text)]
+    ids = []
     for i, line in enumerate(text.splitlines()):
-        if BARE_UNCHECKED_RE.match(line) and not re.search(r"\(R\d+", line):
+        m = OPEN_ID_RE.match(line)
+        if m:
+            if session_id is None or _line_is_session(line, session_id):
+                ids.append("R" + m.group(1))
+        elif session_id is None and BARE_UNCHECKED_RE.match(line) and not re.search(r"\(R\d+", line):
             ids.append(f"bare-{i}")
     return ids
 
@@ -279,12 +289,12 @@ def read_review(cwd=None):
         return None
 
 
-def review_satisfies_open(cwd=None):
+def review_satisfies_open(cwd=None, session_id=None):
     """Does the on-disk review receipt clear the project gate? Returns (ok: bool, reason: str).
     ok=True only when a receipt exists, is FRESH (its file mtime is newer than the ledger's, so
     the review ran after the last requirement change), and reports EVERY currently-OPEN id as
     MET. Any untagged bare '- [ ]' line keeps the gate closed (it cannot be matched by id)."""
-    open_set = open_ids(cwd)
+    open_set = open_ids(cwd, session_id)
     if not open_set:
         return True, "no open items"
     rec = read_review(cwd)

@@ -165,7 +165,7 @@ def main():
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         import req_recon_lib as RL
         turn = RL.bump_turn()
-        seeded = RL.append_items(parse_asks(user_prompt), turn)
+        seeded = RL.append_items(parse_asks(user_prompt), turn, session_id=session_id)
     except Exception:
         seeded = []
 

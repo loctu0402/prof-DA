@@ -52,14 +52,14 @@ def is_block(out):
 
 # 1. host ABSENT + OPEN + no receipt -> check.py BLOCKS
 proj = tempfile.mkdtemp(); env = make_env(host_present=False)
-open(ledger_path(env, proj), "w", encoding="utf-8").write("## Requirements\n- [ ] (R2 - OPEN - t1) x\n")
+open(ledger_path(env, proj), "w", encoding="utf-8").write("## Requirements\n- [ ] (R2 - OPEN - t1 - sess:11111111) x\n")
 out = subprocess.run([sys.executable, str(CHECK)], cwd=proj, env=env,
                      input=json.dumps({"session_id": SID}), capture_output=True, text=True)
 check("host absent + OPEN + no receipt -> block", is_block(out))
 
 # 2. host PRESENT -> check.py defers (silent) even with OPEN
 proj = tempfile.mkdtemp(); env = make_env(host_present=True)
-open(ledger_path(env, proj), "w", encoding="utf-8").write("## Requirements\n- [ ] (R2 - OPEN - t1) x\n")
+open(ledger_path(env, proj), "w", encoding="utf-8").write("## Requirements\n- [ ] (R2 - OPEN - t1 - sess:11111111) x\n")
 out = subprocess.run([sys.executable, str(CHECK)], cwd=proj, env=env,
                      input=json.dumps({"session_id": SID}), capture_output=True, text=True)
 check("host present -> check defers (no block)", out.stdout.strip() == "" and out.returncode == 0)
