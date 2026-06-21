@@ -1,4 +1,4 @@
-# adapters/ - the portability layer (DESIGN placeholders)
+# adapters/ - the portability layer (BUILT, v3.20.0)
 
 The per-platform layer that carries prof-DA's mechanism (scripts + gates + references + rules) to
 non-Claude agents WITHOUT flattening to plain markdown. See `../docs/portability-architecture.md` for

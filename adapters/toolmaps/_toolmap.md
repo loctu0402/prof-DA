@@ -1,18 +1,18 @@
-# Tool-name map (Layer 4) - DESIGN reference
+# Tool-name map (Layer 4)
 
-Maps prof-DA's tool vocabulary to each platform's tool names, so a mode reference that says "use Edit,
-not Write" or "spawn an Agent" translates. `[FILL]` = confirm the exact name from that platform's docs
-when building the mirror.
+Maps prof-DA's tool vocabulary to each platform's tool names so a mode reference that says "use Edit,
+not Write" or "spawn an Agent" translates. Confident names are filled; a `~` marks a name to confirm
+against that platform's current docs when wiring (the platform's own tooling is the source of truth).
 
-| prof-DA tool | Claude Code | Codex / OpenAI | GitHub Copilot | Cursor | Gemini CLI | OpenCode |
-|--------------|-------------|----------------|----------------|--------|-----------|----------|
-| Skill | Skill | (prompt include) | agent file | rule include | command | skill tool |
-| Agent (subagent) | Task / Agent | sub-agent prompt | `@agent` file | composer agent | sub-agent | agent |
-| Bash | Bash | shell | terminal | terminal | shell | bash |
-| Read | Read | read_file `[FILL]` | read | read | read_file `[FILL]` | read |
-| Edit | Edit | apply_patch `[FILL]` | edit | edit | edit | edit |
-| Write | Write | create_file `[FILL]` | create | create | write_file `[FILL]` | write |
-| TodoWrite | TodoWrite | (plan) | (issue) | (todo) | (plan) | todo |
+| prof-DA tool | Claude Code | Codex / OpenAI | GitHub Copilot | Cursor | Gemini CLI |
+|--------------|-------------|----------------|----------------|--------|-----------|
+| Skill (mode) | Skill | AGENTS.md routing (prompt) | copilot-instructions routing | .cursor/rules routing | /prof-da command |
+| Agent (subagent) | Task / Agent | sequential prompt (no native subagent) | `@agent` file | composer agent | sub-agent ~ |
+| Bash / shell | Bash | shell | terminal | terminal | run_shell_command |
+| Read | Read | shell (`cat`/`sed`) | read | read | read_file |
+| Edit | Edit | apply_patch | edit (str-replace) ~ | edit | replace |
+| Write | Write | apply_patch (add) | create | create | write_file |
+| Plan / todo | TodoWrite | update_plan | (issue/checklist) | (todo) | (plan) ~ |
 
-When building a platform mirror, split this into `toolmaps/<platform>-tools.md` (one column each) if the
-mode references need a per-platform include.
+The Layer-1 engine (`skills/da/references/`, `skills/da/scripts/`) is platform-neutral and carried
+verbatim; only the invocation surface and these tool names differ per platform.
