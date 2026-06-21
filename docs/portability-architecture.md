@@ -1,6 +1,9 @@
 # prof-DA Portability Architecture (mechanism-parity across agent platforms)
 
-> DESIGN doc + a placeholder scaffold. How to carry prof-DA's mechanism (scripts + validator GATES +
+> STATUS: BUILT (v3.20.0) - the functional per-platform adapters (L2 routers + L3 gate triggers + L4
+> toolmap) are live; this doc is the architecture behind them.
+>
+> Architecture doc. How to carry prof-DA's mechanism (scripts + validator GATES +
 > the references library + rules) to Claude Code, Codex, GitHub Copilot, Cursor, Gemini CLI,
 > Antigravity, and OpenCode WITHOUT flattening the skill to plain markdown. This session ships the
 > design + a placeholder tree; the functional per-platform mirrors are built later. Self-contained.
