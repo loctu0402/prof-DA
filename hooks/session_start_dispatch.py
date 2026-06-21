@@ -16,6 +16,7 @@ Fail-open: any error -> print nothing, never disrupt session start.
 """
 from __future__ import annotations
 import sys
+from pathlib import Path
 
 PROTOCOL = """<prof-DA-dispatch>
 prof-DA plugin is installed. It is the standing entry point for ALL data-analyst-shaped work in this session.
@@ -46,9 +47,49 @@ When a [prof-DA dispatch] note is attached to a user prompt, treat it as a hard 
 </prof-DA-dispatch>"""
 
 
+def requirement_monitor_context():
+    """OPEN-items context from this project's requirement-monitor ledger, or None. Lets a NEW
+    session continue the cross-session monitor instead of restarting blank. Fail-open."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import req_recon_lib as RL
+        text = RL.read_ledger()
+        if not text:
+            return None
+        open_lines = []
+        for ln in text.splitlines():
+            if RL.OPEN_ID_RE.match(ln) or (RL.BARE_UNCHECKED_RE.match(ln) and "(R" not in ln):
+                open_lines.append(ln.strip())
+        if not open_lines:
+            return None
+        shown = open_lines[:15]
+        out = ["[req-recon] This project has a cross-session requirement monitor with "
+               f"{len(open_lines)} OPEN item(s) (append-only, survives across chat sessions). "
+               "CONTINUE these - do not restart blank. Reconcile via /req-recon check (writes the "
+               "receipt that clears the Stop gate) before claiming done."]
+        out += ["  " + ln for ln in shown]
+        if len(open_lines) > len(shown):
+            out.append(f"  ... +{len(open_lines) - len(shown)} more OPEN item(s) in the ledger")
+        out.append(f"  Ledger: {RL.ledger_path()}")
+        return "\n".join(out)
+    except Exception:
+        return None
+
+
 def main() -> int:
     try:
         print(PROTOCOL)
+    except Exception:
+        pass
+    # Surface this project's OPEN requirement-monitor items (detect-and-defer: silent if the host
+    # already runs the monitor). Plain stdout == SessionStart additionalContext here, same as PROTOCOL.
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from _host_detect import host_monitor_present
+        if not host_monitor_present():
+            ctx = requirement_monitor_context()
+            if ctx:
+                print(ctx)
     except Exception:
         pass
     return 0
