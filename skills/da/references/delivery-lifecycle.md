@@ -3,6 +3,8 @@
 > The A-Z spine for a whole DA engagement. The 7-phase Lean Spec Delivery lifecycle mapped to the
 > prof-DA mode(s) that execute each phase and the gate each produces. A router map; follow the named
 > mode reference for the binding behavior. Self-contained. Distilled from the Lean Spec Delivery post.
+> For what each phase ACTUALLY does (produces / procedure / aspects / done-gate), read
+> `lifecycle-execution-rules.md`; for the Agile-vs-BABOK track fork + when to use which, `adaptive-vs-predictive.md`.
 
 ## Grain and scope
 One unit = a whole DA engagement (kickoff to ship to learn). In scope: the 7 phases -> modes -> gates.
