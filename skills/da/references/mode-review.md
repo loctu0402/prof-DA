@@ -205,6 +205,8 @@ If the same deliverable comes back through Sub-mode A for a 4th review cycle, ST
 ### Goal
 Deep audit of a whole project: workflow integrity + cache discipline + business logic + approach maturity + method appropriateness + advanced-method opportunities + academic/scientific rigor + domain accuracy + fact-check + code-check. Multi-pass review. Returns a structured rework plan, awaits user approval, executes.
 
+> When the audited target IS an agent package (a skill / workflow / plugin / hook / generator), also run the package security scan: `python scripts/validators/skill_security_scan.py <package> --fail-on critical`. A CRITICAL verdict (prompt-injection, embedded secret, pipe-to-shell, eval/exec) is a BLOCKER. Detail: `references/skill-workflow-security.md`.
+
 > The audit IS a doubt pass at project scale (`execution-discipline.md` section 6): run it bias-to-disprove, not bias-to-confirm. For each headline claim and method choice, actively try to BREAK it (confound, stale source, miscount, cherry-picked window, wrong grain); a pass that finds nothing on a complex project is itself a red flag (no doubt theater). The context-tracer + method-auditor sub-agents are the fresh-context skeptics that make the doubt real.
 
 ### When to pick this (not A)
