@@ -1,5 +1,4 @@
-# DESIGN PLACEHOLDER - Copilot/CI pre-merge evidence gate (Layer 3). Build deferred.
-# [FILL] enable on pull_request; nonzero = red build = the deliverable is not proven (evidence-based-done).
+# prof-DA evidence gate (Layer 3) - blocks a PR until deliverables are proven + requirements reconciled.
 name: prof-DA evidence gate
 on:
   pull_request:
@@ -13,5 +12,6 @@ jobs:
           python-version: "3.x"
       - name: prof-DA evidence gate
         run: |
+          GATE="${PROFDA_GATE:-adapters/gate.py}"
           RECEIPT=".prof-da/pending-validation.json"
-          if [ -f "$RECEIPT" ]; then python -m gate "$RECEIPT"; fi
+          if [ -f "$GATE" ]; then python "$GATE" "$RECEIPT"; fi
