@@ -68,7 +68,7 @@ Modes follow the standard DA flow: **Frame → Model → Query → Process → I
 | **report** | "build báo cáo", "làm report", "stakeholder report", "/prof-DA:report" | `references/mode-report.md` |
 | **deliver** | "build it autonomously", "chunk and commit per task", "deliver this end to end", "/build auto", "/prof-DA:deliver" (the build-auto execution loop that wraps any build mode: 1 task = 1 commit + verify gate + stop-on-error/risk) | `references/build-auto.md` |
 | **submit** | "submit report", "finalize trước khi nộp", "đã đủ mục chưa", "fit yêu cầu quản lý chưa", "duyệt lần cuối trước khi submit vào hệ thống", "/prof-DA:submit" (final acceptance gate vs team contract; distinct from review) | `references/mode-submit.md` |
-| **review** | "review code", "audit project", "OK chưa", "snapshot review", "/prof-DA:review" (5 tiers: A0 Brief / A Polish / B Full / C Stakeholder Q / D Staleness Trace) | `references/mode-review.md` |
+| **review** | "review code", "audit project", "OK chưa", "snapshot review", "/prof-DA:review" (6 tiers: A0 Brief / A Polish / B Full / C Stakeholder Q / D Staleness Trace / E Lifecycle Compliance) | `references/mode-review.md` |
 | **fix-pipeline** | "fix pipeline", "debug pipeline", "sửa pipeline", "/prof-DA:fix" | `references/mode-fix-pipeline.md` |
 | **workspace** | "dọn workspace", "sắp xếp lại thư mục", "hệ thống lại workspace", "file nằm khắp nơi", "organize my workspace", "rebuild index", "/prof-DA:workspace" | `references/mode-workspace.md` |
 

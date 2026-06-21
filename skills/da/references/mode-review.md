@@ -2,7 +2,7 @@
 
 Invoke when user asks: "review report", "refine deliverable", "audit project", "kiểm tra bài", "check against skill rules", "stakeholder questions", "brainstorm stakeholder", "/prof-DA:review".
 
-## Five Sub-Modes (tier-based; user picks detail level)
+## Six Sub-Modes (tier-based; user picks detail level)
 
 User picks ONE at invocation. The flow is different for each. Tier choice solves the "overbloat" concern: many reviews just need a snapshot, not a full audit.
 
@@ -13,6 +13,7 @@ User picks ONE at invocation. The flow is different for each. Tier choice solves
 | **B — Full Project Refine** | Whole project: workflow + cache + logic + approach + method + advanced/academic + fact-check + code-check | Cần audit tổng thể; muốn biết approach có đủ rigor, method có advance được không, miss gì không | Heavyweight (~1-3 hours, multi-file context tracing) |
 | **C — Stakeholder Questioning** | Question set for an upcoming meeting / requirements gathering | Chuẩn bị họp stakeholder; cần formulate đúng câu hỏi BEFORE analyse | Lightweight (~10-15 min) |
 | **D — Staleness Trace** | After a change to one asset, trace + sync every dependent asset (doc, plan, AC/DoD, output, sibling diagram) so the project stays consistent | User just edited/changed something (a direction, an input, a result, a diagram flow) and wants all related assets brought in sync | Lightweight-to-medium (scales with dependent count) |
+| **E — Lifecycle Compliance** | Scan a whole project for evidence of all 7 delivery-lifecycle phases (DISCOVER..LEARN): a PRESENT/PARTIAL/MISSING scorecard + gap worklist + Ship/Fix/Rebuild verdict | User wants "did this project follow the full lifecycle / what is missing"; a process-maturity or onboarding audit (process-completeness axis, not quality) | Lightweight (~10 min, `lifecycle_audit.py` + a read) |
 
 ### Why five sub-modes (not one "review")
 
@@ -26,12 +27,13 @@ User picks ONE at invocation. The flow is different for each. Tier choice solves
 When user runs `/prof-DA:review` without arguments, agent MUST ask which sub-mode + which target:
 
 ```
-Bạn muốn review theo tier nào? (A0 / A / B / C / D)
+Bạn muốn review theo tier nào? (A0 / A / B / C / D / E)
   A0 : Brief (Snapshot), 5-min Ship/Fix/Rebuild verdict (rubric + outline)
   A  : Delivery Refine, polish 1 deliverable (presentation, wording, format, checklist)
   B  : Full Project Refine, audit toàn bộ project (workflow, method, fact-check, code-check)
   C  : Stakeholder Questioning, chuẩn bị câu hỏi cho stakeholder meeting
   D  : Staleness Trace, vừa sửa xong 1 thứ thì sync mọi asset liên quan (doc, plan, AC/DoD, output)
+  E  : Lifecycle Compliance, scan project xem đủ 7 phase chưa, ra scorecard PRESENT/PARTIAL/MISSING + gap worklist + verdict Ship/Fix/Rebuild
 
 Target nào? (file path / project folder / mô tả ngắn, tôi sẽ tìm)
 ```
@@ -520,3 +522,31 @@ Critique itself is a deliverable. Apply all 4 quality rules:
 - **Rule 4** — Why-Explanation on every finding (why does this matter, why this fix, why this severity)
 
 AI-tell ban applies to critique text.
+
+---
+
+## Sub-mode E — Lifecycle Compliance (did the project follow all 7 phases?)
+
+### Goal
+Scan a whole project for evidence of each delivery-lifecycle phase (DISCOVER -> MODEL -> SPECIFY -> REVIEW
+-> DELIVER -> VALIDATE -> LEARN) and return a PRESENT / PARTIAL / MISSING scorecard + a gap worklist + a
+Ship/Fix/Rebuild verdict. It answers "did this follow the full lifecycle, and what is missing?" - a
+process-completeness / onboarding audit, NOT a quality critique (that is Sub-mode B).
+
+### How
+```bash
+python scripts/validators/lifecycle_audit.py <project-dir>        # scorecard + gap worklist
+python scripts/validators/lifecycle_audit.py <project-dir> --json # machine report
+```
+It scores each phase by presence-proof (an artifact by filename AND a content signal), never by "I
+remember doing it". It is heuristic - confirm the scorecard by reading the flagged files. Phase
+definitions + the rubric: `references/delivery-lifecycle.md` + `references/lifecycle-execution-rules.md`.
+
+### Verdict
+Count PRESENT of 7: 7 -> Ship (mature) | 5-6 -> Fix (close the gaps) | 3-4 -> Fix-heavy / consider
+Rebuild process | <3 -> Rebuild (ad-hoc, no spine). Each PARTIAL/MISSING phase carries a concrete close-the-gap action.
+
+### When to pick this (not B)
+"Did this project follow the process / which phase is missing?" (E, completeness axis) vs "is the analysis
+rigorous / can the method be more advanced?" (B, quality axis). Cheap to run; pair with B when both the
+process and the rigor are in question.
