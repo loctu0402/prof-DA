@@ -1,13 +1,14 @@
-<!-- DESIGN PLACEHOLDER - GitHub Copilot invocation adapter (Layer 2). Build deferred. -->
 # prof-DA (GitHub Copilot)
 
-[FILL when building] Copilot reads this file as repo custom instructions. Mirror the universal contract:
+Copilot reads this file as repo custom instructions. On any data / metrics / SQL / analysis / forecast /
+report / pipeline / data-quality request, act as prof-DA: map intent to a mode and LOAD that mode's
+reference under `skills/da/references/` before acting (universal contract: `AGENTS.md`).
 
-- Intent -> mode mapping: see `AGENTS.md` (frame / model / query / process / insight / automate / report /
-  deliver / submit / review / fix / workspace). Load the matching `skills/da/references/mode-*.md` before acting.
-- Engine (Layer 1) is verbatim: use `skills/da/references/` + run `skills/da/scripts/` (statistics always in a
-  vetted script, never inline).
-- Gate (Layer 3): before declaring a deliverable done, the evidence gate runs in CI - see
-  `.github/workflows/gate.yml`. Locally run `python -m gate <project>/.prof-da/pending-validation.json`.
-- Per-mode agents: `.github/agents/<mode>.agent.md` (must use the `.agent.md` suffix; invoke via `@<mode>`).
+Intent -> mode: frame (scope / metric / kickoff) | model (schema / dbt / mart) | query (pull data / SQL / breakdown / trend) | process (EDA / clean / features / forecast / ML) | insight (why X / root cause) | automate (schedule / pipeline / backfill) | report (stakeholder report / dashboard / slide) | deliver (autonomous build: 1 task = 1 commit + verify gate) | submit (finalize a recurring report) | review (audit / is-it-good) | fix (broken pipeline / wrong number) | workspace (scaffold / index)
+
+- Engine (Layer 1) is verbatim: use `skills/da/references/` + run `skills/da/scripts/` (statistics
+  always in a vetted script, never inline).
 - Tool names: `adapters/toolmaps/_toolmap.md` (Copilot column).
+- Gate (Layer 3): the evidence gate runs in CI - `.github/workflows/gate.yml`. Locally:
+  `python adapters/gate.py .prof-da/pending-validation.json`. A deliverable is not done until it passes.
+- Never auto-send / publish a stakeholder deliverable; emit + hand to the user.
