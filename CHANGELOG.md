@@ -4,6 +4,55 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.20.0] - 2026-06-21
+
+prof-DA is now **multi-agent + a 2nd brain**. Two layers: (1) the project-keyed SCD2 **requirement
+monitor** bundled as prof-DA's flagship "agent -> 2nd brain" governance (capture asks, never forget
+across sessions, gate done on an independent review receipt) with the gate made portable; (2) the
+**functional per-platform adapters** so the same mechanism runs on Codex, Gemini CLI, GitHub Copilot,
+and Cursor, not only Claude Code; (3) **DA governance + quality tooling** mirrored from the workspace - a
+skill/workflow security scanner, PII detection + data-classification, the per-phase lifecycle
+execution-rules + the Agile-vs-BABOK track fork, and a review Sub-mode E that audits a project's lifecycle
+completeness. Augment-only - the existing governance hooks are unchanged.
+
+### Added
+- **Requirement monitor** (`hooks/req_recon_lib.py`, `req_recon_intake.py`, `req_recon_check.py`,
+  `_host_detect.py`): a project-keyed append-only SCD2 ledger; intake seeds it (skips harness-injected
+  turns; Windows stdin-utf-8); the Stop gate blocks until OPEN asks clear via a fresh all-MET review
+  receipt; detect-and-defer (silent when a host already runs it); atomic + append-mode durable writes.
+- **Functional gate** (`adapters/gate_core.py` + `gate.py`): `python adapters/gate.py` runs the
+  requirement-monitor check + the report-consistency check; exit 0 = done, 2 = not done.
+- **Multi-agent adapters**: per-platform routers (`.cursor/rules/`, `.github/copilot-instructions.md`,
+  `.gemini/commands/prof-da.toml`, `.codex/` via the root `AGENTS.md`) + L3 gate triggers
+  (`adapters/git/pre-commit`, `.github/workflows/gate.yml`, `adapters/ci/gate-step.yml`) + the filled
+  L4 tool-name map (`adapters/toolmaps/_toolmap.md`).
+- **docs/governance.md** - the monitor + the governance suite as the "second brain" mechanism.
+- **Skill/workflow security scan** (`skills/da/scripts/validators/skill_security_scan.py` +
+  `references/skill-workflow-security.md`): a stdlib regex+AST scanner over 8 categories
+  (prompt-injection, data-exfiltration, system-prompt-leak, excessive-agency, supply-chain, tool-misuse,
+  secret-hardcode, mcp-least-privilege); `--fail-on`-tunable verdict (decoupled from the risk-surface
+  score) + `# nosec` suppression; wired into review Sub-mode B for agent-package targets.
+- **PII detection + data-classification** (`skills/da/scripts/validators/scan_pii_columns.py`,
+  `gate_pii_classification.py` + `references/data-classification.md`): Presidio-concept stdlib
+  recognizers (name deny-list + value pattern/Luhn) propose a 4-tier sensitivity + PII entity per column
+  (ambiguous = `[DA-INPUT]`); the gate flags a raw RESTRICTED-PII column reaching a mart; wired into
+  model-mode governance hooks.
+- **Lifecycle execution rules + Agile-vs-BABOK track fork** (`references/lifecycle-execution-rules.md`,
+  `references/adaptive-vs-predictive.md`): each of the 7 lifecycle phases with
+  produces/procedure/aspects/done-gate; the Predictive (BABOK) vs Adaptive (Agile/Scrum) tracks separated
+  with a per-decision selection rule; linked from `delivery-lifecycle.md`.
+- **Review Sub-mode E - Lifecycle Compliance** (`skills/da/scripts/validators/lifecycle_audit.py`): scan a
+  project for evidence of all 7 phases -> a PRESENT/PARTIAL/MISSING scorecard + gap worklist +
+  Ship/Fix/Rebuild verdict (the process-completeness axis, distinct from Sub-mode B's quality axis).
+
+### Changed
+- **README.md** / **AGENTS.md** - positioned multi-agent (Claude Code / Codex / Gemini / Copilot /
+  Cursor) + the cross-session monitor + the portable gate.
+- **hooks/session_start_dispatch.py** - surfaces this project's OPEN monitor items at SessionStart
+  (detect-and-defer); the dispatch protocol is unchanged.
+- **hooks/hooks.json** - registers `req_recon_intake` (UserPromptSubmit) + `req_recon_check` (Stop).
+- **docs/portability-architecture.md**, **adapters/README.md** - marked BUILT (were placeholders).
+
 ## [3.19.3] - 2026-06-19
 
 Reconcile the `report` mode's template references to the locked **A1-A12 archetype library**. The decision tree + catalog pointers used stale example names (`daily-email/`, `app-dashboard/`, `gchat-webhook/`, `_catalog.md`, `_index.md`) that did not match the canonical A1-A12 folders + `README.md` catalog the report design system actually uses - the README already framed it correctly, only `mode-report.md` had drifted.

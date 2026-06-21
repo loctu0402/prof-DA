@@ -50,10 +50,19 @@ Before declaring ANY deliverable done, prove it. The portable gate is:
 python -m gate <project>/.prof-da/pending-validation.json     # or: python adapters/gate.py <receipt>
 ```
 
-It checks each named deliverable EXISTS, is NON-EMPTY, and (for code) carries a proof marker; exit 0 =
-proven, nonzero = not done. On Claude Code this runs automatically as a Stop hook; on every other
-platform run it as a git pre-commit / a CI step / the final tool call (see `docs/portability-architecture.md`).
+It checks each named deliverable EXISTS, is NON-EMPTY, and (for code) carries a proof marker, AND that
+the project's requirement monitor has no OPEN ask left un-cleared by a fresh all-MET review receipt;
+exit 0 = proven, nonzero = not done. On Claude Code this runs automatically as a Stop hook; on every
+other platform run it as a git pre-commit / a CI step / the final tool call (see
+`docs/portability-architecture.md`).
 A task is not done until this passes (the evidence ladder: `skills/da/references/evidence-based-done.md`).
+
+**Maintain the requirement ledger.** prof-DA keeps a project-keyed, append-only ledger of your asks at
+`~/.claude/req-recon/<project-key>.md` (capture each ask as `OPEN`; tag `DONE` only after an independent
+review writes the all-MET receipt; `SUPERSEDED` / `DEFERRED`, never delete). On Claude Code the hooks
+seed, surface, and gate it for you; on a hookless platform YOU maintain it and the gate above enforces
+it at commit. This is prof-DA's "2nd brain": your asks survive across sessions and nothing is called
+done on self-ticked boxes. See `docs/governance.md`.
 
 ## Non-negotiable behaviors
 
