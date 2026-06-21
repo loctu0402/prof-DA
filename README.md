@@ -53,7 +53,7 @@ Why it matters: this is the direct answer to the blog's three open problems. Gro
 
 ### 3. The enforcement layer: a rule-governed, PM-grade work environment
 
-The plausible-but-wrong answer is the hardest problem, and an ordinary agent has no defense: it answers from a blank context, calls it done, and moves on. prof-DA runs **every task the way a project manager would** - a per-task DoR / DoD / AC contract (injected, not optional, depth-scaled), a just-enough spec with a durable work cache so a compacted session never drops an ask, the 5 universal rules + 19 audited scripts on the deliverable, and a verify -> doubt -> reconcile gate before "done" (an evidence ladder + an anti-rationalization checklist + an adversarial doubt pass + an independent MET / PARTIAL / MISSED reconcile). Multi-step builds run 1 task = 1 commit, stopping on the first failure or irreversible step. Hooks make it non-skippable; prof-DA ships its own gates and consumes the `workspace-brain` governance layer for the rest. Full detail: **[What it enforces](#what-it-enforces)**.
+The plausible-but-wrong answer is the hardest problem, and an ordinary agent has no defense: it answers from a blank context, calls it done, and moves on. prof-DA runs **every task the way a project manager would** - a per-task DoR / DoD / AC contract (injected, not optional, depth-scaled), a just-enough spec with a durable work cache so a compacted session never drops an ask, the 5 universal rules + 23 audited scripts on the deliverable, and a verify -> doubt -> reconcile gate before "done" (an evidence ladder + an anti-rationalization checklist + an adversarial doubt pass + an independent MET / PARTIAL / MISSED reconcile). Multi-step builds run 1 task = 1 commit, stopping on the first failure or irreversible step. Hooks make it non-skippable; prof-DA ships its own gates and consumes the `workspace-brain` governance layer for the rest. Full detail: **[What it enforces](#what-it-enforces)**.
 
 ## Why not just vanilla Claude Code?
 
@@ -105,7 +105,7 @@ prof-DA detects the request, confirms intent and a detail level (Quick / Standar
 Two layers. **Execution modes** run the analysis along the six-phase lifecycle; **Governance modes** are cross-cutting (enforce the rules + review-discipline, fix, finalize to a contract, systematize the workspace into a second brain). A non-technical user never learns the names: they ask in plain language and prof-DA routes.
 
 - **Execution (the 6-phase pipeline):** `frame` (ask: scope + metric contract) -> `model` + `query` (prepare: schema design + NL-to-SQL) -> `process` (process: clean / EDA / predictive modeling) -> `insight` (analyze: diagnostic + causal method) -> `report` (share: stakeholder deliverable from a locked template) -> `automate` (act: scheduled pipeline + fail-alerts).
-- **Governance (run any time):** `deliver` (gated build-auto loop), `submit` (recurring-report acceptance gate), `review` (5-tier audit + staleness re-sync), `fix` (surgical debug), `workspace` (scaffold + index + consolidate the second brain).
+- **Governance (run any time):** `deliver` (gated build-auto loop), `submit` (recurring-report acceptance gate), `review` (6-tier audit + staleness re-sync), `fix` (surgical debug), `workspace` (scaffold + index + consolidate the second brain).
 
 The full per-mode table, the auto-fire trigger phrases, and each mode's sub-flows (`frame`'s 4 planning gates, `model`'s 4 warehouse patterns, the 5 `review` tiers) are in **[GUIDE section 3](docs/GUIDE.md)**.
 
@@ -127,15 +127,16 @@ prof-DA is one root skill plus thin per-mode stubs, a script stdlib, method spec
 skills/
   da/                      root skill: rules, protocols, references
     references/            deep docs (modes, methods, governance, SWD, schema)
-    scripts/               19 stdlib scripts (run, never inline, statistics)
+    scripts/               23 stdlib scripts (run, never inline, statistics)
   frame, model, query ...  12 thin mode stubs that load the root skill
 commands/                  13 slash commands (1 entry + 12 modes)
 agents/                    3 support sub-agents
 ```
 
-- **19 stdlib scripts** (`skills/da/scripts/`): stats (effect size, significance, MDE, bootstrap CI, multiple testing), causal (DiD / event study, parallel-trends), formatting, and validators (orientation, action brief, AI-tell scan, rubric audit, method-maturity audit, report consistency, section-contract, artifact-presence, anti-rationalization, self-check). Script-over-agent-compute is a hard rule: statistics always run in a vetted script, never guessed inline. See [scripts-guide](skills/da/references/scripts-guide.md).
+- **23 stdlib scripts** (`skills/da/scripts/`): stats (effect size, significance, MDE, bootstrap CI, multiple testing), causal (DiD / event study, parallel-trends), formatting, and validators (orientation, action brief, AI-tell scan, rubric audit, method-maturity audit, report consistency, section-contract, artifact-presence, anti-rationalization, self-check, skill-security scan, PII classification + gate, lifecycle audit). Script-over-agent-compute is a hard rule: statistics always run in a vetted script, never guessed inline. See [scripts-guide](skills/da/references/scripts-guide.md).
 - **14 method specs** (`skills/da/references/methods/`): DiD, event study, RDD, synthetic control, PSM, IV, bootstrap CI, robustness, sensitivity, falsification, multiple testing, post-hoc power, cross-validation, pre-registration. Each cites a primary source. See [methods/_index](skills/da/references/methods/_index.md).
 - **3 support sub-agents** (`agents/`), spawned only when value beats cost: `da-orchestrator` (intent + plan + final-review gate), `da-context-tracer` (multi-file reads for big-project review), `da-method-auditor` (causal-method judgment).
+- **Governance + quality tooling** (mirrored into the modes): a skill/workflow **security scanner** (`review` / package targets), **PII detection + 4-tier data-classification** (`model` governance), the per-phase **lifecycle execution-rules** + the **Agile-vs-BABOK** track fork (`delivery-lifecycle`), and review **Sub-mode E - Lifecycle Compliance** (presence-proof scan of all 7 phases -> Ship/Fix/Rebuild verdict).
 
 ## Configuration
 

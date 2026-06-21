@@ -48,7 +48,7 @@ The standard lifecycle runs left to right; `deliver` / `submit` / `review` / `fi
 | **report** | Build a stakeholder deliverable from a locked template: storyline, chart anatomy, dual-comparison KPIs, portal publish. HTML / PDF / email / Gchat / slides / editable PPTX. | "build báo cáo", "làm dashboard", "làm slide", "convert sang PPTX" |
 | **deliver** | Run an approved build as a gated autonomous loop (build-auto): spec-or-STOP, clean baseline, single batch approval, then per-task RED -> GREEN -> build -> commit + verify gate, stop-on-error/risk, evidence summary. Wraps any build mode (the HOW, not the WHAT). | "build it autonomously", "chunk and commit per task", "deliver end to end", "/build auto" |
 | **submit** | **Final acceptance gate** before a recurring report goes to a team's submission system: completeness audit vs the team's section contract, route gaps to the builder, per-section quality_check, emit a ready-to-paste payload. Distinct from review (judges quality); submit judges completeness + acceptability + readiness. Ships a <product> bi-weekly profile. | "submit report", "finalize trước khi nộp", "đã đủ mục chưa", "fit yêu cầu quản lý chưa" |
-| **review** | Audit a deliverable or a whole project. 5 tiers: A0 brief / A delivery polish / B full project audit / C stakeholder questioning / D staleness trace (after a change, sync every dependent asset). | "review report", "OK chưa", "audit project", "góp ý", "sửa xong sync giúp" |
+| **review** | Audit a deliverable or a whole project. 6 tiers: A0 brief / A delivery polish / B full project audit / C stakeholder questioning / D staleness trace / E lifecycle compliance (scan a project for all 7 lifecycle phases). | "review report", "OK chưa", "audit project", "góp ý", "sửa xong sync giúp" |
 | **fix** | Surgically debug a pipeline or report. Bug triage tree, cache verify, patch-ceiling escalation. Never edits the generator for an HTML patch (overlay instead). | "fix pipeline", "report sai", "wrong number", "pipeline fail" |
 | **workspace** | Scaffold, organize, and index a whole workspace into a navigable second brain — plus the self-operating maintenance loops in §5. | "dọn workspace", "sắp xếp lại thư mục", "organize my workspace", "rebuild index" |
 
@@ -71,7 +71,7 @@ A mode is not a single script. Each is a small designed workflow with **named su
 | **report** | **10 steps** (3 are hard `[GATE]`s): 0 scaffold `[GATE]` · 1 audience+format · 2 fork a locked template — fork-or-fail `[GATE]` · 3 wire data · 4 orientation block · 5 body (baseline-noise-impact + 7-element chart anatomy) · 6 recommendations · 7 self-check · 7.5 HTML-SPA structural inspect · 8 save + validation receipt · 9 portal publish `[GATE]`. **Output channels:** HTML SPA / PDF / email / Gchat card / slide deck / editable PPTX. |
 | **deliver** | **7-gate build-auto loop:** 0 spec/charter-or-STOP `[GATE]` · 1 clean baseline · 2 plan into tasks · 3 single batch approval `[GATE]` · 4 per-task RED/GREEN/build/commit · 5 per-task verify gate · 6 stop-on-failure/risk/irreversible · 7 evidence summary. One task = one commit; drops a validation receipt. Wraps any build mode. |
 | **submit** | **Steps 0 -> 6:** identify team + load contract `[GATE]` · structure audit · gap punch-list + route to the builder · per-section quality_check · carry-forward check · build payload · readiness checklist `[GATE]` -> hand off (never auto-submits). |
-| **review** | **5 tiers, pick by depth:** A0 quick brief · A delivery polish · B full project audit (spawns the context-tracer + method-auditor sub-agents) · C stakeholder questioning · D staleness trace (after a change, sync every dependent asset). |
+| **review** | **6 tiers, pick by depth:** A0 quick brief · A delivery polish · B full project audit (spawns the context-tracer + method-auditor sub-agents) · C stakeholder questioning · D staleness trace (after a change, sync every dependent asset) · E lifecycle compliance (presence-proof scan of all 7 phases -> Ship/Fix/Rebuild). |
 | **fix** | Bug-triage decision tree -> cache verify -> numerical / silent-data-layer debug -> patch via **overlay** (never edit the generator) -> **patch-ceiling escalation** after 3 patches -> wire email-on-fail. |
 | **workspace** | **7 sub-modes:** GUIDE (orchestrates the rest) · SCAFFOLD (fresh) · ORGANIZE (existing mess) · INDEX (**build / update / rebuild** + reverse-existence check) · SETUP (install hooks) · DISCOVER (seed memory) · CURATOR (periodic consolidation). Plus the self-operating loops in §5. |
 
@@ -96,7 +96,7 @@ Three mechanisms make these non-optional rather than advisory:
 - **Doubt pass** — before a high-stakes claim ships, an adversarial self-review (CLAIM -> EXTRACT -> DOUBT -> RECONCILE, bias-to-disprove, no rubber-stamp) actively tries to break the result. It is the negative complement to the positive evidence ladder + the anti-rationalization checklist (`references/execution-discipline.md`). Runs at deliver Gate 7 and is review Sub-mode B at project scale.
 - **Learning loop** — your corrections are captured at session end and become the rule the agent reads next time, so a repeated mistake becomes a permanent fix.
 
-Plus: **19 audited stdlib scripts** (statistics always run in code, never guessed inline), **14 cited causal-method specs** (DiD, event study, RDD, synthetic control, PSM, IV, bootstrap CI, robustness, sensitivity, falsification, multiple testing, post-hoc power, cross-validation, pre-registration), the **12 locked report archetypes (A1-A12)** every deliverable forks 1:1 (never freestyles), and Storytelling-with-Data visual discipline.
+Plus: **23 audited stdlib scripts** (statistics always run in code, never guessed inline), **14 cited causal-method specs** (DiD, event study, RDD, synthetic control, PSM, IV, bootstrap CI, robustness, sensitivity, falsification, multiple testing, post-hoc power, cross-validation, pre-registration), the **12 locked report archetypes (A1-A12)** every deliverable forks 1:1 (never freestyles), and Storytelling-with-Data visual discipline.
 
 ---
 
@@ -158,7 +158,7 @@ docs/prof-da-architecture.svg   the visual (6 nested loops by time scale)
 CHANGELOG.md               version history
 skills/da/                 root skill: rules, protocols, references, scripts
   references/              deep docs (per mode, 14 methods, governance, SWD, schema, the self-operating loops)
-  scripts/                 19 stdlib scripts (stats / causal / format / validators)
+  scripts/                 23 stdlib scripts (stats / causal / format / validators)
 skills/{frame,...,workspace}/   12 thin mode stubs that load the root skill
 commands/                  13 slash commands (1 entry + 12 modes)
 agents/                    3 support sub-agents (orchestrator / context-tracer / method-auditor)
