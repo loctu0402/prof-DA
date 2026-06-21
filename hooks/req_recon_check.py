@@ -68,7 +68,7 @@ def load_state(session_id):
     p = RECON_DIR / f"{session_id}.state.json"
     if p.exists():
         try:
-            return json.loads(p.read_text(encoding="utf-8"))
+            return json.loads(p.read_text(encoding="utf-8-sig"))   # utf-8-sig: tolerate a BOM (defer snippet wrote one)
         except Exception:
             pass
     return {"block_count": 0, "soft_reminded": False, "deferred": False}
@@ -123,7 +123,7 @@ def load_proj_state(RL):
     try:
         p = RECON_DIR / f"{RL.project_key()}.state.json"
         if p.exists():
-            return json.loads(p.read_text(encoding="utf-8"))
+            return json.loads(p.read_text(encoding="utf-8-sig"))   # utf-8-sig: tolerate a BOM (defer snippet wrote one)
     except Exception:
         pass
     return {"block_count": 0}
@@ -199,10 +199,10 @@ def main():
     try:
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         import req_recon_lib as RL
-        p_open = RL.count_open()          # None when this cwd has no project ledger
+        p_open = RL.count_open(session_id=session_id)   # session-scoped: only THIS session's OPEN items gate
         gate_clear = True
         if p_open:
-            ok, why = RL.review_satisfies_open()
+            ok, why = RL.review_satisfies_open(session_id=session_id)
             if not ok:
                 gate_clear = False
                 pstate = load_proj_state(RL)
