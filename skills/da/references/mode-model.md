@@ -194,6 +194,7 @@ After modeling, route to `governance.md` for:
 - Modeling & grain governance (this section enforces some)
 - Data quality validation (dbt tests or equivalent)
 - Access control
+- Data classification & PII tagging (column sensitivity PUBLIC/INTERNAL/CONFIDENTIAL/RESTRICTED-PII; propose with `scripts/validators/scan_pii_columns.py`, enforce with `scripts/validators/gate_pii_classification.py` — detail `references/data-classification.md`)
 - Reporting governance
 
 Modeling pattern + governance setup go together. Don't ship model without governance plan.
