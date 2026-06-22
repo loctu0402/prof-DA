@@ -4,6 +4,18 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.20.1] - 2026-06-22
+
+### Added
+- **Workspace project-folder structure curation** (`skills/da/scripts/project_structure_scan.py` +
+  `references/mode-workspace.md` Step 1b): a read-only scan that clusters projects by name-token family
+  and verdicts each **KEEP-FLAT / LOW-RISK / SAFE-TO-NEST** from its external-ref count + live-job marker
+  + abs-path, and flags index purpose-map DRIFT. Codifies the policy: **greenfield** (a new workspace /
+  new project) classifies into purpose-families FROM THE START; **brownfield** (an existing cross-ref +
+  live-job workspace) keeps wired projects flat and groups them in the index purpose-map, not the
+  filesystem (deep physical nesting trades navigability for fragility). The plugin's 2nd brain now
+  curates the `projects/` layer, not only the memory/notes layer.
+
 ## [3.20.0] - 2026-06-21
 
 prof-DA is now **multi-agent + a 2nd brain**. Two layers: (1) the project-keyed SCD2 **requirement
