@@ -50,6 +50,26 @@ Compare the filesystem against the standard AND the existing `.index/` if any. T
 | Project-tied | outputs belonging to a project | grep refs; move to `projects/<name>/output/` only if 0 refs | medium |
 | Live | files a scheduled pipeline reads/writes | DO NOT move | high |
 
+### Step 1b — Project-folder structure (families + move-safety)
+Step 1 was per-file; this is per-PROJECT-FOLDER. Run `python scripts/project_structure_scan.py <root>`
+(read-only): it clusters projects by name-token family, counts each project's external `projects/<name>/`
+references + live-job markers + abs-paths, verdicts **KEEP-FLAT / LOW-RISK / SAFE-TO-NEST**, and flags
+index purpose-map DRIFT (a project on disk that no purpose-map line names).
+
+Two regimes, opposite defaults:
+- **Greenfield (a new workspace / a brand-new project): classify FROM THE START.** A new project nests
+  under its purpose-family hub at birth — cheap, and it sets a clean IA before any cross-ref or live job
+  pins the folder in place. Onboarding a new workspace runs this classification, not a flat dump.
+- **Brownfield (an existing workspace that grew organically): mostly KEEP-FLAT.** Cross-refs + live jobs
+  have accumulated, so a retrofit move is mostly unsafe. Keep the wired/live projects flat and carry the
+  grouping in the **index purpose-map** (the grouping source-of-truth); physically nest ONLY a
+  genuinely-isolated (0-ref, non-live) project, with approval + `git mv` + every ref fixed in the same commit.
+
+The trap: the projects that visibly "share a pattern" (a name cluster) are often the ones with the most
+cross-refs + live jobs = the LEAST safe to move. Deep physical nesting trades navigability for fragility.
+**The zero-risk grouping action is maintaining the index purpose-map** — add any drift project to its
+family line; do that first, before considering any move.
+
 ### Step 2 — Propose (get approval)
 Present the inventory as a table: each item → current → proposed action → why. Mark genuine judgment calls (delete vs archive, which project owns this) with YOUR recommended default. **Wait for the user's yes before any move.**
 **Why (Operational):** silently handing over a finished reorganization the user never agreed to is the failure mode — surface the plan, let them redirect.
