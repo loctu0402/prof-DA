@@ -31,6 +31,9 @@ What is the report for?   (archetypes = the locked A1-A12 library under shared/t
   ├─ Data-quality profile  ·  Training material
   │   └─ shared/templates/A10-data-quality/  ·  A9-training/
   │
+  ├─ Spreadsheet / data table / eval set (.xlsx)
+  │   └─ `references/output-xlsx.md` (xlsx design contract: theme-selectable header/freeze/zebra/key-block/color-code/auto-size + Index/Legend — a naked grid is a defect)
+  │
   └─ Custom one-off
       └─ Confirm intent → choose closest archetype → fork
 ```
@@ -47,8 +50,9 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
 
 ### Step 1 — Confirm Audience & Output Format
 - Audience: team / manager / cross-functional / C-level?
-- Format: HTML SPA / PDF / email body / Gchat / slides?
+- Format: HTML SPA / PDF / email body / Gchat / slides / spreadsheet (.xlsx)?
   - Slides / editable PPTX: see `references/output-slide-deck.md` (deck-authoring contract + the two export paths: `gen_pptx` in claude.ai/cowork, `html2pptx.js` in CC-CLI)
+  - Spreadsheet / data table / eval set: see `references/output-xlsx.md` — every generated `.xlsx` is styled through the workspace xlsx theme module (header fill + freeze + zebra + key-column block + semantic color-code + auto-size W/H + wrap + Index/Legend); themes are DA-selectable, never force one brand color. A naked openpyxl grid is a defect.
 - Language: Vietnamese with diacritics (stakeholder) or English (internal docs)?
 - Length: 1-page summary or multi-section?
 - **Baseline / comparator (ALWAYS ask, never assume):** which reference does each metric compare against? Menu: prior period (DoD / WoW / MoM) / trailing average (7d / 28d) / SDLM or same-period-last-year (YoY) / target-or-plan or <product-b>-expected / competitor-market benchmark / cohort baseline. A bare number is noise (Rule 2) - never ship one. Default for <product> daily = DoD + vs-7d-avg, but confirm per report. The chosen comparator(s) fill the template's comparator slot (template-library handoff §4.10).

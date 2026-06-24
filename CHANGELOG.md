@@ -4,6 +4,21 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.21.0] - 2026-06-24
+
+### Added
+- **Spreadsheet (.xlsx) output design contract** (`skills/da/references/output-xlsx.md`, wired into
+  `mode-report.md` decision tree + Step 1 and `skills/report/SKILL.md`): a generated `.xlsx` is now a
+  first-class report deliverable with an enforced presentation standard, not a naked openpyxl grid. The
+  spreadsheet is the RENDERER of the same Theme-Token Contract the HTML reports and charts use (one design
+  language across archetypes). Rules: theme-selectable header fill + freeze panes + zebra striping +
+  distinct key-output-column block + monospace code-column block + semantic color-coding + content-aware
+  auto-size (width AND wrap-aware height) + full wrap (no overflow / truncation) + an Index (progressive
+  navigation) and Legend (column dictionary) companion sheet. Themes fork the contract's set and are
+  DA-selectable (default = the muted neutral-dark theme); never force a single brand color. Implementation
+  lives in the workspace theme layer (`<your-workspace>/shared/themes/<organization>_xlsx_theme.py`),
+  mirroring the chart-theme module.
+
 ## [3.20.1] - 2026-06-22
 
 ### Added
