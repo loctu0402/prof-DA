@@ -25,6 +25,9 @@ Any `[GATE]` failure ⇒ not shippable. Fix, re-run, then declare done.
 - [ ] **No AI-tells** — `===`, `-----`, em-dash, `≈`, `→` absent from stakeholder prose. — `ai_tell_scan.py`
 - [ ] **Brand fidelity** — implemented from a locked template in `shared/templates/` (canonical palette/fonts);
       no per-report freestyle CSS when a locked template exists. — `project-scaffold.md`, mode-report A2
+- [ ] **EFFECTIVE-HTML compliance** (any HTML SPA / dashboard / diagram / plan) — themeable via `data-theme` +
+      a light/dark `data-mode` toggle; zero hard-coded hex in the stage (colour in `var()` tokens); SVG diagrams
+      styled by CSS classes; no leaked build context. Forked the boilerplate, not freestyled. — `output-effective-html.md`
 - [ ] **Project scaffold** exists (`queries/ cache/ scripts/ output/ data/`); deliverable not dumped flat. — `report_consistency_audit.py`
 - [ ] **Portal published** — pushed via `shared/portal_upload.py` (72h TTL, stable UUID); receipt
       `latest_portal_url.json` saved. — mode-report Step 9 (skip only if user explicitly says "no link").

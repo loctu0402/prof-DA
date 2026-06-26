@@ -4,6 +4,19 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.22.0] - 2026-06-26
+
+### Added
+- **HTML artifact (SPA / dashboard / diagram / plan) output design contract** — the EFFECTIVE-HTML standard,
+  the HTML renderer of the same Theme-Token Contract the charts and `.xlsx` already use. New reference
+  `skills/da/references/output-effective-html.md` + wired into `skills/report/SKILL.md` (rules list +
+  Cross-references) and the pre-ship gate `skills/da/references/report-standard-checklist.md`.
+  Every HTML deliverable is now themeable (`data-theme` brand axis + a light/dark `data-mode` toggle),
+  carries zero hard-coded hex in the stage (colour in `var()` tokens), styles SVG diagrams by CSS classes
+  (geometry-in-markup / colour-in-tokens / state-in-classes), and leaks no build context. Fork the
+  boilerplate, never freestyle — the same `fork-or-fail` discipline the report templates enforce. Closes the
+  "hollow boxes, unclear flow, hard-coded single-theme page" failure mode for diagrams and dashboards.
+
 ## [3.21.0] - 2026-06-24
 
 ### Added

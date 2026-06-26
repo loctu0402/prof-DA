@@ -44,6 +44,7 @@ Narrative template (SCQR + Key Terms + Impact Cards): `${CLAUDE_PLUGIN_ROOT}/ski
 - NEVER edit generator for HTML patch (use update_report_vN.py overlay)
 - Slide deck / editable PPTX: see `output-slide-deck.md` (deck-authoring contract + 2 export paths; `gen_pptx` is cowork-only, `html2pptx.js` is the CC-CLI path)
 - Spreadsheet / data table / eval set (.xlsx): see `output-xlsx.md` — style EVERY generated `.xlsx` through the workspace xlsx theme module (header fill + freeze + zebra + key-column block + semantic color-code + auto-size W/H + wrap + Index/Legend sheets); themes DA-selectable, never force one brand color. A naked openpyxl grid is a defect
+- HTML SPA / dashboard / diagram / plan: see `output-effective-html.md` — every HTML artifact follows the EFFECTIVE-HTML standard (themeable via `data-theme` + a light/dark `data-mode` toggle; geometry-in-markup / colour-in-tokens / state-in-classes; SVG diagrams styled by CSS classes, zero hard-coded hex). Fork the boilerplate, never freestyle. A hard-coded-hex single-theme page is a defect
 - Step 0 scaffold FIRST, Step 9 portal-publish LAST — both `[GATE]` via `report_consistency_audit.py`
 - Fork-or-fail: a README-only template stub = STOP + handoff, NEVER freestyle (root cause of style drift)
 - Stop-hook gate (v3.6): Step 8 drops `.prof-da/pending-validation.json`; the bundled `hooks/stop_gate.py` BLOCKS finishing until the report passes `report_consistency_audit` (clears the receipt on pass). Receipt-driven, silent on non-report sessions
@@ -52,6 +53,7 @@ Narrative template (SCQR + Key Terms + Impact Cards): `${CLAUDE_PLUGIN_ROOT}/ski
 - Full mode workflow: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/mode-report.md`
 - Slide deck / editable PPTX: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/output-slide-deck.md`
 - Spreadsheet / data table (.xlsx) design contract: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/output-xlsx.md`
+- HTML artifact (SPA / dashboard / diagram / plan) design contract: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/output-effective-html.md`
 - Project scaffold (Step 0): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/project-scaffold.md`
 - Binding pre-ship gate: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/report-standard-checklist.md`
 - Scoring rubric (C-level): `${CLAUDE_PLUGIN_ROOT}/skills/da/references/evaluation-rubric.md`
