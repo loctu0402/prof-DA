@@ -48,6 +48,15 @@ with a numbered sequence. So the diagram re-skins with the page and dark mode ju
   persisting to localStorage. Themes are DA-selectable; never force a single brand colour.
 - Interactivity (a node detail card, a flow highlight, a tab) is CSS-class-driven state, prerendered +
   offline-first — never a runtime-only effect that breaks when the file is opened from disk.
+- **Load clean (a diagram):** the detail card starts COLLAPSED with nothing auto-selected, so the diagram is
+  unobstructed on arrival; a node click opens it. Auto-opening a card on load blocks the diagram, a defect.
+- **Multi-page set (a hub + N pages):** every page carries a nav link back to the index hub so the set is
+  navigable from any page — never a dead-end. Keep floating reference panels (a legend) clear of the content; a
+  dense diagram may need a per-page position override.
+- **Deploy to a static host (Netlify / GitHub Pages):** shared css/js + same-folder relative links mean a partial
+  or wrong-path upload BLACK-BOXES the diagram (the SVG `rect`s fall back to black when the CSS 404s). Deploy the
+  WHOLE folder; for robustness inline the css + js into each page via a build step (a self-contained bundle) so
+  every page renders even on its own, then drag-drop the folder.
 
 ## Per-artifact adoption
 
