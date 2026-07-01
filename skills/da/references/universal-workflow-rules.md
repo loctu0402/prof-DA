@@ -320,3 +320,9 @@ For any task involving evaluation, scoring, comparison:
 4. THEN pick the data, judge, rubric
 
 Anti-pattern: pick metric while looking at data; conflate granularities (session vs task). Field-research first if unsure.
+
+## Keyed-Snapshot Record (persistence contract, cross-cutting)
+
+Every artifact a mode persists - a cache, a computed table, an event/eval/log store, a model manifest, a pipeline step - MUST be a Keyed-Snapshot Record: Structured + Keyed (stable id / date-key) + Snapshotted (as-of stamp, no silent overwrite, history replayable) + Step-persisted (each step its own artifact). Pick 1 of 3 patterns - keyed append-log / latest-pointer + dated-history-store / dated immutable manifest - each carrying a top-level `_meta{schema_version, key, as_of, generated_at, source}`. The anti-pattern this kills: a lone `*_latest` overwritten each run so past state is lost, a number untraceable to a keyed dated source. Full contract + the 3 patterns + exemplars: `references/keyed-snapshot-record.md`.
+
+Why this rule exists — Operational: downstream work (Automation cache, Model table contracts, Report data caches) must replay a past run and trace any number to a keyed dated source; a lone overwrite makes both impossible. A KSR artifact on disk (keyed + dated) IS the evidence-based-done receipt for that step.
