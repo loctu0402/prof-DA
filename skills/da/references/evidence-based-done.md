@@ -49,11 +49,30 @@ The fix: RUN it end to end, OPEN the output, COUNT what came out, then claim.
 | A pipeline | run with the live date, inspect the tail rows landed |
 | A sent email | the send call returned ok (a draft is not a send) |
 
+## Reproducible-deliverable form gate (harness / pipeline / eval / "process")
+If the deliverable must be **reproducible / scale to many users / run on another machine or a different agent**,
+Presence is NOT enough — the FORM matters. It must be **tested code + a CLI + a versioned contract**, NEVER a
+prompt-driven agent or a markdown "flow". A markdown "flow" describing what an agent should do is a rung-1 claim;
+the process is the runnable artifact + a passing test. Put the bar in the DoD as an EXECUTABLE acceptance
+criterion (only code can meet it, so it forces a harness, not a prompt). The 5 forcing functions:
+
+1. **DoD is an executable artifact** — "a `test_x.py` PROVES the property" (e.g. the extractor cannot emit the gold), not a requirement sentence.
+2. **Cross-portability proof** — "another person clones + runs the CLI with ZERO code edits"; "runs on 1 non-Claude model via an env-selected per-role endpoint resolver, not `claude -p`".
+3. **Reproducibility proof** — "it is a CLI; same input -> same output; unit tests per component".
+4. **Fail-closed BY CONSTRUCTION** — a whitelist that can only emit N fields (a bug degrades to a missing field, never a leaked answer), not a prompt saying "please don't leak".
+5. **Force iteration** — run -> deliberately break -> harden -> add a regression test. One-shot = no rigor.
+
+HARD form-rule: never accept a markdown "flow" as "the process"; accept the runnable artifact + a passing test.
+Applies to the `deliver` / `build-auto` / `model` modes when the build must scale or run elsewhere.
+Canonical rule (workspace): `lt-memory/rules/build-reproducible-as-tested-code-not-prompt.md` (+ the 7 harness
+best-practices); enforced by the workspace Stop hook `reproducible_artifact_gate.py`.
+
 ## How to apply (before any done-claim)
 1. Name the rung you claim; confirm you have evidence at it.
 2. For an artifact: prove Presence (path + non-empty + ran).
 3. For code: a named validator / test at exit 0, output captured.
-4. If you cannot prove it, do not claim done; say what is missing.
+4. For a reproducible / harness / eval deliverable: the form gate above — code + test + CLI + a portability proof, not a markdown flow.
+5. If you cannot prove it, do not claim done; say what is missing.
 
 ## Validator + receipt
 `python scripts/validators/artifact_presence_check.py <project>/.prof-da/pending-validation.json`

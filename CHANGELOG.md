@@ -4,6 +4,23 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.23.0] - 2026-07-05
+
+### Added
+- **Reproducible-deliverable form gate** in the done-contract (`skills/da/references/evidence-based-done.md`):
+  when a deliverable must be reproducible / scale to many users / run on another machine or a different agent,
+  Presence is not enough — the FORM must be tested code + a CLI + a versioned contract, NEVER a prompt-driven
+  agent or a markdown "flow". Adds the 5 forcing functions as the executable DoD (a passing `test_x.py` proves
+  the property; clone + run the CLI with zero edits; runs on a non-Claude model via env; fail-closed by
+  construction; run -> break -> harden -> regression test). HARD rule: never accept a markdown "flow" as the
+  process; accept the runnable artifact + a passing test.
+- Wired the form gate into the build modes: `references/build-auto.md` Gate 0, `references/mode-model.md`
+  (reproducible-form note), and `skills/deliver/SKILL.md` Hard rules. A harness / pipeline / eval build's DoD
+  is code + unit test + a CLI + a cross-machine/model proof.
+- Canonical rule (workspace source of truth): `lt-memory/rules/build-reproducible-as-tested-code-not-prompt.md`
+  (+ 7 harness best-practices), enforced by the workspace Stop hook `reproducible_artifact_gate.py`
+  (dogfooded by its own passing test).
+
 ## [3.22.0] - 2026-06-26
 
 ### Added
