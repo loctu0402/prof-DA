@@ -16,7 +16,7 @@ query (-> query mode), schema design (-> model mode), a one-shot chart.
 - DO NOT use this to decide WHAT to build (that is frame / the charter).
 
 ## The 7 gates
-0. Spec / contract or STOP. Require a frame charter OR a metric contract OR a section contract on disk. Absent -> STOP and route to `/frame` or `/report`. Do not invent requirements.
+0. Spec / contract or STOP. Require a frame charter OR a metric contract OR a section contract on disk. Absent -> STOP and route to `/frame` or `/report`. Do not invent requirements. If the build must be reproducible / scale / run elsewhere (a harness / pipeline / eval), its DoD is code + unit test + a CLI + a cross-machine/model proof — NEVER a markdown "flow" (`evidence-based-done.md` reproducible-form gate; canonical `lt-memory/rules/build-reproducible-as-tested-code-not-prompt.md`).
 1. Clean baseline. `git status` clean (or an explicit dirty-ack); existing validators green before starting. Do not absorb unrelated local work into per-task commits.
 2. Plan into tasks. Decompose into atomic tasks, each with a one-line verify check.
 3. Single approval. Present the whole task list ONCE; the user approves the batch (not each task). A hedged reply is NOT approval. This is the only human gate after this point.

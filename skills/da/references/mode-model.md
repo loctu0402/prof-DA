@@ -18,6 +18,8 @@ After `da-frame` Gate 3 chose "TH2 — need new data model", someone has to desi
 
 Skip when: existing tables solve the problem + just need SQL → `/prof-DA:query`. Don't model when you can reuse.
 
+**Reproducible-form gate:** when the model / pipeline must scale or run on another machine or agent, it ships as **tested code + a CLI + a versioned contract**, NEVER a prompt-driven agent or a markdown "flow" — the DoD is an executable acceptance criterion (a passing test proves the property), not requirement prose. See `evidence-based-done.md` (reproducible-form gate); canonical `lt-memory/rules/build-reproducible-as-tested-code-not-prompt.md`.
+
 ## Four Modeling Patterns
 
 ### Pattern 1 — Kimball Star / Snowflake

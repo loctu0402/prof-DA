@@ -31,6 +31,7 @@ step without an explicit confirm.
 - 1 task = 1 commit; never sweep unrelated work into a task commit.
 - An irreversible step needs an explicit confirm + the proof gate first.
 - Run the global pre-ship layer (`self_check.py`) when the build is a report.
+- If the build must be reproducible / scale / run elsewhere (a harness / pipeline / eval), its DoD is code + unit test + a CLI + a cross-machine/model proof — NEVER a markdown "flow" (`references/evidence-based-done.md` reproducible-form gate).
 
 ## Cross-references
 - Execution loop: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/build-auto.md`
