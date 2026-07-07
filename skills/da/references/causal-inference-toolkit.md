@@ -1,6 +1,8 @@
 # Causal Inference Toolkit
 
-When to load: user asks for "why X caused Y", "did the policy work", "DiD", "Event Study", "RDD", "synthetic control", "PSM", "instrumental variable", "causal effect", "treatment effect", or any analysis that goes beyond correlation to claim a cause.
+When to load: user asks for "why X caused Y", "did the policy work", "DiD", "Event Study", "RDD", "synthetic control", "PSM", "instrumental variable", "causal effect", "treatment effect", "did giving X to a segment help", "did the whitelist / grant / free tier work", "segment impact", "cohort analysis", "composition shift", or any analysis that goes beyond correlation to claim a cause.
+
+**Reflex before any "did giving X to a segment help?" question: read Section 7 first.** Aggregate segment metrics almost always overclaim, because the segment's own membership shifts over time. Section 7 is the mandatory pre-check that stops that error before you pick a method.
 
 ## Overview — Why this toolkit exists
 
@@ -86,6 +88,49 @@ The hardest method to use credibly — exclusion restriction is untestable, weak
 No bundled script — use `linearmodels.IV2SLS` (correct standard errors built in).
 
 → Full spec: [methods/iv.md](methods/iv.md)
+
+## 7. Composition-Shift Trap + Cohort Decomposition (segments / whitelists / grants)
+
+The single most common wrong-but-plausible causal claim at a product company: "we gave benefit X to segment S, S's aggregate metric went up, therefore X worked." Usually WRONG, for two compounding reasons:
+
+- **Composition shift** — S's membership changes over time (a monthly-rebuilt roster, a growing whitelist). Aggregate S can rise purely because this period S absorbed users who were already active elsewhere. The pool grew; no new value was created. It is a relabel, not an impact.
+- **Selection** — S's members were chosen because they were already good (high score, high balance), so their metric would have risen anyway.
+
+**The recipe (make this the default reflex, run it BEFORE choosing a method from the table above):**
+
+1. **Fix a cohort.** Freeze the exact members enrolled at t0 and follow those same people over time. Never compare pool-vs-pool across periods when membership changes.
+2. **Decompose by pre-treatment state:**
+   - **A. Already-treated before t0** = placebo. The benefit is not new to them, so they should NOT jump. If they do, the driver is a general trend, not the benefit.
+   - **B. Eligible but not-yet-treated** = the REAL treatment group. Their change is the effect worth reporting.
+   - **C. New entrants** = extensive-margin / acquisition. Their "before" is zero and inflates any aggregate; report separately, never blend into the treatment effect.
+3. **Add a control:** same "eligible, not-yet-treated" state as B but NOT enrolled. This measures the secular trend for comparable users.
+4. **Test:** DiD (B's before/after change MINUS control's change) + a t-test on the per-user change + inspect pre-treatment leads (were A / B / control already diverging before t0?).
+5. **Verdict logic:** the effect is credibly caused by the benefit only if **B jumps at t0 while A and control stay flat**. If A also jumps, or B was already trending up pre-t0, the naive number is an artifact.
+
+ASCII flow:
+
+```
+Whole segment (raw totals)              TRAP: total grows just from membership change
+   |
+   v  1. FIX A COHORT: the exact members enrolled at t0; follow THESE people
+   |
+   v  2. DECOMPOSE by pre-treatment state:
+   |--- A. Already-treated             : placebo   (should NOT move)
+   |--- B. Eligible, not-yet-treated   : the REAL treatment group
+   +--- C. New entrants                : acquisition, report separately
+   |
+   v  3. CONTROL: same state as B but NOT enrolled  (secular trend)
+   |
+   v  4. TEST: DiD (B minus control) + t-test + pre-trend leads
+   |
+   v  VERDICT: only B jumps, A and control flat   ==>   effect is from the treatment
+```
+
+The headline number is the DiD on group **B** (per-user), with its CI and t-stat. It is NOT the blended change of the whole segment (which mixes A's placebo, C's acquisition, and composition shift). Report a blended number only alongside the decomposition that explains it.
+
+This connects to the table above: Section 7 is the framing pre-check; once B and its control are defined, the estimator is **DiD** (Section 1), upgraded to **Event Study** (Section 2) when you have several pre/post periods, or **PSM** (Section 5) when B and the control need covariate matching to be comparable.
+
+**Worked reference:** MoMo Score free-Túi+ whitelist impact (2026-07). Blended cohort AUM +30.8% collapsed, on decomposition, to B (newly granted) +50% vs A (already had it) flat +2.9% vs control flat +2.2%; clean DiD = +659K VND per user, t about 18. Files: `personal-workspace/projects/ttt-score-segment-impact/` (queries q6 decomposition + q8 significance, synth.py).
 
 ## Reporting Standard (every causal claim)
 
