@@ -82,7 +82,10 @@ hoa bao cao dinh ky"), do NOT pick a single Next Mode. Instead load `recurring-r
 the full 9-phase chain (DISCOVER, METRIC, MODEL, DESIGN, PREDICT, DELIVERABLES+CHANNELS, SCHEDULE, VALIDATE,
 LEARN) filled with this product's specifics (the metric, sources, archetype, channels, cadence), as ONE action
 plan with a DoR/DoD/AC per phase. Get one batch approval, then execute phases 3-8 under `/deliver` (the build-auto
-gated loop). This is how frame connects the otherwise-siloed modes into a single proposed flow.
+gated loop). This is how frame connects the otherwise-siloed modes into a single proposed flow. For a "reproduce
+an existing report" ask, the DESIGN phase forks a LOCKED template (workspace override -> bundled default -> STOP +
+register); tracing the old flow is for FACTS (metrics / sources / cache) only, never to fork its generator's
+format - `references/template-sourcing.md` (FACT-vs-PROCESS gate).
 
 ## Frame mode anti-patterns
 
