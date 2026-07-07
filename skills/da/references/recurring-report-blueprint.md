@@ -43,6 +43,9 @@ phase, and asks the user to approve the plan (one batch approval), then routes p
 - "Build a daily automated report cho product X: pull AUM + MAU, forecast 7 ngay, gui email +
   Gchat luc 9h sang." -> frame proposes the 9-phase plan, then `/deliver` executes it.
 - "Reproduce an existing daily report flow tu dau cho product Y." -> frame loads this blueprint, fills it for Y.
+  BINDING (`template-sourcing.md`): "reproduce" = re-derive the DATA + INTENT through the template system. Trace
+  the old pipeline / generator for FACTS (metrics, sources, cache) only; NEVER fork the old `generate_*.py` as
+  the report's process / format - that is a PROCESS read (a defect), not grounding.
 - "Set up a weekly report product: metric, report, send, schedule." -> same chain, cadence = weekly.
 
 ## Worked example (a savings-product daily report)

@@ -5,7 +5,7 @@ Invoke when user asks: "build báo cáo", "làm report", "stakeholder report", "
 ## Decision Tree — Pick Template
 
 ```
-What is the report for?   (archetypes = the locked A1-A12 library under shared/templates/)
+What is the report for?   (archetype IDs resolve via template-sourcing precedence - see references/template-sourcing.md: workspace shared/templates/<A>/ override, else bundled ${CLAUDE_PLUGIN_ROOT}/templates/<A>/ default. Paths shown name the archetype, not a hard workspace path.)
   │
   ├─ Daily ops snapshot (product / fraud / app performance)
   │   └─ shared/templates/A4-daily-email/  (email)  ·  A2-ops-dashboard/  (portal HTML)
@@ -38,7 +38,7 @@ What is the report for?   (archetypes = the locked A1-A12 library under shared/t
       └─ Confirm intent → choose closest archetype → fork
 ```
 
-Full archetype catalog: `<your-workspace>/shared/templates/README.md` — the **locked A1-A12 archetype library** (build-once-then-locked; every report forks one 1:1 and swaps data only, never freestyles — this is what fixes per-report style drift). Shared design DNA (tokens, verdict ramp, comparator slot, chart-choice matrix) lives in `<your-workspace>/shared/templates/_contract/` (THEME-TOKEN-CONTRACT.html / 00-PLAYBOOK / DESIGN-DECISIONS / SPEC-TEMPLATE). If you don't have an archetype library yet, start by saving one report you're happy with under `<your-workspace>/shared/templates/<name>/` and add a row to the catalog (`README.md`). The plugin also BUNDLES an org-neutral starter set + the shared token contract at `${CLAUDE_PLUGIN_ROOT}/templates/` (catalog `templates/README.md`, DNA `templates/_contract/THEME-TOKEN-CONTRACT.html`) - fork these directly when you have no workspace library yet, then re-theme by swapping the `:root` tokens.
+Full archetype catalog: `<your-workspace>/shared/templates/README.md` — the **locked A1-A12 archetype library** (build-once-then-locked; every report forks one 1:1 and swaps data only, never freestyles — this is what fixes per-report style drift). Shared design DNA (tokens, verdict ramp, comparator slot, chart-choice matrix) lives in `<your-workspace>/shared/templates/_contract/` (THEME-TOKEN-CONTRACT.html / 00-PLAYBOOK / DESIGN-DECISIONS / SPEC-TEMPLATE). If you don't have an archetype library yet, start by saving one report you're happy with under `<your-workspace>/shared/templates/<name>/` and add a row to the catalog (`README.md`). The plugin BUNDLES the org-neutral archetype set + the shared token contract at `${CLAUDE_PLUGIN_ROOT}/templates/` (catalog `templates/README.md`, DNA `templates/_contract/THEME-TOKEN-CONTRACT.html`). This bundled set is the ALWAYS-PRESENT default the report forks; the workspace `shared/templates/` library, when present, is an org-branded OVERRIDE. Which one a given archetype resolves to is fixed by the precedence in `references/template-sourcing.md` (BINDING) - the same file draws the FACT-vs-PROCESS line that forbids sourcing a report's format from a project's `generate_*.py`. Re-theme a bundled fork by swapping its `:root` tokens.
 
 ## Workflow
 
@@ -58,13 +58,18 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
 - **Baseline / comparator (ALWAYS ask, never assume):** which reference does each metric compare against? Menu: prior period (DoD / WoW / MoM) / trailing average (7d / 28d) / SDLM or same-period-last-year (YoY) / target-or-plan or <product-b>-expected / competitor-market benchmark / cohort baseline. A bare number is noise (Rule 2) - never ship one. Default for <product> daily = DoD + vs-7d-avg, but confirm per report. The chosen comparator(s) fill the template's comparator slot (template-library handoff §4.10).
 
 ### Step 2 — Fork a locked template (fork-or-fail, NEVER freestyle)
+> BINDING (`references/template-sourcing.md`): the report's STRUCTURE comes from a LOCKED template resolved by
+> precedence - workspace `shared/templates/<A>/` override, else bundled `${CLAUDE_PLUGIN_ROOT}/templates/<A>/`
+> default, else STOP + register. The "closest real template" in (a) below must itself be a LOCKED template,
+> NEVER a project's generated report or its `generate_*.py`. Read a project for FACTS (data / metric defs)
+> only - never to lift its format (FACT-vs-PROCESS gate, §2).
 - Pick the archetype from the Decision Tree; read its `DESIGN-SPEC.md` first; copy the `<A-folder>/` into the project's `output/`.
 - NEVER edit the template source during a build — fork first.
 - **Fork-or-fail — do NOT invent a bespoke visual.** Claude Code is biased to "ship something working" and
   produces a generic per-report design; that is the root cause of "every report a different style". If the
   chosen template is a README-only stub with no forkable HTML/CSS, STOP and do ONE of:
-  (a) reuse the closest real template + its canonical theme (`shared/themes/<organization>_chart_theme.py`: pink
-  `#d82d8b`, cream `#fdf6ee`, teal `#00b4a0`);
+  (a) reuse the closest real template + its canonical theme (your org chart-theme module, e.g.
+  `shared/themes/<organization>_chart_theme.py`; fork tokens as `var(--brand-*)`, never a raw brand hex);
   - Tokens come from your workspace's **design-system / token contract** if one exists
     (e.g. `<your-workspace>/shared/templates/_contract/THEME-TOKEN-CONTRACT.html` — tokens, theme ramps,
     verdict + sentiment scales); fork `var(--token)` from there, never re-derive hexes per report. If no
@@ -75,6 +80,7 @@ artifacts in. Never dump the deliverable flat next to source files. Announce the
   with no reference to a locked template/theme.
 
 ### Step 3 — Wire Data
+- Reading an existing project's cache / pipeline here is a FACT read (load the numbers + metric defs), NOT a licence to lift its generator's layout or build process (`references/template-sourcing.md` §2).
 - For daily snapshots: pipeline already populated CSV / JSON cache → load and render
 - For ad-hoc: write query (see mode-query) → cache result → render
 - Verify data freshness: T-1 typical, T-2 on holidays; flag if older
@@ -331,6 +337,7 @@ See `feedback_stabilize_to_template.md`.
 ## Reading Order Recap
 
 Before building any report:
+0. `references/template-sourcing.md` — BINDING: which locked template (precedence) + FACT-vs-PROCESS read gate. Read before you open any project file.
 1. `references/universal-workflow-rules.md` — Orientation + Ladder + Action Brief
 2. `references/project-scaffold.md` — Step 0 layout (detect or create)
 3. `references/style-rules.md` — style polish
