@@ -89,6 +89,16 @@ Only after moves settle, build/update the root `.index/` (`_root _tree _graph _e
 Then run the **reverse-existence check**: every pointer already in the index still resolves on disk (moves create dead pointers forward-only scans miss).
 Full format + the recursive rule: `${CLAUDE_PLUGIN_ROOT}/skills/da/references/index-format.md`.
 
+**This mode CONSUMES one canonical index philosophy, not its own.** The library / map / appendix /
+partition-cluster model + the atom-frontmatter contract (`name`/`description`/`tags`/`entities`/`section`/
+`source_tier`/`owner`) + "the index is DERIVED, never hand-arranged" are defined once, in
+`~/.claude/skills/workspace-brain/references/index-format.md`, and cross-linked (same standard, no fork) from
+moat-package's `domain-package-mece-standard.md` §4. This mode's `index-format.md` above is the portable,
+engine-neutral restatement of that same contract. workspace-brain's `scripts/build_index.py` is the reference
+derivation script (reads atom frontmatter -> mechanically writes `_root`/`_entities`/`_graph`/per-folder
+`_index.md` inside AUTO markers, with an executable reverse-existence + coverage + entity-resolution
+acceptance test) — port it here rather than re-deriving the index by hand or re-inventing the model.
+
 ### Step 6 — Setup the enforcement layer (ASK the scope first)
 Scaffold + memory + index build the STRUCTURE; this step installs the BEHAVIOR that keeps it healthy — the maintenance loops (above) + the per-task governance gates (below) as Claude Code hooks. Installing them writes hook registrations into a `settings.json`, so this step edits `settings.json` by design (back it up first). It is idempotent — safe to re-run to repair/update an install. **Ask the user the scope before writing**, then merge the registration into the chosen file:
 - **Global** (`~/.claude/settings.json`) — fires in EVERY workspace on this machine; best for a solo / personal machine you want governed everywhere.

@@ -4,6 +4,18 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.24.0] - 2026-07-07
+
+### Changed
+- **`mode-workspace.md`** — states explicitly that this mode CONSUMES one canonical index philosophy
+  (library / map / appendix / partition-cluster + the atom-frontmatter contract + derived-not-hand-arranged),
+  defined once in workspace-brain's `references/index-format.md` and cross-linked from moat-package's
+  `domain-package-mece-standard.md` §4, rather than a fork of its own.
+- **`skills/da/references/index-format.md`** — added a cross-link note identifying it as the portable,
+  engine-neutral restatement of that same canonical philosophy, and pointing at workspace-brain's
+  `scripts/build_index.py` as the reference derivation script to port for a fully portable, script-driven
+  build (instead of hand-arranging the index).
+
 ## [3.23.0] - 2026-07-05
 
 ### Added
