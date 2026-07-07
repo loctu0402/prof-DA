@@ -7,7 +7,7 @@
 - **The problem it kills:** a stock LLM guesses which metric you meant, queries a schema it never checked, returns a bare number with no signal-vs-noise read, and formats every report differently. Plausible-but-wrong answers slip through. Nothing is reproducible.
 - **The guarantee:** any session, on any engine, driven by anyone, produces work that reads like the same senior analyst made it.
 
-`v3.23.0` · MIT · runs on Claude Code / Codex / Gemini CLI / GitHub Copilot / Cursor · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
+`v3.24.0` · MIT · runs on Claude Code / Codex / Gemini CLI / GitHub Copilot / Cursor · engine-agnostic: BigQuery / Postgres / Snowflake / Redshift / DuckDB
 
 ## The whole system on one page
 
@@ -161,7 +161,7 @@ The intent is bigger than one plugin. prof-DA is meant as a **reference blueprin
 
 ## Versioning
 
-Current version `3.23.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
+Current version `3.24.0`. Full history, including the v3.4 rename from `prof-data-analyst`, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 

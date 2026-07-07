@@ -1,6 +1,16 @@
 # Workspace Index Format — Progressive-Disclosure Retrieval
 
 > The index is the layer that makes a workspace **navigable by lookup, not by guessing**. Read it first each session; follow one link; read only the range you need. This file is the format spec for the workspace `.index/` AND the rule for when a deep folder earns its own local index.
+>
+> **Portable restatement of one canonical philosophy (2026-07-07).** This is the same library / map /
+> appendix / partition-cluster model + atom-frontmatter contract + derived-not-hand-arranged rule defined in
+> `~/.claude/skills/workspace-brain/references/index-format.md` (cross-linked from moat-package's
+> `domain-package-mece-standard.md` §4) — restated here in engine-neutral language so a non-MoMo install
+> gets the same contract without workspace-brain installed. Edit the model in ONE of those two canonical
+> homes and update this restatement to match; never let it drift into a fourth design. workspace-brain's
+> `scripts/build_index.py` is the reference derivation script (frontmatter -> mechanical `_root`/`_entities`/
+> `_graph`/per-folder `_index.md`, AUTO-marker-scoped, with an executable acceptance test) to port for a
+> fully portable build.
 
 ## Progressive disclosure — the contract every index obeys
 
