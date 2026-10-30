@@ -4,6 +4,20 @@ All notable changes to `prof-DA` plugin (formerly `prof-data-analyst` through v3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [3.25.0] - 2026-10-30
+
+### Added
+- **`skills/da/references/output-glass-dashboard.md`**: the dashboard layout and look standard. One hero
+  number with signed change chips, a forecast chip and a sparkline with its forecast band; a sticky
+  segmented tab bar of 3 to 5 pages; translucent glass cards over a soft backdrop of the theme's series
+  colors; titles of two to four words with one window-and-unit note; one footnote for source and as-of date;
+  chart grammar (dashed forecast with a range band, diverging bars, tooltips), table grammar (in-cell share
+  bars, signed colored changes), loading and failure states, and a Sigma translation.
+
+### Changed
+- `skills/report/SKILL.md` and `output-effective-html.md` point to the new standard for every dashboard and
+  recurring report.
+
 ## [3.24.0] - 2026-07-07
 
 ### Changed

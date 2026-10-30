@@ -73,6 +73,7 @@ with no overlap and no leaked build context.
 
 ## Cross-links
 
+- Dashboard layout, glass surfaces, text budget and chart grammar on top of this contract: `output-glass-dashboard.md`.
 - The xlsx renderer of the same contract: `output-xlsx.md`.
 - The slide-deck renderer: `output-slide-deck.md`.
 - The full standard + the boilerplate fork: `<your-workspace>/shared/templates/_contract/EFFECTIVE-HTML-STANDARD.md`.
