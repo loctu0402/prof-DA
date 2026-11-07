@@ -20,4 +20,4 @@ the functional mirrors are built later.
 3. Add the platform's column to `toolmaps/_toolmap.md` (L4).
 4. L1 is already done (the engine is verbatim).
 
-Author: Loc Tu (loc.tu@mservice.com.vn).
+Author: Tu Tan Loc (github.com/loctu0402).
